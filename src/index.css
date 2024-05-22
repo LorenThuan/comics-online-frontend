@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@layer components {
+  .sidebar-category {
+    @apply flex font-sans font-bold space-x-2 items-center;
+  }
+}
