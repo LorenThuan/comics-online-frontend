@@ -10,9 +10,10 @@ import { MdOutlineClose } from "react-icons/md";
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col h-screen fixed bg-white-rgb top-0 m-0 border-1 border-solid box-border overflow-y-auto overflow-x-auto overscroll-contain">
-      <div className="mx-5 my-3 space-y-3 ">
-        <div className="flex space-x-10 items-center">
+    <>
+    <div className="flex fixed flex-col h-screen w-auto bg-white-rgb top-0 m-0 border-1 border-solid box-border overflow-auto overflow-y-scroll overscroll-contain">
+      <div className="mx-5 my-3 gap-3">
+        <div className="flex gap-12 items-center">
           <div className="flex items-center">
             <img
               src={Logo}
@@ -20,7 +21,7 @@ const Sidebar = () => {
               className="w-10 h-8 rounded-xl cursor-pointer"
             />
             <div className="text-2xl font-sans font-bold cursor-pointer tracking-tight">
-              MangaDex
+              MangaLoli
             </div>
           </div>
 
@@ -39,6 +40,7 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -11,4 +11,10 @@
   .sidebar-category {
     @apply flex font-sans font-bold space-x-2 items-center;
   }
+
+  .input-search {
+    @apply font-sans w-80 h-8 rounded-lg bg-white-rgb2 shadow-sm placeholder-black
+    text-lg 
+    ;
+  }
 }

@@ -11,7 +11,7 @@ const MangaDex = () => {
     <div className="space-y-2">
       <div className="sidebar-category">
         <SidebarIcon icon={<GrPin size="22" />} />
-        <div>MangaDex</div>
+        <div>MangaLoli</div>
       </div>
 
       <div className="ml-2 text-gray-700 font-sans space-y-1">

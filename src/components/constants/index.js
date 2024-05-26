@@ -23,3 +23,4 @@ const navbarCategory = [
 ];
 
 export default navbarCategory;
+
