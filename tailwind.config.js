@@ -8,6 +8,7 @@ export default {
         "white-rgb": "rgb(242, 242, 242)",
         "white-rgb2": "rgb(246, 246, 246)",
         "describes-rgb": "rgb(36, 36, 36)",
+        "hr-white-rgb": "rgb(229, 231, 235)",
       },
       container: {
         center: true,

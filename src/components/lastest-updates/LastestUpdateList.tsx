@@ -17,8 +17,8 @@ import ListNewComics from "../constants/list_comic_demo";
 // type ListNewComic = { data: ListNewComics[] };
 
 {/*fetch 6 comics new*/}
-const LastestUpdateList = (comic_news: any) =>  {
-  comic_news = ListNewComics;
+const LastestUpdateList = () =>  {
+  const comic_news = ListNewComics;
   return (
      <div className='grid grid-cols-1 gap-x-6 w-full bg-gray-100'>
    <div className='grid gap-4 p-4 '>
