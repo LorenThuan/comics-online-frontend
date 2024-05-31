@@ -24,7 +24,6 @@ function App() {
       <Searchbar />
       <User handleLoginPopup={handleLoginPopup}/>
       <Popup loginPopup={loginPopup} handleLoginPopup={handleLoginPopup} setLoginPopup={setLoginPopup}/>
-
     </div>
     </>
   );

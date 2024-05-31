@@ -13,8 +13,8 @@
   }
 
   .input-search {
-    @apply font-sans w-80 h-8 rounded-lg bg-white-rgb2 shadow-sm placeholder-black
-    text-lg 
+    @apply font-sans py-1 px-6 rounded-lg bg-white shadow-sm placeholder-black
+    text-[15px] 
     ;
   }
 }

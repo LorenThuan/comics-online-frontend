@@ -21,7 +21,7 @@ const Sidebar = () => {
               className="w-10 h-8 rounded-xl cursor-pointer"
             />
             <div className="text-2xl font-sans font-bold cursor-pointer tracking-tight">
-              MangaLoli
+              MangaDex
             </div>
           </div>
 

@@ -10,6 +10,9 @@ export default {
         "describes-rgb": "rgb(36, 36, 36)",
         "hr-white-rgb": "rgb(229, 231, 235)",
       },
+      backgroundImage: theme => ({
+        'img-bg': "url('src/assets/demo.jpg')",
+        }),
       container: {
         center: true,
         padding: {

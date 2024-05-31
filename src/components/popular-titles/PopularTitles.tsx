@@ -4,10 +4,13 @@ import { MdNavigateNext } from "react-icons/md";
 import SidebarIcon from "../icon/SidebarIcon";
 import ImgDemo from "../../assets/demo.jpg"
 
+// [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]
+// bg-img-bg
+
 const PopularTitles = () => {
   return (
     <>
-      <div className="h-[410px] bg-gray-100 w-fit" >
+      <div className="h-[410px] w-fit bg-gray-100 bg-cover bg-center bg-no-repeat overflow-hidden" >
         <div className="container pb-8 sm:pb-0 mt-12">
 
         {/*This is img section*/}

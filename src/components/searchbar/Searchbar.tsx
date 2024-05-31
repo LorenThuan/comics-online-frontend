@@ -6,10 +6,11 @@ import User from "../user/User";
 const Searchbar = () => {
   return (
     <div className="fixed top-0 right-0 m-0 my-3 mx-20">
-        <div className="input-search flex"><input type="text" placeholder="Search" className="input-search"/>
-        <div className="flex items-center space-x-3 mr-3 flex-shrink-0">
-        <span className="text-sm text-gray-500">Ctrl K</span>
-        <SidebarIcon icon={<FiSearch size="16"/>}/>
+        <div className="flex items-center">
+        <input type="text" placeholder="Search" className="input-search relative"/>
+        <div className="flex items-center absolute right-0">
+        <div><span className="text-sm text-gray-500 mr-6">Ctrl K</span></div>
+        <div className="absolute right-0 "><SidebarIcon icon={<FiSearch size="16"/>}/></div>
         </div>
         </div>
     </div>

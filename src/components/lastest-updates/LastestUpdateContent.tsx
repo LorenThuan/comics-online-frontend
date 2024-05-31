@@ -1,12 +1,14 @@
 import React from 'react'
 import LastestUpdateList from './LastestUpdateList'
-import ListNewComics from "../constants/list_comic_demo"
+import useComicList from '../hooks/CrudComicList'
 
 const LastestUpdateContent = () => {
+  const {comicList} = useComicList();
+
   return (
       <div className='flex flex-row gap-6'>
-      <LastestUpdateList/>
-      <LastestUpdateList/>
+      <LastestUpdateList data={comicList.slice(0, 6)}/>
+      <LastestUpdateList data={comicList.slice(7, 12)}/>
       </div>
   )
 }
