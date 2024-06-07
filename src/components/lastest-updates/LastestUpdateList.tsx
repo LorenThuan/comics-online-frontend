@@ -5,6 +5,7 @@ import Vnsvg from "../../assets/vn.svg"
 import SidebarIcon from '../icon/SidebarIcon';
 import useComicList from '../hooks/CrudComicList';
 import { Comic } from '../constants/types';
+import moment from 'moment';
 
 
 interface LastestUpdateListProps{
@@ -23,11 +24,13 @@ console.log(data);
       <div className='flex items-center'><img src={comicItem.image_src} alt="demo" className=' min-w-[60px] max-w-[60px] h-[80px] object-contain'/></div>
 
      <div className='flex flex-col w-full justify-center'>
-     <h2 className='font-sans text-lg font-bold'>{comicItem.nameComic}</h2>
+     <h2 className='font-sans text-lg font-bold'>{comicItem.name_comic}</h2>
      <div className='flex justify-between items-center'>
       <div className='flex items-center gap-2'>
             <img src={Vnsvg} alt="Vietnamese icon" className='w-[20px] h-[20px] select-none'/>
-            <p className='text-[describes-rgb]'>{comicItem.state}</p>
+            <ul>
+                <li>{comicItem.chapterList[0]}</li>
+            </ul> 
       </div>
 
       <SidebarIcon icon={<FiMessageSquare size="16"/>}/>
@@ -38,7 +41,7 @@ console.log(data);
             <p className='text-[describes-rgb]'>{comicItem.author}</p>
       </div>
 
-      <p className='text-[describes-rgb]'>2 hours ago</p>
+      <p className='text-[describes-rgb]'>{moment(comicItem.createDate).fromNow()}</p>
      </div>
       </div> 
      

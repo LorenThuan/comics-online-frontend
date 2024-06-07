@@ -1,6 +1,7 @@
 import React from "react";
 import { LuHome } from "react-icons/lu";
 import SidebarIcon from "./icon/SidebarIcon";
+import {Link} from "react-router-dom";
 
 const Home = () => {
   return (
@@ -9,13 +10,9 @@ const Home = () => {
         <SidebarIcon icon={<LuHome size="24" />} />
       </div>
 
-      <a
-        href="/"
-        onClick={(e) => e.preventDefault()}
-        className="font-sans font-bold"
-      >
-        Home
-      </a>
+      <Link to="/"
+        onClick={(e) => e.stopPropagation()}
+        className="font-sans font-bold">Home</Link>
     </div>
   );
 };

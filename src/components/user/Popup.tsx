@@ -3,6 +3,8 @@ import { FiUser } from "react-icons/fi";
 import SidebarIcon from '../icon/SidebarIcon';
 import { IoSettingsOutline, IoWaterOutline  } from "react-icons/io5";
 import VnIcon from "../../assets/vn.svg";
+import { useNavigate } from 'react-router-dom';
+import CrudUser from '../hooks/CrudUser';
 
 interface PopupProps {
   loginPopup: boolean;
@@ -12,6 +14,10 @@ interface PopupProps {
 
 const Popup = (props: PopupProps) => {
   let loginRef = useRef(null);
+
+  const navigate = useNavigate();
+
+  const {user} = CrudUser();
 
  useEffect(() => {
    let handle = (e:any) => {
@@ -42,7 +48,7 @@ const Popup = (props: PopupProps) => {
         {/*User info*/}
         <div className='flex flex-col gap-4 mt-4 items-center hover:bg-gray-200 cursor-pointer'>
         <SidebarIcon icon={<FiUser size="46"/>}/>
-        <h1 className='text-2xl font-sans font-bold'>Guest</h1>
+        <h1 className='text-2xl font-sans font-bold'>{user.username}</h1>
         </div>
         <hr className='border-1 border-solid border-hr-white-rgb my-4 w-full'/>
         {/*Setting*/}
@@ -78,9 +84,10 @@ const Popup = (props: PopupProps) => {
           {/*Login Register*/}
           <div className='flex flex-col gap-4'>
               <button className='px-10 py-2 text-lg bg-orange-500 rounded-lg text-white font-bold text-center
-              hover:bg-orange-700
-              '>Sign in</button>
-              <button className='text-center text-lg hover:bg-gray-200 cursor-pointer'>Register</button>
+              hover:bg-orange-700'
+              onClick={() => navigate("/auth/login")}
+              >Sign in</button>
+              <button onClick={() => navigate("/auth/register")} className='text-center text-lg hover:bg-gray-200 cursor-pointer'>Register</button>
           </div>
         </div>
       </div>

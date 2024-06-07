@@ -6,7 +6,7 @@ const LastestUpdateContent = () => {
   const {comicList} = useComicList();
 
   return (
-      <div className='flex flex-row gap-6'>
+      <div className='grid grid-cols-2 gap-6'>
       <LastestUpdateList data={comicList.slice(0, 6)}/>
       <LastestUpdateList data={comicList.slice(7, 12)}/>
       </div>

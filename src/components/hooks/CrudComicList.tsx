@@ -9,7 +9,9 @@ const useComicList = () => {
   useEffect(() => {
     
     const loadComicList = async () => {
-      const result = await axios.get("http://localhost:8083/last-comics");
+      const result = await axios.get("http://localhost:8083/comic/last-comics");
+      console.log(result);
+      
       setComicList(result.data);
     } 
 
