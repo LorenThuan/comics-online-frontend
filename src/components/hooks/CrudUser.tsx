@@ -80,9 +80,7 @@ const CrudUser = () => {
         const result = await UserService.getYourProfile(token);
         console.log(result.user.usernameEntity);
         setUser( {username: result.user.usernameEntity});
-      } else {
-        setUser({username: 'Guest'});
-      } 
+      }
     }
      handle();
 

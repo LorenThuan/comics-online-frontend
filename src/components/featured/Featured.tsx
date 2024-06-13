@@ -22,7 +22,7 @@ const Featured = () => {
 
   return (
     <div className='h-auto' onWheel={handleSliderWheel}>
-      <div className='container pb-8'>
+      <div className=' pb-8'>
 
         <div className='flex justify-between items-center mb-6'>
           <div className='flex gap-4 items-center'>
@@ -30,10 +30,10 @@ const Featured = () => {
               <SidebarIcon icon={<GrLinkNext size="18" className='cursor-pointer'/>}/>
               <h1 className='font-sans font-semibold text-lg cursor-pointer'>Seasonal: Spring 2024</h1>
           </div>
-          <div className='cursor-pointer'><SidebarIcon icon={<GrLinkNext size="18" />} /></div>
+          <div className='cursor-pointer p-3 rounded-full hover:bg-gray-200'><SidebarIcon icon={<GrLinkNext size="18" />} /></div>
         </div>
 
-  <div className='w-[1000px] pb-4' onWheel={handleWheel}>
+  <div className='w-full pb-4' onWheel={handleWheel}>
     <p id='demo'></p>
 <style jsx global>{`
         .slick-dots li button:before {

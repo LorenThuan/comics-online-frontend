@@ -7,12 +7,13 @@ import Community from "../community/Community";
 import MangaDex from "../mangadex/MangaDex";
 import SidebarIcon from "../icon/SidebarIcon";
 import { MdOutlineClose } from "react-icons/md";
+import Footer from "../footer/Footer";
 
 const Sidebar = () => {
   return (
     <>
     <div className="flex fixed flex-col h-screen w-auto bg-white-rgb top-0 m-0 border-1 border-solid box-border overflow-auto overflow-y-scroll overscroll-contain">
-      <div className="mx-5 my-3 gap-3">
+      <div className="mx-3 my-3 gap-3">
         <div className="flex gap-12 items-center">
           <div className="flex items-center">
             <img
@@ -37,6 +38,7 @@ const Sidebar = () => {
           <Titles />
           <Community />
           <MangaDex />
+          <Footer />
         </div>
       </div>
     </div>

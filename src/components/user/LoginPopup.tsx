@@ -5,24 +5,36 @@ import { IoSettingsOutline, IoWaterOutline  } from "react-icons/io5";
 import VnIcon from "../../assets/vn.svg";
 import { useNavigate } from 'react-router-dom';
 import CrudUser from '../hooks/CrudUser';
+import UserService from '../constants/UserService';
 
 interface PopupProps {
   loginPopup: boolean;
-  setLoginPopup:(login: boolean) => void;
+  setLoginPopup:(isLogin: boolean) => void;
   handleLoginPopup(): void;
 }
 
-const Popup = (props: PopupProps) => {
+const LoginPopup = (props: PopupProps) => {
   let loginRef = useRef(null);
 
   const navigate = useNavigate();
 
   const {user} = CrudUser();
 
+  const isAuthenticated = UserService.isAuthenticated();
+  const isAdmin = UserService.isAdmin();
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout")
+    if (confirmLogout) {
+      UserService.logout();
+      navigate("/");
+    }
+  }
+
  useEffect(() => {
    let handle = (e:any) => {
     // @ts-ignore: Object is possibly 'null'.
-    if(!loginRef.current.contains(e.target)) {
+    if(!loginRef.current?.contains(e.target)) {
       props.setLoginPopup(false);
       console.log(loginRef.current);  
     }
@@ -35,7 +47,7 @@ const Popup = (props: PopupProps) => {
     document.removeEventListener("mousedown", handle)
   }
 
- });
+ }, []);
 
 
   return (
@@ -48,7 +60,10 @@ const Popup = (props: PopupProps) => {
         {/*User info*/}
         <div className='flex flex-col gap-4 mt-4 items-center hover:bg-gray-200 cursor-pointer'>
         <SidebarIcon icon={<FiUser size="46"/>}/>
-        <h1 className='text-2xl font-sans font-bold'>{user.username}</h1>
+        <h1 className='text-2xl font-sans font-bold'>{isAuthenticated ? 
+        <span>{user.username}</span> : 
+        <span>Guest</span>}
+        </h1>
         </div>
         <hr className='border-1 border-solid border-hr-white-rgb my-4 w-full'/>
         {/*Setting*/}
@@ -87,7 +102,11 @@ const Popup = (props: PopupProps) => {
               hover:bg-orange-700'
               onClick={() => navigate("/auth/login")}
               >Sign in</button>
-              <button onClick={() => navigate("/auth/register")} className='text-center text-lg hover:bg-gray-200 cursor-pointer'>Register</button>
+              <button onClick={() => navigate("/auth/register")} className='text-center text-lg hover:bg-gray-400 cursor-pointer rounded-lg px-10 py-2'>Register</button>
+              {isAuthenticated ? <button className='px-10 py-2 text-lg bg-red-500 rounded-lg text-white font-bold text-center
+              hover:bg-red-700'
+              onClick={handleLogout}
+              >Log out</button> : null}
           </div>
         </div>
       </div>
@@ -96,4 +115,4 @@ const Popup = (props: PopupProps) => {
   )
 }
 
-export default Popup
+export default LoginPopup
