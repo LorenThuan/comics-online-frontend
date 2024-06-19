@@ -6,8 +6,9 @@ import PopularComicDetails from "../popular-titles/PopularComicDetails";
 import PopularTitles from "../popular-titles/PopularTitles";
 import Searchbar from "../searchbar/Searchbar";
 import Sidebar from "../sidebar/Sidebar";
-import LoginPopup from "../user/LoginPopup";
-import User from "../user/User";
+import LoginPopup from "../user/login/LoginPopup";
+import UpdateUserPopup from "../user/user_component/UpdateUserPopup";
+import User from "../user/user_component/User";
 
 const Home = () => {
   const { setLoginPopup, loginPopup, handleLoginPopup } = useLoginPopup();
@@ -18,11 +19,11 @@ const Home = () => {
         <Sidebar />
 
         <div className="grid grid-cols-1 w-full ml-[290px]">
-            <PopularTitles data={popularComic}/>
-            <LastestUpdateMain />
-            <Featured />
+          <PopularTitles data={popularComic} />
+          <LastestUpdateMain />
+          <Featured />
         </div>
-        <Searchbar/>
+        <Searchbar />
         <User handleLoginPopup={handleLoginPopup} />
         <LoginPopup
           loginPopup={loginPopup}

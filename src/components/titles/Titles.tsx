@@ -1,5 +1,5 @@
 import React from "react";
-import AdvancedSearch from "./AdvancedSearch";
+import AdvancedSearch from "./advanced_search/AdvancedSearch";
 import RecentlyAdded from "./RecentlyAdded";
 import LatestUpdates from "./LatestUpdates";
 import Random from "./Random";

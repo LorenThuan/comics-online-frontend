@@ -1,5 +1,5 @@
 import React from 'react'
-import SidebarIcon from '../icon/SidebarIcon'
+import SidebarIcon from '../../icon/SidebarIcon'
 import { FiUser } from "react-icons/fi";
 
 interface PopupProps {

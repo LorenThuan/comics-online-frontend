@@ -1,4 +1,4 @@
-import React, {InputHTMLAttributes, useEffect} from 'react'
+import React, {InputHTMLAttributes, useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import UserService from '../constants/UserService';
 import { AuthLogin, User } from '../constants/types';
@@ -35,7 +35,7 @@ const CrudUser = () => {
   }
 
   const [formData, setFormData] = React.useState<User>({
-    username: '',
+    name: '',
     email: '',
     password: '',
     role: 'ROLE_USER',
@@ -50,11 +50,10 @@ const CrudUser = () => {
     e.preventDefault();
     try {
       // const role = localStorage.getItem("role");
-      const token = localStorage.getItem("token");
-      await UserService.register(formData, token);
-
+      await UserService.register(formData);
+      
       setFormData({
-        username: '',
+        name: '',
         email: '',
         password: '',
         role: 'ROLE_USER',
@@ -68,9 +67,7 @@ const CrudUser = () => {
     }
   }
 
-  const [user, setUser] = React.useState({
-    username: '',
-  })
+  const [user, setUser] = React.useState<User | null>(null)
 
   useEffect(() => {
      
@@ -78,16 +75,117 @@ const CrudUser = () => {
       const token = localStorage.getItem("token");
       if(token) {
         const result = await UserService.getYourProfile(token);
-        console.log(result.user.usernameEntity);
-        setUser( {username: result.user.usernameEntity});
+        console.log(result);
+        
+        console.log(result.user.name);
+        setUser(result.user);
       }
     }
      handle();
 
   }, [])
+
+  const [usersList, setUsersList]  = React.useState<User[]>([]);
+
+  useEffect(() => {
+    const handle = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const result = await UserService.getAllUsers(token);
+        console.log(result);
+        setUsersList(result.userList);
+      }
+      }
+
+      handle();
+  }, [])
+  
+  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User>();
+
+  const handleOpenUpdate = (userItem:any) => {
+    setIsOpenUpdate(prevState => !prevState);
+    setSelectedUser(userItem);
+  }
+
+  useEffect(() => {
+    console.log('isOpenUpdate:', isOpenUpdate);
+  }, [isOpenUpdate]);
+
+  const closeUpdatePopup = () => {
+    setIsOpenUpdate(false);
+  }
+
+  const [userData, setUserData] = React.useState<User>({
+    name: '',
+    email: '',
+    password: '',
+    role: '',
+  });
+
+  useEffect(() => {
+    const fetchUserDataById = async () => {
+        const token = localStorage.getItem("token");
+        const response = await UserService.getUserById(selectedUser?.userId, token);  
+        console.log(response);
+        
+        const {name, email, password, role} = response.user;
+        setUserData({name, email, password, role});
+    }
+    fetchUserDataById();
+  }, [selectedUser?.userId]) //whenever change call update on td it change userId 
+
+  
   
 
-  return {setEmail, setPassword, error, handle, handleChange, handleForm, formData, user, email, password}
+  const [selectedValue, setSelectedValue] = React.useState('');
+
+  const handleChangeUpdate = async (e:any) => {
+    const {name, value} = e.target;
+    setSelectedValue(e.target.value)
+    setUserData((preUserData) => ({
+      ...preUserData,
+      [name]: value
+    }));
+  }
+
+  const handleFormUpdate = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const confirmUpdate = window.confirm('Are you sure you want to update this user?')
+      if (confirmUpdate) {
+        const token = localStorage.getItem("token");
+        console.log(selectedUser);
+        const userId = selectedUser?.userId;
+        console.log(userData);
+        
+        await UserService.updateUser(userId , userData, token);
+        alert("Update information successfully");
+        window.location.reload();
+      }
+      // setFormDataUpdate({
+      //   usernameEntity: '',
+      //   email: '',
+      //   password: '',
+      //   role: '',
+      // })
+ 
+      // setIsOpenUpdate(false);
+    } catch (error: any) {
+      console.log("Error updating user",error);
+      throw error;     
+    }
+  }
+
+
+  
+  
+
+  return {setEmail, setPassword, error, handle, handleChange, handleForm, 
+    formData, user, email, password, usersList, 
+    isOpenUpdate, handleOpenUpdate, setIsOpenUpdate, closeUpdatePopup,
+    selectedUser, selectedValue, handleChangeUpdate, userData, handleFormUpdate
+  }
 }
 
 export default CrudUser

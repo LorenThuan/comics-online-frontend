@@ -45,7 +45,7 @@ const SearchbarPopup = (props: PopupProps) => {
           <SidebarIcon icon={<GrLinkNext size="22" />} className="cursor-pointer p-1 rounded-full hover:bg-gray-200" />
         </div>
         
-        <ListComicSearch data={searchComic}/>
+        <ListComicSearch data={searchComic.slice(0,5)}/>
       
       
 

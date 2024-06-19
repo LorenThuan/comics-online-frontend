@@ -5,6 +5,7 @@ import { FaHeart } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa";
 import SidebarIcon from '../icon/SidebarIcon';
 import { Comic } from '../constants/types';
+import Vnsvg from "../../assets/vn.svg"
 
 interface SearchComicProps {
   data: Comic[];
@@ -16,7 +17,7 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
 
     return (
       <>
-        {data?.slice(0,5).map((comicItem: Comic) => (
+        {data?.map((comicItem: Comic) => (
           <div
             key={comicItem.comic_id}
             className='bg-gray-100 w-auto h-auto px-3 ml-3 mt-5 rounded-lg cursor-pointer hover:bg-gray-200'
@@ -49,6 +50,12 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
                   )}
                   <p className='text-sm'>{comicItem.state}</p>
                 </div>
+                <div className='flex items-center gap-2'>
+            <img src={Vnsvg} alt="Vietnamese icon" className='w-[20px] h-[20px] select-none'/>
+            <ul>
+                <li>{comicItem.chapterList?.[0]?.toString()}</li>
+            </ul> 
+      </div>
               </div>
             </div>
           </div>

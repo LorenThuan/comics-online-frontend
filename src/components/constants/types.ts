@@ -16,12 +16,14 @@ export interface Comic {
 }
 
 export interface User {
-  username: string;
+  userId?: number;
+  name?: string;
   email: string;
   password: string;
-  role: "ROLE_USER";
+  // usernameEntity?: string;
+  role: string;
 }
 
 export interface AuthLogin {
-  username?: string;
+  name?: string;
 }

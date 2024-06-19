@@ -55,7 +55,7 @@ const PopularComicDetails = () => {
       
       <div className='ml-3'>
           <h2 className='text-lg text-orange-500'>Describe</h2>
-          <p className='text-base font-sans'>Chàng trai Haibara Natsuki đã phải trải qua những tháng ngày tăm tối mịt mù ở trường học do có màn giới thiệu bản thân thất bại hồi cấp ba. Quá khứ đen tối ấy cứ tiếp tục đeo bám cậu ngay cả khi đã trở thành sinh viên năm tư đại học.</p>
+          <p className='text-base font-sans'></p>
         </div>
       <div className='mt-10 pb-8'>
         <h2 className='text-lg text-orange-500 ml-3'>Chapter List</h2>

@@ -14,12 +14,9 @@ class UserService {
     }
   }
 
-  static async register(userData, token) {
+  static async register(userData) {
     try {
-      const response = await axios.post('http://localhost:8083/auth/register', userData,
-        {
-          headers: {Authorization: `Bearer ${token}`}
-        }
+      const response = await axios.post('http://localhost:8083/auth/register', userData
       );
 
       return response.data;
@@ -66,7 +63,7 @@ class UserService {
           headers: {Authorization: `Bearer ${token}`} 
         }
       );
-      
+      // console.log(response);
       return response.data;
 
     } catch (error) {
@@ -91,7 +88,7 @@ class UserService {
 
   static async updateUser(userId, userData,token) {
     try {
-      const response = await axios.put(`http://localhost:8083/user/update/${userId}`, userData,
+      const response = await axios.put(`http://localhost:8083/admin/update/${userId}`, userData,
         {
           headers: {Authorization: `Bearer ${token}`} 
         }
