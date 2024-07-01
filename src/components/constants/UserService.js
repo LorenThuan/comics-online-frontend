@@ -41,6 +41,21 @@ class UserService {
     }
   }
 
+  static async getAllUserMembers(token) {
+    try {
+      const response = await axios.get('http://localhost:8083/users/get-user-members',
+        {
+          headers: {Authorization: `Bearer ${token}`}
+        }
+      );
+      
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getYourProfile(token) {
     try {
       const response = await axios.get('http://localhost:8083/user/me',
@@ -56,6 +71,21 @@ class UserService {
     }
   }
 
+  static async getComicFromUser(token) {
+    try {
+      const response = await axios.get('http://localhost:8083/user/comic-list',
+        {
+          headers: {Authorization: `Bearer ${token}`}
+        }
+      );
+      console.log(response);
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getUserById(userId, token) {
     try {
       const response = await axios.get(`http://localhost:8083/user/${userId}`,
@@ -63,6 +93,21 @@ class UserService {
           headers: {Authorization: `Bearer ${token}`} 
         }
       );
+      // console.log(response);
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findUserByName(name, token) {
+    try {
+      const response = await axios.get("http://localhost:8083/users/", {params: {
+        name: name, // include the name in the query parameters
+      },
+          headers: {Authorization: `Bearer ${token}`} 
+    });
       // console.log(response);
       return response.data;
 
@@ -101,10 +146,27 @@ class UserService {
     }
   }
 
+  static async addToLibrary(comic_id, token) {
+    try {
+      const response = await axios.post(`http://localhost:8083/titles/follows?comic_id=${comic_id}`,
+        {}, // Empty body
+        {
+          headers: {Authorization: `Bearer ${token}`,},
+        }
+      );
+      return response.data;
+
+    } catch (error) {
+      console.error('Error adding to library:', error.response || error.message);
+      throw error;
+    }
+  }
+
   /* AUTHENCATION CHECK */
   static logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('user');
   }
 
   static isAuthenticated() {

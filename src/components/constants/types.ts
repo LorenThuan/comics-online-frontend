@@ -13,6 +13,7 @@ export interface Comic {
   last_modified_date?: Date;
   genreList?: string[];
   chapterList?: string[];
+  number_chapters?: number;
 }
 
 export interface User {
@@ -20,10 +21,44 @@ export interface User {
   name?: string;
   email: string;
   password: string;
-  // usernameEntity?: string;
   role: string;
+  comicList?: ComicTest[];
 }
 
 export interface AuthLogin {
   name?: string;
 }
+
+export interface ComicAdd {
+  comicId: number;
+  nameComic: string;
+  author?: string;
+  image_src: string;
+  state: string;
+  liked?: number;
+  followed?: number;
+  views?: bigint;
+  createDate: Date;
+  lastModifiedDate?: Date;
+  // genreList?: Genre[];
+}
+
+export interface ComicTest {
+  comicId: number;
+  nameComic: string;
+  author: string;
+  image_src: string;
+  state: string;
+  liked: number;
+  followed: number;
+  views: bigint;
+  createDate: Date;
+  lastModifiedDate: Date;
+  genreList: { genreId: number; genre: string }[];
+  // chapterList?: { chapterId: number; chapterNumber: string; createDate: Date; lastModifiedDate: Date }[]
+}
+
+// export interface Genre {
+//   genreId?: number;
+//   genre?: string;
+// }

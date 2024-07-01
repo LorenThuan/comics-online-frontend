@@ -1,37 +1,31 @@
+import { useEffect } from "react";
+import Common from "../common/Common";
 import Featured from "../featured/Featured";
-import useComicList from "../hooks/CrudComicList";
-import useLoginPopup from "../hooks/LoginPopup";
+import useComicList from "../../hooks/CrudComicList";
+import CrudUser from "../../hooks/CrudUser";
 import LastestUpdateMain from "../lastest-updates/LastestUpdateMain";
-import PopularComicDetails from "../popular-titles/PopularComicDetails";
 import PopularTitles from "../popular-titles/PopularTitles";
-import Searchbar from "../searchbar/Searchbar";
-import Sidebar from "../sidebar/Sidebar";
-import LoginPopup from "../user/login/LoginPopup";
-import UpdateUserPopup from "../user/user_component/UpdateUserPopup";
-import User from "../user/user_component/User";
+import { useStateContext } from "../../context/StateContext";
 
 const Home = () => {
-  const { setLoginPopup, loginPopup, handleLoginPopup } = useLoginPopup();
   const { popularComic } = useComicList();
-  return (
-    <>
-      <div className="flex flex-row">
-        <Sidebar />
+  // const { handleGetUserLogin } = CrudUser();
 
-        <div className="grid grid-cols-1 w-full ml-[290px]">
+  // useEffect(() => {
+  //   handleGetUserLogin();
+  // }, []);
+
+  return (
+    <Common
+      className="grid grid-cols-1 w-full ml-[290px]"
+      components={
+        <div>
           <PopularTitles data={popularComic} />
           <LastestUpdateMain />
           <Featured />
         </div>
-        <Searchbar />
-        <User handleLoginPopup={handleLoginPopup} />
-        <LoginPopup
-          loginPopup={loginPopup}
-          handleLoginPopup={handleLoginPopup}
-          setLoginPopup={setLoginPopup}
-        />
-      </div>
-    </>
+      }
+    />
   );
 };
 

@@ -4,11 +4,13 @@ import SidebarIcon from "../../icon/SidebarIcon";
 import { IoSettingsOutline, IoWaterOutline } from "react-icons/io5";
 import VnIcon from "../../../assets/vn.svg";
 import { useNavigate } from "react-router-dom";
-import CrudUser from "../../hooks/CrudUser";
+import CrudUser from "../../../hooks/CrudUser";
 import UserService from "../../constants/UserService";
 import { ImProfile } from "react-icons/im";
 import { FaUsers } from "react-icons/fa6";
 import LoginRequired from "./LoginRequired";
+import { User } from "../../constants/types";
+import { useStateContext } from "../../../context/StateContext";
 
 interface PopupProps {
   loginPopup: boolean;
@@ -21,7 +23,8 @@ const LoginPopup = (props: PopupProps) => {
 
   const navigate = useNavigate();
 
-  const { user } = CrudUser();
+  // const { user } = CrudUser();
+  const {user} = useStateContext();
 
   const isAuthenticated = UserService.isAuthenticated();
   const adminOnly = UserService.adminOnly();
@@ -54,6 +57,8 @@ const LoginPopup = (props: PopupProps) => {
     };
   }, []);
 
+  console.log(user?.name);
+
   return (
     <>
       {props.loginPopup ? (
@@ -80,14 +85,20 @@ const LoginPopup = (props: PopupProps) => {
             <div className="flex flex-col gap-4">
               {/* User and Admin */}
               {isAuthenticated && (
-                <div onClick={() =>navigate("/user/me")} className="ml-6 flex items-center gap-2 hover:bg-gray-200 cursor-pointer ">
+                <div
+                  onClick={() => navigate("/user/me")}
+                  className="ml-6 flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
+                >
                   <SidebarIcon icon={<ImProfile size="24" />} />
                   <p className="text-lg">My Profile</p>
                 </div>
               )}
 
               {adminOnly && (
-                <div onClick={() => navigate("/admin/user-manager")} className="ml-6 flex items-center gap-2 hover:bg-gray-200 cursor-pointer ">
+                <div
+                  onClick={() => navigate("/admin/user-manager")}
+                  className="ml-6 flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
+                >
                   <SidebarIcon icon={<FaUsers size="24" />} />
                   <p className="text-lg">User Management</p>
                 </div>

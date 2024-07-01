@@ -1,5 +1,5 @@
 import React from "react";
-import CrudUser from "../../hooks/CrudUser";
+import CrudUser from "../../../hooks/CrudUser";
 
 const RegisterForm = () => {
   const { formData, handleChange, handleForm } = CrudUser();

@@ -3,11 +3,17 @@ import SidebarIcon from "../../icon/SidebarIcon";
 import { GrLinkPrevious } from "react-icons/gr";
 import AdvancedSearchModal from "./AdvancedSearchBox";
 import ListComicSearch from "../../searchbar/ListComicSearch";
-import useComicList from "../../hooks/CrudComicList";
+import useComicList from "../../../hooks/CrudComicList";
 import SearchListValue from "./SearchListValue";
 
 const AdvancedSearchContainer = () => {
-  const { comicList } = useComicList();
+  const {
+    comicListAll,
+    comicsQuery,
+    isFindComic,
+    setIsFindComic,
+    setComicQuerys,
+  } = useComicList();
 
   return (
     <div className="mr-4">
@@ -19,15 +25,15 @@ const AdvancedSearchContainer = () => {
         <h2 className="font-semibold text-2xl">Advanced Search</h2>
       </div>
 
-      <AdvancedSearchModal />
-      <div className="mt-2 grid grid-cols-6">
-        <SearchListValue />
-        <SearchListValue></SearchListValue>
-        <SearchListValue></SearchListValue>
-        <SearchListValue></SearchListValue>
-        <SearchListValue></SearchListValue>
-        <SearchListValue></SearchListValue>
-      </div>
+      <AdvancedSearchModal
+        setComicQuerys={setComicQuerys}
+        setIsFindComic={setIsFindComic}
+      />
+      {isFindComic ? (
+        <SearchListValue data={comicsQuery} />
+      ) : (
+        <SearchListValue data={comicListAll} />
+      )}
     </div>
   );
 };

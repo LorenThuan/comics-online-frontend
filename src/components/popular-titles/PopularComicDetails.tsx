@@ -1,15 +1,64 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom';
-import ImgDemo from "../../assets/SaladBowl.jpg"
+import React, { useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import UserService from '../constants/UserService';
+import { User } from '../constants/types';
+import { useStateContext } from '../../context/StateContext';
 
 const PopularComicDetails = () => {
   let location = useLocation();
-  const comicItem = location.state?.comicItem;
+  const { comicItem } = location.state || {};
+
+  const {setComicList, comicList} = useStateContext();
+  const navigate = useNavigate();
+
+  const handleAddToLibrary = async (comic_id: number) => {
+    console.log(comic_id);
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if (token) {
+     
+        const result = await UserService.addToLibrary(comic_id, token);
+        console.log(result);
+        // console.log(result.comicList);  
+       
+        if (result) {
+          alert("Add to library success")
+          setComicList(result.comicList);
+          navigate("/titles/follows");
+        } else {
+          console.error('Comic already in library'); 
+        }
+
+
+    } else {
+      console.error('No token found in localStorage'); // Handle the case where the token is not found
+    }
+  }
+
+  const handleSetState = () => {
+    alert("Value really exist in library");
+  }
+
+  const [stateValue, setStateValue] = React.useState<string>('');
+
+  useEffect(() => {
+    const handleFound = async () => {
+      const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comic_id);
+      if (foundComic) {
+          console.log(foundComic);
+          setStateValue("Reading")
+      } else {
+        setStateValue("Add to Library")
+      }
+    }
+    handleFound();
+  }, [comicItem])
+  
 
   return (
     <div className='h-screen w-auto'>
-      {console.log(comicItem)}
+
       <div className='flex flex-col items- sm:flex-row space-x-7 pb-8 mt-10'>
         <div className='flex item-center'>
           <img src={comicItem.image_src} alt="img demo" className='rounded-md shadow-lg object-cover w-[193px] h-[250px]'/>
@@ -42,6 +91,11 @@ const PopularComicDetails = () => {
           </ul>
 
           <div className='flex space-x-2'>
+            <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary(comicItem.comic_id) : handleSetState()}} 
+ 
+            className='px-6 py-2 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>
+              {stateValue}
+              </button>
             <Link to="" className='px-6 py-2 bg-green-400 text-center rounded-md hover:opacity-50 text-white duration-200'>First Read</Link>
             <Link to="" className='px-6 py-2 bg-red-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Followed</Link>
             <Link to="" className='px-6 py-2 bg-violet-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Liked</Link>
