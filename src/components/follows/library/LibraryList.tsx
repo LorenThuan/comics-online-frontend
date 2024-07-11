@@ -1,11 +1,9 @@
-import React from "react";
-import DemoImg from "../../../assets/SaladBowl.jpg";
+
 import VnLogo from "../../../assets/vn.svg";
-import CrudUser from "../../../hooks/CrudUser";
 import { useStateContext } from "../../../context/StateContext";
-import { ComicTest } from "../../constants/types";
 import useComicList from "../../../hooks/CrudComicList";
 import { useNavigate } from "react-router-dom";
+import { Comic } from "../../constants/types";
 
 const LibraryList = () => {
   const {comicList} = useStateContext();
@@ -14,7 +12,7 @@ const LibraryList = () => {
   const navigate = useNavigate();
 
   const handleLibrary = (comicId: number) => {
-    const comicItem =  comicListAll.find(comic => comic.comic_id === comicId);
+    const comicItem =  comicListAll.find(comic => comic.comicId === comicId);
     try {
       if (comicItem) {
           console.log(comicItem);
@@ -31,7 +29,7 @@ const LibraryList = () => {
 
   return (
     <div className='mt-2 grid grid-cols-6'>
-    {comicList?.map((comicItem: ComicTest, index: number) => (
+    {comicList?.map((comicItem: any, index: number) => (
       <div className="m-2 hover:cursor-pointer" onClick={() => handleLibrary(comicItem.comicId)}>
       <div className="flex justify-center">
         <img

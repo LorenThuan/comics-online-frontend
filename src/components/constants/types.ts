@@ -1,19 +1,19 @@
 export interface Comic {
   author?: string;
-  comic_id: number;
+  comicId?: number;
+  nameComic?: string;
   followed?: number;
   image_src?: string;
   liked?: number;
-  name_comic: string;
-  state: string;
+  state?: string;
   views?: bigint;
-  create_date: Date;
-  create_date_chapter?: Date;
-  last_modified_date_chapter?: Date;
-  last_modified_date?: Date;
-  genreList?: string[];
-  chapterList?: string[];
-  number_chapters?: number;
+  createDate?: Date;
+  createDateChapter?: Date;
+  lastModifiedDateChapter?: Date;
+  lastModifiedDate?: Date;
+  genreList?: string[] | { genreId?: number; genre?: string; }[];
+  chapterList?: string[] | { chapterId?: number; chapterNumber: string; createDate?: Date; lastModifiedDate?: Date }[];
+  chapterNumber?: number;
 }
 
 export interface User {
@@ -22,43 +22,36 @@ export interface User {
   email: string;
   password: string;
   role: string;
-  comicList?: ComicTest[];
+  comicList?: Comic[];
 }
 
 export interface AuthLogin {
   name?: string;
 }
 
-export interface ComicAdd {
-  comicId: number;
-  nameComic: string;
-  author?: string;
-  image_src: string;
-  state: string;
-  liked?: number;
-  followed?: number;
-  views?: bigint;
-  createDate: Date;
-  lastModifiedDate?: Date;
-  // genreList?: Genre[];
+export interface Genre {
+  genreId?: number;
+  genre?: string;
 }
 
-export interface ComicTest {
-  comicId: number;
-  nameComic: string;
-  author: string;
-  image_src: string;
-  state: string;
-  liked: number;
-  followed: number;
-  views: bigint;
-  createDate: Date;
-  lastModifiedDate: Date;
-  genreList: { genreId: number; genre: string }[];
-  // chapterList?: { chapterId: number; chapterNumber: string; createDate: Date; lastModifiedDate: Date }[]
-}
-
-// export interface Genre {
-//   genreId?: number;
-//   genre?: string;
+// export interface ComicTest {
+//   comicId?: number;
+//   nameComic: string;
+//   author?: string;
+//   image_src?: string;
+//   state: string;
+//   liked?: number;
+//   followed?: number;
+//   views?: bigint;
+//   createDate?: Date;
+//   lastModifiedDate?: Date;
+//   genreList?: { genreId?: number; genre?: string; }[];
+//   chapterList?: { chapterId?: number; chapterNumber: string; createDate?: Date; lastModifiedDate?: Date }[]
 // }
+
+export interface Chapter {
+  chapterId?: number;
+  chapterNumber?: string;
+  createDate?: Date; 
+  lastModifiedDate?: Date
+};

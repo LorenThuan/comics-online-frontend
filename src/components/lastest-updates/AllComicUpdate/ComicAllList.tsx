@@ -4,7 +4,6 @@ import SidebarIcon from "../../icon/SidebarIcon";
 import { LuEye } from "react-icons/lu";
 import { LuClock4 } from "react-icons/lu";
 import { FiMessageSquare, FiUsers } from "react-icons/fi";
-import { Comic } from "../../constants/types";
 import moment from "moment";
 import useSliderScrollUpdates from "../../../hooks/SlideScrollUpdates";
 import Slider from "react-slick";
@@ -12,6 +11,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import useComicList from "../../../hooks/CrudComicList";
 
 interface LastestUpdateListProps {
   data: any[];
@@ -30,19 +30,10 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
     sliderRef.current?.slickPrev();
   };
 
+  const {getClosestDate} = useComicList();
+
   return (
     <>
-      <style jsx global>
-        {`
-          .slick-slide {
-            width: 1030px !important;
-            display: flex !important;
-            // grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-            flex-direction: column;
-            margin-left: 16px !important;
-          }
-        `}
-      </style>
       <Slider ref={sliderRef} {...settings}>
         {data?.map((comicItem: any) => (
           <div className=" bg-gray-100">
@@ -58,7 +49,7 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
                 <div className="flex flex-col w-full">
                   <h2 className="font-bold text-base  whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[920px]">
-                    {comicItem.name_comic}
+                    {comicItem.nameComic}
                   </h2>
                   <hr className="border-1 border-solid border-gray-400 my-4 w-full px-2" />
                   <div className="flex justify-between items-center">
@@ -83,8 +74,11 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
                     <div className="flex items-center gap-4 mr-3">
                       <div className="flex items-center gap-2">
                         <SidebarIcon icon={<LuClock4 size="16" />} />
-                        <p className="text-[describes-rgb]">
-                          {moment(comicItem.create_date).fromNow()}
+                        {/* <p className="text-[describes-rgb]">
+                          {moment(comicItem.createDate).fromNow()}
+                        </p> */}
+                         <p className="text-[describes-rgb]">
+                        {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
                         </p>
                       </div>
 

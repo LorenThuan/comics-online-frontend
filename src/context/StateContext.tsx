@@ -1,6 +1,6 @@
 // src/context/StateContext.tsx
 import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { ComicTest, User } from '../components/constants/types';
+import { Comic, User } from '../components/constants/types';
 import UserService from '../components/constants/UserService';
 
 interface StateContextType {
@@ -8,16 +8,16 @@ interface StateContextType {
   setToken: React.Dispatch<React.SetStateAction<string>>;
   user: User | undefined;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-  comicList: ComicTest[] | undefined;
-  setComicList: React.Dispatch<React.SetStateAction<ComicTest[] | undefined>>;
+  comicList: Comic[] | undefined;
+  setComicList: React.Dispatch<React.SetStateAction<Comic[] | undefined>>;
 }
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
 
 export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [token, setToken] = useState('');
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [comicList, setComicList] = useState<ComicTest[] | undefined>([]);
+  const [user, setUser] = useState<User | undefined>();
+  const [comicList, setComicList] = useState<Comic[] | undefined>([]);
 
   useEffect(() => {
     const handleGetUserLogin = async () => {
@@ -27,7 +27,7 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
                 const result = await UserService.getYourProfile(token);
                 console.log("Full response:", result);
 
-                if (result && result.statusCode === 200 && result.message === "Get successfully" && result.user) {
+                if (result && result.statusCode === 200 && result.user) {
                     console.log("User:", result.user);
                     
                     if (result.user.comicList) {

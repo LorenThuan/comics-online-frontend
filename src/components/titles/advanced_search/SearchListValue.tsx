@@ -19,7 +19,7 @@ const SearchListValue = ({data}: SearchListValueProps) => {
       <div className='flex items-center flex-col'>
         <div className='flex space-x-1'>
         <img src={VnLogo} alt="vn" className='w-[24px] h-[24px] object-cover'/>
-        <div className='text-base text-blue-800 font-bold'>{comicItem.name_comic}</div>
+        <div className='text-base text-blue-800 font-bold'>{comicItem.nameComic}</div>
         </div>
         <ul className=''>
                 <li className='text-blue-800'>{comicItem.chapterList?.[0]?.toString()}</li>

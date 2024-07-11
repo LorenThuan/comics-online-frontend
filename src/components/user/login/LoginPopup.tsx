@@ -4,12 +4,10 @@ import SidebarIcon from "../../icon/SidebarIcon";
 import { IoSettingsOutline, IoWaterOutline } from "react-icons/io5";
 import VnIcon from "../../../assets/vn.svg";
 import { useNavigate } from "react-router-dom";
-import CrudUser from "../../../hooks/CrudUser";
 import UserService from "../../constants/UserService";
 import { ImProfile } from "react-icons/im";
 import { FaUsers } from "react-icons/fa6";
-import LoginRequired from "./LoginRequired";
-import { User } from "../../constants/types";
+import { FaBook } from "react-icons/fa";
 import { useStateContext } from "../../../context/StateContext";
 
 interface PopupProps {
@@ -57,8 +55,6 @@ const LoginPopup = (props: PopupProps) => {
     };
   }, []);
 
-  console.log(user?.name);
-
   return (
     <>
       {props.loginPopup ? (
@@ -95,12 +91,22 @@ const LoginPopup = (props: PopupProps) => {
               )}
 
               {adminOnly && (
-                <div
+                <div className="ml-6 flex flex-col space-y-3">
+                  <div
                   onClick={() => navigate("/admin/user-manager")}
-                  className="ml-6 flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
+                  className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
                 >
                   <SidebarIcon icon={<FaUsers size="24" />} />
                   <p className="text-lg">User Management</p>
+                </div>
+
+                <div
+                onClick={() => navigate("/comics/comic-management")}
+                className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
+              >
+                <SidebarIcon icon={<FaBook size="24" />} />
+                <p className="text-lg">Comic Managemnet</p>
+              </div>
                 </div>
               )}
 

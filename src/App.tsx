@@ -10,6 +10,7 @@ import LibraryManager from "./components/follows/library/LibraryManager";
 import SearchUserManager from "./components/user/user_component/SearchUserManager";
 import UserManagerComponent from "./components/user/user_component/UserManagerComponent";
 import { ContextProvider } from "./context/StateContext";
+import ComicManagement from "./components/comic/ComicManagement";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             path="/admin/user-manager"
             element={<UserManagerComponent />}
           />
+          <Route path="/comics/comic-management" element={<ComicManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>

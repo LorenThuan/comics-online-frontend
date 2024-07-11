@@ -58,7 +58,7 @@ const PopularTitles = ({ data }: PopularComicProps) => {
               {/*This is titles section*/}
               {data?.map((comicItem: any, index: number) => (
                 <div
-                  key={comicItem.comic_id}
+                  key={comicItem.comicId}
                   className="custom-slide gap-4 cursor-pointer"
                   onClick={() =>
                     navigate(`/title/${comicItem.image_src}`, {
@@ -74,7 +74,7 @@ const PopularTitles = ({ data }: PopularComicProps) => {
 
                   <div className="grid grid-cols-1 w-full">
                     <h1 className="text-2xl font-bold font-sans  whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[500px]">
-                      {comicItem.name_comic}
+                      {comicItem.nameComic}
                     </h1>
 
                     <ul className="flex gap-2 font-bold items-center">

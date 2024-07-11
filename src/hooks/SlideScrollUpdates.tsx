@@ -2,6 +2,9 @@ import React, {useRef} from 'react'
 import Slider from 'react-slick';
 
 const useSliderScrollUpdates = () => {
+  const sliderRef = useRef<Slider>(null);
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
   const settings = {
     dots: true,
     dotsClass: 'slick-dots',
@@ -12,10 +15,10 @@ const useSliderScrollUpdates = () => {
     slidesToScroll: 15,
     vertical: true,
     swipe: false, // Disable swipe for the settings
+    afterChange: (index: number) => setCurrentSlide(index),
     appendDots: (dots:any) => (
       <div>
         <ul style={{ 
-          margin: "0px", 
           display: "flex",
           justifyContent: "center",
           alignItems: "center", 
@@ -25,24 +28,29 @@ const useSliderScrollUpdates = () => {
         </ul>
       </div>
     ),
-    customPaging: (i:any) => (
-      <>
-      <div
-        style={{
-          width: "50px",
-          padding: "10px",
-          backgroundColor: "#f87171",
-          border: "1px solid",
-          color: "white",
-          borderRadius: "5px",
-        }}
-        className='hover:opacity-50'
-        onClick={() => handleCustomPagingClick(i)}
-      >
-        {i + 1}
-      </div>
-      </>
-    ),
+    customPaging: (i: any) => {
+      const isActive = currentSlide === i * settings.slidesToScroll;
+      return (
+        <div
+          style={{
+            width: '40px',
+            height: '40px',
+            backgroundColor: isActive ? '#fc4103' : '',
+            color: isActive ? 'white' : 'black',
+            opacity: isActive ? '0.6' : '',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            padding: '5px',
+            marginTop: '17px',
+            cursor: 'pointer',
+          }}
+          className="hover:bg-slate-300 whitespace-nowrap"
+          onClick={() => handleCustomPagingClick(i)}
+        >
+          {i + 1}
+        </div>
+      );
+    },
     responsive: [
       {
         breakpoint: 1075,
@@ -83,10 +91,9 @@ const useSliderScrollUpdates = () => {
     ]
   };
 
-  const sliderRef = useRef<Slider>(null);
-
   const handleCustomPagingClick = (index:number) => {
     if (sliderRef.current) {
+      setCurrentSlide(index);
       sliderRef.current?.slickGoTo(index * settings.slidesToScroll);
     }
   };

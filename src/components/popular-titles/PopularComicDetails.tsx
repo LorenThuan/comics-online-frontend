@@ -12,13 +12,13 @@ const PopularComicDetails = () => {
   const {setComicList, comicList} = useStateContext();
   const navigate = useNavigate();
 
-  const handleAddToLibrary = async (comic_id: number) => {
-    console.log(comic_id);
+  const handleAddToLibrary = async (comicId: number) => {
+    console.log(comicId);
     const token = localStorage.getItem("token");
     console.log(token);
     if (token) {
      
-        const result = await UserService.addToLibrary(comic_id, token);
+        const result = await UserService.addToLibrary(comicId, token);
         console.log(result);
         // console.log(result.comicList);  
        
@@ -44,7 +44,7 @@ const PopularComicDetails = () => {
 
   useEffect(() => {
     const handleFound = async () => {
-      const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comic_id);
+      const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comicId);
       if (foundComic) {
           console.log(foundComic);
           setStateValue("Reading")
@@ -64,7 +64,7 @@ const PopularComicDetails = () => {
           <img src={comicItem.image_src} alt="img demo" className='rounded-md shadow-lg object-cover w-[193px] h-[250px]'/>
         </div>
         <div className='grid grid-cols-1 gap-2'>
-          <h2 className='text-xl font-semibold'>{comicItem.name_comic}</h2>
+          <h2 className='text-xl font-semibold'>{comicItem.nameComic}</h2>
           {/*  */}
           <div className='flex space-x-16'>
           <div className='grid grid-cols-1'>
@@ -91,7 +91,7 @@ const PopularComicDetails = () => {
           </ul>
 
           <div className='flex space-x-2'>
-            <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary(comicItem.comic_id) : handleSetState()}} 
+            <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary(comicItem.comicId) : handleSetState()}} 
  
             className='px-6 py-2 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>
               {stateValue}
@@ -117,7 +117,7 @@ const PopularComicDetails = () => {
         {comicItem.chapterList.map((chapter:any, index:any) => (
           <div className='flex justify-between'>
            <li key={index} className="text-blue-500 cursor-pointer">{chapter}</li>
-           <li>{moment(comicItem.create_date_chapter).fromNow()}</li>
+           <li>{moment(comicItem.createDateChapter).fromNow()}</li>
           </div>
                    
                 ))}

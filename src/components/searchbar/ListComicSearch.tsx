@@ -19,7 +19,7 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
       <>
         {data?.map((comicItem: Comic) => (
           <div
-            key={comicItem.comic_id}
+            key={comicItem.comicId}
             className='bg-gray-100 w-auto h-auto px-3 ml-3 mt-5 rounded-lg cursor-pointer hover:bg-gray-200'
           >
             <div className='flex space-x-4'>
@@ -27,7 +27,7 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
                 <img src={comicItem.image_src} alt="img-search" className='object-cover w-16 h-24 rounded-md' />
               </div>
               <div className='grid grid-cols-1 gap-3'>
-                <div className='font-bold text-xl'>{comicItem.name_comic}</div>
+                <div className='font-bold text-xl'>{comicItem.nameComic}</div>
                 <div className='flex space-x-2 items-center'>
                   <div className='flex items-center gap-1'>
                     <SidebarIcon icon={<AiFillLike size="18" />} />

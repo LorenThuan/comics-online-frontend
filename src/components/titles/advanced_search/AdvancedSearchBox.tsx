@@ -12,6 +12,9 @@ interface AdvancedSearchProps {
 
 const AdvancedSearchModal = (props: AdvancedSearchProps) => {
   const genres = GenreList[0].gerne.split(", ");
+  const genresList = GenreList[0].gerne;
+  console.log(genresList);
+  
   const {
     selectedGenres,
     handleChecked,
