@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import UserService from "../components/constants/UserService";
 import { AuthLogin, User } from "../components/constants/types";
 import { useStateContext } from "../context/StateContext";
+import { toast } from "react-toastify";
 
 const CrudUser = () => {
   const [email, setEmail] = React.useState("");
@@ -28,6 +29,7 @@ const CrudUser = () => {
         navigate("/", { replace: true });  
       } else {
         setError(userData.message);
+        toast.error("Username or Password incorrect!")
       }
     } catch (error: any) {
       console.log(error);
@@ -45,6 +47,8 @@ const CrudUser = () => {
     role: "ROLE_USER",
   });
 
+  const [confirmPw, setConfirmPw] = useState<string>("");
+
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -53,17 +57,19 @@ const CrudUser = () => {
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // const role = localStorage.getItem("role");
-      await UserService.register(formData);
-
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        role: "ROLE_USER",
-      });
-      alert("User Registered successfully");
-      navigate("/auth/login", { replace: true });
+      if (formData.password === confirmPw) {
+        const response = await UserService.register(formData);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          role: "ROLE_USER",
+        });
+        alert("User Registered successfully");
+        navigate("/auth/login", { replace: true });
+      } else {
+        alert("Password and confirm default password do not match!");
+      }
     } catch (error: any) {
       console.log(error);
       throw error;
@@ -216,7 +222,9 @@ const CrudUser = () => {
     searchUser,
     setSearchUser,
     usersListSearch,
-    userListMembers
+    userListMembers,
+    confirmPw,
+    setConfirmPw
   };
 };
 

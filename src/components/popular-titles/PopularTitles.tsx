@@ -12,6 +12,7 @@ import ListNewComics from "../constants/list_comic_demo";
 import { Comic } from "../constants/types";
 import { useNavigate } from "react-router-dom";
 import useComicList from "../../hooks/CrudComicList";
+import { useStateContext } from "../../context/StateContext";
 
 // [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]
 // bg-img-bg
@@ -24,6 +25,7 @@ const PopularTitles = ({ data }: PopularComicProps) => {
   const navigate = useNavigate();
   const { settings } = useSlideScrollPopular();
   const sliderRef = useRef<Slider>(null);
+  const {setSelected} = useStateContext();
 
   const next = (e: MouseEvent) => {
     e.stopPropagation(); // Stop the click event from bubbling up to the parent
@@ -38,7 +40,7 @@ const PopularTitles = ({ data }: PopularComicProps) => {
   return (
     <>
       <div className="h-[410px] w-full bg-cover bg-center bg-no-repeat overflow-hidden">
-        <div className="pb-8 sm:pb-0 mt-12">
+        <div className="pb-8 sm:pb-0 mt-16">
           {/*This is img section*/}
           <div className="flex flex-col gap-8">
             <div className="">
@@ -60,11 +62,12 @@ const PopularTitles = ({ data }: PopularComicProps) => {
                 <div
                   key={comicItem.comicId}
                   className="custom-slide gap-4 cursor-pointer"
-                  onClick={() =>
+                  onClick={() => {
                     navigate(`/title/${comicItem.image_src}`, {
                       state: { comicItem },
                     })
-                  }
+                    setSelected("");
+                  }}
                 >
                   <img
                     src={comicItem.image_src}
@@ -77,11 +80,11 @@ const PopularTitles = ({ data }: PopularComicProps) => {
                       {comicItem.nameComic}
                     </h1>
 
-                    <ul className="flex gap-2 font-bold items-center">
+                    <ul className="grid grid-cols-2 sm:flex sm:gap-2 font-bold place-items-center">
                       {comicItem.genreList.map((genre: any, index: any) => (
                         <li
                           key={index}
-                          className="p-1 text-sm rounded-lg bg-white-rgb2"
+                          className="p-2 sm:p-1 text-nowrap text-sm rounded-lg bg-white-rgb2"
                         >
                           {genre}
                         </li>
@@ -92,11 +95,11 @@ const PopularTitles = ({ data }: PopularComicProps) => {
 
                     {/**/}
                     <div className="flex items-center justify-between self-end">
-                      <p className="italic font-bold text-1xl">
+                      <p className="italic font-bold text-sm sm:text-base">
                         {comicItem.author}
                       </p>
-                      <div className="flex gap-6 items-center">
-                        <div className="font-bold text-1xl">NO.{index + 1}</div>
+                      <div className="flex gap-4 sm:gap-6 items-center">
+                        <div className="font-bold text-sm sm:text-base">NO.{index + 1}</div>
                         {/* Arrows */}
                         <SidebarIcon
                           icon={<MdNavigateBefore size="28" />}

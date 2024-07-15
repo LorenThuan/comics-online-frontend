@@ -4,10 +4,11 @@ import chapterList from '../components/constants/chapter_list';
 import UserService from '../components/constants/UserService';
 import axios from 'axios';
 import useComicList from './CrudComicList';
+import { toast } from 'react-toastify';
 
 const ComicListManager = () => {
   const [usersList, setUsersList] = React.useState<User[]>([]);
-  const {setComicListFull, setComicListAll} = useComicList();
+  const {setComicListFull} = useComicList();
 
   useEffect(() => {
     const handle = async () => {
@@ -18,10 +19,12 @@ const ComicListManager = () => {
         setUsersList(result.userList);
       }
     };
-    if (usersList === null) {
+    const debounceTimeout = setTimeout(() => {
       handle();
-    }
-  }, [usersList]);
+    }, 300); // Adjust the debounce delay as needed
+
+    return () => clearTimeout(debounceTimeout);
+  }, []);
 
   const [comicData, setComicData] = React.useState<Comic>({
   nameComic: '',
@@ -80,19 +83,7 @@ const ComicListManager = () => {
   };
 
   const updateLocalStorage = (comicList:any) => {
-    const comicListString = JSON.stringify(comicList);
-  
-  // Check if the new data exceeds the localStorage limit (typically around 5MB)
-  if (comicListString.length > 5000000) { // approximate size check
-    console.error("Error: Data exceeds localStorage size limit.");
-    return;
-  }
-  
-  try {
-    localStorage.setItem('comicListFull', comicListString);
-  } catch (e) {
-    console.error("Error saving to localStorage", e);
-  }
+    localStorage.setItem('comicListFull', comicList);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -102,28 +93,32 @@ const ComicListManager = () => {
         "Are you sure want to add this comic?"
       );
       if (confirmAdd) {
-        console.log('Form Data:', comicData);
-        const response = await axios.post("http://localhost:8083/comic", comicData);
-        setComicListFull((prevList) => {
-          const updatedList = [...prevList, response.data];
-          updateLocalStorage(updatedList);
-          return updatedList;
-        });
-        const responseComicAll = await axios.get(
-          "http://localhost:8083/comic/last-comics"
-        );
-        // Store in localStorage for future use
-        localStorage.setItem("comicList", JSON.stringify(responseComicAll.data));
-        closeFormAddPopup();
-        alert("Add Comic successfully");
-        setComicData({
-          nameComic: '',
-          author: '',
-          image_src: '',
-          state: 'Đang Cập Nhật',
-          genreList: [],
-          chapterList: [],
-        })
+        if (comicData.genreList?.length !== 0) {
+          console.log('Form Data:', comicData);
+          const response = await axios.post("http://localhost:8083/comic", comicData);
+          setComicListFull((prevList) => {
+            const updatedList = [...prevList, response.data];
+            updateLocalStorage(updatedList);
+            return updatedList;
+          });
+          const responseComicAll = await axios.get(
+            "http://localhost:8083/comic/last-comics"
+          );
+          // Store in localStorage for future use
+          localStorage.setItem("comicList", JSON.stringify(responseComicAll.data));
+          closeFormAddPopup();
+          alert("Add Comic successfully");
+          setComicData({
+            nameComic: '',
+            author: '',
+            image_src: '',
+            state: 'Đang Cập Nhật',
+            genreList: [],
+            chapterList: [],
+          })
+        } else {
+          toast.error("Please Select Genres valid!");
+        }
       }
 
     } catch (error: any) {

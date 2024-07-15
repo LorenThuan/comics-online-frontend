@@ -5,6 +5,8 @@ import AdvancedSearchModal from "./AdvancedSearchBox";
 import ListComicSearch from "../../searchbar/ListComicSearch";
 import useComicList from "../../../hooks/CrudComicList";
 import SearchListValue from "./SearchListValue";
+import { useStateContext } from "../../../context/StateContext";
+import { useNavigate } from "react-router-dom";
 
 const AdvancedSearchContainer = () => {
   const {
@@ -15,14 +17,21 @@ const AdvancedSearchContainer = () => {
     setComicQuerys,
   } = useComicList();
 
+  const {setSelected} = useStateContext();
+  const navigate = useNavigate();
+
   return (
     <div className="mr-4">
       <div className="flex space-x-2 items-center">
         <SidebarIcon
           icon={<GrLinkPrevious size="18" />}
           className="p-3 hover:bg-gray-200 rounded-full cursor-pointer"
+          onClick={() => {
+            navigate("/");
+            setSelected('home');
+          }}
         />
-        <h2 className="font-semibold text-2xl">Advanced Search</h2>
+        <h2 className="font-semibold text-xl sm:text-2xl">Advanced Search</h2>
       </div>
 
       <AdvancedSearchModal

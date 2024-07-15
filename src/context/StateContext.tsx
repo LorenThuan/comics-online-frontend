@@ -10,14 +10,22 @@ interface StateContextType {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   comicList: Comic[] | undefined;
   setComicList: React.Dispatch<React.SetStateAction<Comic[] | undefined>>;
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  isOpenSidebar: boolean;
+  setOpenIsSidebar: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
 
 export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [token, setToken] = useState('');
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [comicList, setComicList] = useState<Comic[] | undefined>([]);
+  const [selected, setSelected] = useState<string>("home");
+  const [isOpenSidebar, setOpenIsSidebar] = useState<boolean>(false);
+
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     const handleGetUserLogin = async () => {
@@ -51,10 +59,11 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
     if (user === undefined) {
         handleGetUserLogin();
     }
-}, [user]);
+}, [token, role, user]);
 
   return (
-    <StateContext.Provider value={{ token, setToken, user, setUser, comicList, setComicList}}>
+    <StateContext.Provider value={{ token, setToken, user, setUser, comicList, 
+    setComicList, selected, setSelected, isOpenSidebar, setOpenIsSidebar}}>
       {children}
     </StateContext.Provider>
   );

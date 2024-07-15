@@ -6,6 +6,7 @@ import { Comic } from "../constants/types";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import useComicList from "../../hooks/CrudComicList";
+import { useStateContext } from "../../context/StateContext";
 
 interface LastestUpdateListProps {
   data: Comic[];
@@ -17,20 +18,21 @@ interface LastestUpdateListProps {
 const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
   const navigate = useNavigate();
   const {getClosestDate} = useComicList();
+  const {setSelected} = useStateContext();
 
   return (
     <div className="grid grid-cols-1 gap-x-6 w-full bg-gray-100">
       <div className="grid gap-4 p-4">
         {data?.slice(0, 6).map((comicItem: any) => (
-          <div className="flex gap-2" id={comicItem.comicId}>
-            <div
-              onClick={() =>
-                navigate(`/title/${comicItem.image_src}`, {
-                  state: { comicItem },
-                })
-              }
-              className="flex items-center"
-            >
+          <div               
+          onClick={() => {
+            navigate(`/title/${comicItem.image_src}`, {
+              state: { comicItem },
+            }) 
+            setSelected("");
+          }}
+          className="flex gap-2" id={comicItem.comicId}>
+            <div className="flex items-center">
               <img
                 src={comicItem.image_src}
                 alt="demo"
@@ -40,11 +42,6 @@ const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
 
             <div className="flex flex-col w-full justify-center">
               <h2
-                onClick={() =>
-                  navigate(`/title/${comicItem.image_src}`, {
-                    state: { comicItem },
-                  })
-                }
                 className="cursor-pointer font-sans text-lg font-bold whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[400px]"
               >
                 {comicItem.nameComic}
@@ -72,7 +69,7 @@ const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
                 {/* <p className="text-[describes-rgb]">
                   {moment(comicItem.createDate).fromNow()}
                 </p> */}
-                <p className="text-[describes-rgb]">
+                <p onClick={(e) => e.preventDefault()} className="text-[describes-rgb] cursor-none">
                 {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
                 </p>
               </div>

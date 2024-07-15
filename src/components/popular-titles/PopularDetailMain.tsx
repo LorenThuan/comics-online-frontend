@@ -4,7 +4,7 @@ import PopularComicDetails from "./PopularComicDetails";
 const PopularDetailMain = () => {
 
   return (
-      <Common className="grid grid-cols-1 w-full ml-[290px]" components={<PopularComicDetails/>}/>
+      <Common className="grid grid-cols-1 w-full mt-16" components={<PopularComicDetails/>}/>
   )
 };
 

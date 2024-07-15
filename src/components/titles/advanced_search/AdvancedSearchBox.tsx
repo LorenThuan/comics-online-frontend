@@ -56,7 +56,7 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
       <div className="flex justify-center">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-4 py-2 hover:opacity-60 bg-blue-400 text-white font-bold rounded-lg text-center cursor-pointer"
+          className="px-4 py-1 sm:py-2 hover:opacity-60 bg-blue-400 text-white font-bold rounded-lg text-center cursor-pointer"
         >
           {isOpen ? <div>Hide search box</div> : <div>Show the search box</div>}
         </button>
@@ -91,7 +91,7 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
         </div>
 
         <div className="flex justify-center mt-2">
-          <button className="px-4 py-2 bg-blue-600 text-white font-bold text-center rounded-lg hover:opacity-60 cursor-pointer">
+          <button onClick={() => window.location.reload()} className="px-4 py-1 sm:py-2 bg-blue-600 text-white font-bold text-center rounded-lg hover:opacity-60 cursor-pointer">
             Reset
           </button>
         </div>
@@ -114,7 +114,7 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
               ))}
             </div>
             <div className="mt-5">
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
                 <div className="col-span-1">
                   <h2 className="text-lg font-semibold">Chapters quantity</h2>
                   <select

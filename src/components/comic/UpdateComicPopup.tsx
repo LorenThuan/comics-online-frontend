@@ -75,8 +75,8 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
   return (
     <>
     {props.isOpenUpdate &&    
-    <div className='h-screen w-screen left-0 top-0 fixed backdrop:brightness-90'>
-      <div className='fixed top-1/2 left-1/2 -translate-y-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
+    <div className='fixed h-screen w-screen left-0 top-0 backdrop:brightness-90'>
+      <div className='fixed left-1/4 top-12 -translate-x-10  sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
       <form
               onSubmit={props.handleFormUpdate}
               className="flex justify-center items-center bg-blue-300 p-4 rounded shadow-sm"
@@ -122,16 +122,19 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
 
                   <div className="sm:col-span-1">
                     <label htmlFor="image_src" className="text-base font-semibold">
-                    Image Src
+                    Image Url
                     </label>
                     <div className="">
                       <input
-                        type="file"
-                        multiple={false}
-                        accept='image/*'
+                        type="url"
+                        required
+                        value={props.comicValue?.image_src}
                         onChange={props.handleChangeUpdate}
                         name="image_src"
-                        className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
+                        id='image_src'
+                        placeholder="https://example.com" 
+                        pattern="https://.*"
+                        className="block py-1.5 w-full pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                       />
                     </div>
                   </div>
@@ -167,7 +170,7 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
           {props.comicValue?.genreList?.length ?? 0 > 0 ? props.comicValue?.genreList?.map((g:any) => g.genre).join(', ') : 'Select Genres'}
         </button>
         {isDropdownOpen && (
-          <div className="absolute mt-2 w-full  bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-36 overflow-y-auto">
+          <div className="absolute mt-2 w-full  bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-28 sm:max-h-36 overflow-y-auto">
             {genreList.map((genre: any, index: number) => (
               <label key={index} className="flex items-center px-4 py-2 hover:bg-gray-100">
                 <input

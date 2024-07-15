@@ -6,7 +6,7 @@ import CrudUser from "../../../hooks/CrudUser";
 const UserManagerComponent = () => {
   return (
     <Common
-      className="grid grid-cols-1 w-full ml-[290px] mt-10"
+      className="grid grid-cols-1 w-full"
       components={<UserManagement />}
     />
   );

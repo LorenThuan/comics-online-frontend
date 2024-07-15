@@ -12,6 +12,7 @@ const Searchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const searchRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutSide = (e: MouseEvent) => {
@@ -34,6 +35,7 @@ const Searchbar = () => {
     <div className="fixed top-0 right-0 m-0 my-3 mx-20">
       <div className="flex items-center" ref={searchRef}>
         <input
+          ref={inputRef}
           type="text"
           placeholder="Search"
           value={searchQuery}
@@ -42,11 +44,12 @@ const Searchbar = () => {
             setSearchPopup(true);
           }}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="input-search relative bg-white-rgb"
+          className={`input-search relative bg-white-rgb 
+            w-[25px] sm:w-[234px] ${isOpen ? 'w-[350px] sm:w-[500px]' : ''}`}
           style={{
-            width: isOpen ? "500px" : "234px",
+            // width: isOpen ? "350px sm:[500px]" : "",
             borderStyle: isOpen ? "solid" : "none",
-            borderWidth: isOpen ? "4px" : "0px",
+            borderWidth: isOpen ? "2px" : "0px",
             borderColor: isOpen ? "orange" : "white",
             transitionProperty: "width",
             transitionDuration: isOpen ? "300ms" : "150ms",
@@ -55,20 +58,28 @@ const Searchbar = () => {
         <div className="flex items-center absolute right-0">
           <div>
             <span
-              className="text-sm text-gray-500 mr-6"
-              style={{ visibility: isOpen ? "hidden" : "visible" }}
+              className="text-sm text-gray-500 mr-6 invisible sm:visible"
+              style={{ visibility: isOpen ? "hidden" : undefined }}
             >
               Ctrl K
             </span>
           </div>
-          {isOpen ? (
+          {searchQuery ? (
             <SidebarIcon
+              onClick={() => {
+                setSearchQuery('')
+                inputRef?.current?.focus(); // Focus on the input field
+              }}
               className="absolute cursor-pointer right-0 bg-red-500 p-0.5 rounded-lg"
               icon={<MdOutlineClose size="20" color="white" />}
             />
           ) : (
             <SidebarIcon
-              className="absolute right-0"
+            onClick={() => {
+              setIsOpen(true);
+              setSearchPopup(true);
+            }}
+              className="absolute right-0 mr-2 cursor-text"
               icon={<FiSearch size="16" />}
             />
           )}

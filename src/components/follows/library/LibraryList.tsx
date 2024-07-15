@@ -3,10 +3,9 @@ import VnLogo from "../../../assets/vn.svg";
 import { useStateContext } from "../../../context/StateContext";
 import useComicList from "../../../hooks/CrudComicList";
 import { useNavigate } from "react-router-dom";
-import { Comic } from "../../constants/types";
 
 const LibraryList = () => {
-  const {comicList} = useStateContext();
+  const {comicList, setSelected} = useStateContext();
   console.log(comicList);
   const { comicListAll } = useComicList();
   const navigate = useNavigate();
@@ -19,18 +18,18 @@ const LibraryList = () => {
           navigate(`/title/${comicItem.image_src}`, {
             state: {comicItem},
           })
+          setSelected("");
       }
     } catch (error) {
       console.log("Comic not found");
       throw error;
     }
   };
-  
 
   return (
-    <div className='mt-2 grid grid-cols-6'>
+    <div className='mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6'>
     {comicList?.map((comicItem: any, index: number) => (
-      <div className="m-2 hover:cursor-pointer" onClick={() => handleLibrary(comicItem.comicId)}>
+      <div key={index} className="m-2 hover:cursor-pointer" onClick={() => handleLibrary(comicItem.comicId)}>
       <div className="flex justify-center">
         <img
           src={comicItem.image_src}

@@ -50,27 +50,27 @@ const useOptions = () => {
 
   const optionSortBy = [
     {
-      name: 'Posting date gradually decreases',
+      name: 'Posting date decreases',
       value: 'create_date_chapter_desc'
     },
     {
-      name: 'Posting date gradually increases',
+      name: 'Posting date increases',
       value: 'create_date_chapter_asc'
     },
     {
-      name: 'Update date gradually decreases',
+      name: 'Update date decreases',
       value: 'last_modified_date_chapter_desc'
     },
     {
-      name: 'Update date gradually increases',
+      name: 'Update date increases',
       value: 'last_modified_date_chapter_asc'
     },
     {
-      name: 'Views gradually decrease',
+      name: 'Views decrease',
       value: 'views_desc'
     },
     {
-      name: 'Views gradually increases',
+      name: 'Views increases',
       value: 'views_asc'
     },
   ]

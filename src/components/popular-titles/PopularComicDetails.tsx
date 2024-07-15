@@ -9,7 +9,7 @@ const PopularComicDetails = () => {
   let location = useLocation();
   const { comicItem } = location.state || {};
 
-  const {setComicList, comicList} = useStateContext();
+  const {setComicList, comicList, setSelected} = useStateContext();
   const navigate = useNavigate();
 
   const handleAddToLibrary = async (comicId: number) => {
@@ -23,9 +23,16 @@ const PopularComicDetails = () => {
         // console.log(result.comicList);  
        
         if (result) {
-          alert("Add to library success")
           setComicList(result.comicList);
-          navigate("/titles/follows");
+          const debounceTimeout = setTimeout(() => {
+            alert("Add to library success")
+          }, 500); 
+      
+          return () => {
+            clearTimeout(debounceTimeout);
+            navigate("/titles/follows");
+            setSelected("library");
+          };
         } else {
           console.error('Comic already in library'); 
         }
@@ -52,6 +59,7 @@ const PopularComicDetails = () => {
         setStateValue("Add to Library")
       }
     }
+    
     handleFound();
   }, [comicItem])
   
@@ -59,11 +67,11 @@ const PopularComicDetails = () => {
   return (
     <div className='h-screen w-auto'>
 
-      <div className='flex flex-col items- sm:flex-row space-x-7 pb-8 mt-10'>
+      <div className='flex flex-col items-center sm:items-start sm:flex-row space-x-7 pb-8 mt-10'>
         <div className='flex item-center'>
           <img src={comicItem.image_src} alt="img demo" className='rounded-md shadow-lg object-cover w-[193px] h-[250px]'/>
         </div>
-        <div className='grid grid-cols-1 gap-2'>
+        <div className='grid grid-cols-1 gap-2 place-items-center sm:place-items-start mt-5 sm:mt-0'>
           <h2 className='text-xl font-semibold'>{comicItem.nameComic}</h2>
           {/*  */}
           <div className='flex space-x-16'>
@@ -84,21 +92,21 @@ const PopularComicDetails = () => {
           </div>
           </div>
 
-          <ul className='flex space-x-2'>
+          <ul className='grid grid-cols-4 gap-5 place-items-center sm:flex sm:space-x-2'>
           {comicItem.genreList.map((genre:any, index:any) => (
-                    <li key={index} className="p-1 text-sm rounded-lg bg-white-rgb2">{genre}</li>
+                    <li key={index} className="px-2 py-1.5 sm:p-1 text-sm rounded-lg bg-white-rgb2 text-center text-nowrap">{genre}</li>
                 ))}
           </ul>
 
-          <div className='flex space-x-2'>
+          <div className='grid grid-cols-3 sm:grid-cols-4 gap-2 mt-2 sm:mt-0'>
             <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary(comicItem.comicId) : handleSetState()}} 
  
-            className='px-6 py-2 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>
+            className='px-4 py-2 sm:px-6 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>
               {stateValue}
               </button>
-            <Link to="" className='px-6 py-2 bg-green-400 text-center rounded-md hover:opacity-50 text-white duration-200'>First Read</Link>
-            <Link to="" className='px-6 py-2 bg-red-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Followed</Link>
-            <Link to="" className='px-6 py-2 bg-violet-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Liked</Link>
+            <Link to="" className='px-4 py-2 sm:px-6 bg-green-400 text-center rounded-md hover:opacity-50 text-white duration-200'>First Read</Link>
+            <Link to="" className='px-4 py-2 sm:px-6 bg-red-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Followed</Link>
+            <Link to="" className='px-4 py-2 sm:px-6 bg-violet-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Liked</Link>
           </div>
 
         </div>
@@ -113,7 +121,7 @@ const PopularComicDetails = () => {
         </div>
       <div className='mt-10 pb-8'>
         <h2 className='text-lg text-orange-500 ml-3'>Chapter List</h2>
-        <ul className='p-6 rounded-lg shadow-md w-auto m-4 h-auto border border-slate-200 divide-y  divide-slate-200'>
+        <ul className='p-6 rounded-lg shadow-md w-auto mr-4 mt-5 h-auto border border-slate-200 divide-y  divide-slate-200'>
         {comicItem.chapterList.map((chapter:any, index:any) => (
           <div className='flex justify-between'>
            <li key={index} className="text-blue-500 cursor-pointer">{chapter}</li>

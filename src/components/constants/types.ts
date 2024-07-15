@@ -1,6 +1,6 @@
 export interface Comic {
   author?: string;
-  comicId?: number;
+  comicId?: number | any;
   nameComic?: string;
   followed?: number;
   image_src?: string;

@@ -36,7 +36,7 @@ const SearchbarPopup = (props: PopupProps) => {
       {props.searchPopup ? (
         <div className="h-auto w-screen fixed top-0 right-0 z-21 backdrop-brightness-95">
           {props.searchQuery === "" ? (
-            <div className="left-2/4 mt-20 h-14 fixed ml-[104px] -translate-y-1/2 p-4 w-[500px] rounded-lg bg-white shadow-md">
+            <div className="left-1/3 sm:left-1/2 mt-20 h-14 fixed ml-[135px] sm:ml-[104px] -translate-y-1/2 -translate-x-2/3 sm:-translate-x-1 p-4 w-[350px] sm:w-[500px] rounded-lg bg-white shadow-md">
               <div className="text-base font-sans">Enter a search query...</div>
             </div>
           ) : (

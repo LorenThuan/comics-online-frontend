@@ -72,7 +72,7 @@ const TableComicList = ({data}: TableComicListProps) => {
           {data?.map((comicItem: any, index: number) => (
             <tr key={index} className="text-center">
               <td>{index}</td>
-              <td className='whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[620px]'>
+              <td className=''>
                 {comicItem.nameComic}
               </td>
               <td>{comicItem.author}</td>

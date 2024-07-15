@@ -14,8 +14,11 @@ const UserList = (props:UserListProps) => {
   
 
   const renderUserList = (userList: User[]) => {
-    return userList.map((userListItem: User, index: any) => (
-      <div key={index} className='bg-slate-200 px-3 py-2 flex justify-between items-center cursor-pointer rounded-md hover:bg-slate-300'>
+    return (
+    <>
+    <div className='mt-10 grid grid-cols-1 sm:grid-cols-4 gap-2 mr-4'>
+    {userList.map((userListItem: User, index: any) => (
+      <div key={index} className='bg-slate-200 px-2 w-full py-2 flex items-center justify-between cursor-pointer rounded-md hover:bg-slate-300'>
         <div className='flex space-x-2'>
           <img src={Neko} alt="" className='w-6 h-6 object-cover rounded-full'/>
           <h2 className='font-semibold'>{userListItem.name}</h2>
@@ -24,8 +27,10 @@ const UserList = (props:UserListProps) => {
           <p className='text-sm'>{userListItem.role}</p>
         </div>
       </div>
-    ));
-  };
+    ))}
+    </div>
+    </>
+  )};
   
   
   return (

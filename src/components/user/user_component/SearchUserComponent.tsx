@@ -6,12 +6,15 @@ import UserList from "./UserList";
 import UserService from "../../constants/UserService";
 import LoginRequired from "../login/LoginRequired";
 import CrudUser from "../../../hooks/CrudUser";
+import { useStateContext } from "../../../context/StateContext";
+import { useNavigate } from "react-router-dom";
 
 const SearchUserComponent = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const isAuthenticated = UserService.isAuthenticated();
-  const { searchUser, setSearchUser, usersListSearch, userListMembers } =
-    CrudUser();
+  const { searchUser, setSearchUser, usersListSearch, userListMembers } = CrudUser();
+  const {setSelected} = useStateContext();
+  const navigate = useNavigate();
 
   return (
     <div className="">
@@ -19,6 +22,10 @@ const SearchUserComponent = () => {
         <SidebarIcon
           icon={<GrLinkPrevious size="18" />}
           className="p-3 hover:bg-gray-200 rounded-full cursor-pointer"
+          onClick={() => {
+            setSelected("home");
+            navigate("/")
+          }}
         />
         <h2 className="font-semibold text-2xl">Search User</h2>
       </div>
@@ -53,13 +60,11 @@ const SearchUserComponent = () => {
               />
             </div>
           </div>
-          <div className="mt-10 grid grid-cols-4">
             <UserList
               usersListSearch={usersListSearch}
               searchUser={searchUser}
               userListMembers={userListMembers}
             />
-          </div>
         </div>
       ) : (
         <LoginRequired />

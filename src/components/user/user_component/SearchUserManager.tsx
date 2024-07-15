@@ -4,7 +4,7 @@ import SearchUserComponent from './SearchUserComponent'
 
 const SearchUserManager = () => {
   return (
-    <Common className="grid grid-cols-1 w-full ml-[290px] mt-10" components={<SearchUserComponent/>}/>
+    <Common className="grid grid-cols-1 w-full mt-16" components={<SearchUserComponent/>}/>
   )
 }
 

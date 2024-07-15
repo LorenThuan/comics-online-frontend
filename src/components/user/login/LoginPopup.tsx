@@ -60,13 +60,13 @@ const LoginPopup = (props: PopupProps) => {
       {props.loginPopup ? (
         <div className="h-screen w-screen fixed top-0 left-0 z-20 backdrop-brightness-75">
           <div
-            className="fixed left-3/4 top-1/3 -translate-y-1/4 bg-white
-      p-[24px] h-auto rounded-md shadow-md min-w-[256px] max-w-[320px] w-[302.906px]
+            className="fixed sm:left-3/4 sm:top-1/3 sm:-translate-y-1/4 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/4 sm:-translate-x-0 bg-white
+      p-[24px] h-screen sm:h-auto rounded-md shadow-md min-w-[256px] max-w-[320px] w-[302.906px]
       "
             ref={loginRef}
           >
             {/*User info*/}
-            <div className="flex flex-col gap-4 mt-4 items-center hover:bg-gray-200 cursor-pointer">
+            <div className="flex flex-col gap-4  items-center hover:bg-gray-200 cursor-pointer">
               <SidebarIcon icon={<FiUser size="46" />} />
               <h1 className="text-2xl font-sans font-bold">
                 {isAuthenticated ? (
@@ -76,7 +76,7 @@ const LoginPopup = (props: PopupProps) => {
                 )}
               </h1>
             </div>
-            <hr className="border-1 border-solid border-hr-white-rgb my-4 w-full" />
+            <hr className="border border-solid border-hr-white-rgb my-4 w-full" />
             {/*Setting*/}
             <div className="flex flex-col gap-4">
               {/* User and Admin */}
@@ -145,14 +145,14 @@ const LoginPopup = (props: PopupProps) => {
                   Content Fillter
                 </p>
               </div>
-              <hr className="border-1 border-solid border-hr-white-rgb my-2 w-full" />
+              <hr className="border border-solid border-hr-white-rgb my-2 w-full" />
               {/*Login Register*/}
               <div className="flex flex-col gap-4">
                 {!isAuthenticated ? (
                   <div className="flex flex-col gap-4">
                     <button
                       className="px-10 py-2 text-lg bg-orange-500 rounded-lg text-white font-bold text-center
-              hover:bg-orange-700"
+              hover:bg-orange-600"
                       onClick={() => navigate("/auth/login")}
                     >
                       Sign in

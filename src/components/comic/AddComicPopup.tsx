@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import GenreList from '../constants/genre_list'
 import chapterList from '../constants/chapter_list';
 import { Comic } from '../constants/types';
+import { ToastContainer } from 'react-toastify';
 
 interface AddComicPopupProps {
   isOpenForm?: boolean;
@@ -49,12 +50,13 @@ const AddComicPopup = (props: AddComicPopupProps) => {
     };
   }, []);
 
-
+  // 
   return (
     <>
+    <ToastContainer/>
     {props.isOpenForm &&
-    <div className='h-screen w-screen fixed left-0 top-0 backdrop:brightness-90'>
-      <div className='fixed top-1/2 left-1/2 -translate-y-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
+    <div className='h-screen w-screen fixed left-0 top-0 backdrop:brightness-90 overflow-auto overflow-y-scroll overscroll-contain'>
+      <div className='fixed left-1/4 top-14 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
       <form
               onSubmit={props.handleSubmit}
               className="flex justify-center items-center bg-blue-300 p-4 rounded shadow-sm"
@@ -100,16 +102,19 @@ const AddComicPopup = (props: AddComicPopupProps) => {
 
                   <div className="sm:col-span-1">
                     <label htmlFor="image_src" className="text-base font-semibold">
-                    Image Src
+                    Image Url
                     </label>
                     <div className="">
                       <input
-                        type="file"
+                        type="url"
                         required
-                        multiple={false}
-                        accept='image/*'
+                        value={props.comicData?.image_src}
                         onChange={props.handleChange}
                         name="image_src"
+                        id='image_src'
+                        size={26}
+                        placeholder="https://example.com" 
+                        pattern="https://.*"
                         className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                       />
                     </div>
@@ -149,7 +154,7 @@ const AddComicPopup = (props: AddComicPopupProps) => {
           {props.comicData?.genreList?.length ?? 0 > 0 ? props.comicData?.genreList?.map((g:any) => g.genre).join(', ') : 'Select Genres'}
         </button>
         {isDropdownOpen && (
-          <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-36 overflow-y-auto">
+          <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-28 sm:max-h-36 overflow-y-auto">
             {genreList.map((genre: any) => (
               <label key={genre} className="flex items-center px-4 py-2 hover:bg-gray-100">
                 <input

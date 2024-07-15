@@ -1,8 +1,8 @@
 import React from "react";
-import SupportUs from "./SupportUs";
+import SupportUs from "./SupportMe";
 import SiteRules from "./SiteRules";
 import Announcements from "./Announcements";
-import AboutUs from "./AboutUs";
+import AboutUs from "./AboutMe";
 import { GrPin } from "react-icons/gr";
 import SidebarIcon from "../icon/SidebarIcon";
 
