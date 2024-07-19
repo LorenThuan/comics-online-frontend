@@ -4,12 +4,61 @@ import SidebarIcon from "../icon/SidebarIcon";
 import useSearchPopup from "../../hooks/SearchPopup";
 import SearchbarPopup from "./SearchbarPopup";
 import { MdOutlineClose } from "react-icons/md";
+import { useStateContext } from "../../context/StateContext";
 import useComicList from "../../hooks/CrudComicList";
+import { Comic } from "../constants/types";
+import axios from "axios";
 
 const Searchbar = () => {
   const { searchPopup, setSearchPopup } = useSearchPopup();
-  // const { searchQuery, setSearchQuery } = useComicList();
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [isFound, setIsFound] = React.useState<boolean>(false);
+
+  const [searchComic, setSearchComic] = React.useState<Comic[]>([]);
+  const cache: any = {};
+  console.log(searchQuery);
+
+  useEffect(() => {
+    const handle = async () => {
+      try {
+        if (!searchQuery) {
+          return [];
+        }
+
+          if (cache[searchQuery]) {
+          return cache[searchQuery];
+        }
+  
+        console.log("Fetching data from server");
+        const response = await axios.get(
+          "http://localhost:8083/comics/search-list",
+          {
+            params: {
+              searchQuery: searchQuery, // use the appropriate parameter name expected by your API
+            },
+          }
+        );
+        console.log("API response status:", response.status);
+        console.log("API response data:", response.data);
+        if (response.data.length > 0) {
+          setIsFound(true);
+          setSearchComic(response.data)
+          cache[searchQuery] = response.data;
+        } else {
+          setIsFound(false);
+        }
+      } catch (error) {
+        console.error("Error fetching comic:", error);
+        return [];
+      }
+    };
+
+    const debounceTimeout = setTimeout(() => {
+      handle();
+    }, 300); // Adjust the debounce delay as needed
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchQuery]);
 
   const searchRef = useRef(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +116,7 @@ const Searchbar = () => {
           {searchQuery ? (
             <SidebarIcon
               onClick={() => {
-                setSearchQuery('')
+                setSearchQuery("");
                 inputRef?.current?.focus(); // Focus on the input field
               }}
               className="absolute cursor-pointer right-0 bg-red-500 p-0.5 rounded-lg"
@@ -87,6 +136,8 @@ const Searchbar = () => {
         <SearchbarPopup
           searchPopup={searchPopup}
           setSearchPopup={setSearchPopup}
+          searchComic={searchComic}
+          isFound={isFound}
           searchQuery={searchQuery}
         />
       </div>

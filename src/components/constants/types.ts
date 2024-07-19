@@ -12,8 +12,13 @@ export interface Comic {
   lastModifiedDateChapter?: Date;
   lastModifiedDate?: Date;
   genreList?: string[] | { genreId?: number; genre?: string; }[];
-  chapterList?: string[] | { chapterId?: number; chapterNumber: string; createDate?: Date; lastModifiedDate?: Date }[];
+  chapterList?: { chapterIdConcat?: number; chapterNumberConcat?: string; }[] | string[];
   chapterNumber?: number;
+}
+
+export interface ChapterInfo {
+  chapterIdConcat?: number;
+  chapterNumberConcat?: string;
 }
 
 export interface User {
@@ -34,24 +39,33 @@ export interface Genre {
   genre?: string;
 }
 
-// export interface ComicTest {
-//   comicId?: number;
-//   nameComic: string;
-//   author?: string;
-//   image_src?: string;
-//   state: string;
-//   liked?: number;
-//   followed?: number;
-//   views?: bigint;
-//   createDate?: Date;
-//   lastModifiedDate?: Date;
-//   genreList?: { genreId?: number; genre?: string; }[];
-//   chapterList?: { chapterId?: number; chapterNumber: string; createDate?: Date; lastModifiedDate?: Date }[]
-// }
-
 export interface Chapter {
   chapterId?: number;
   chapterNumber?: string;
   createDate?: Date; 
   lastModifiedDate?: Date
 };
+
+export interface FileData {
+  id?: bigint;
+  name?: string;
+  type?: string;
+  filePath?: string;
+}
+
+export interface ComicFull {
+  author?: string;
+  comicId?: number | any;
+  nameComic?: string;
+  followed?: number;
+  image_src?: string;
+  liked?: number;
+  state?: string;
+  views?: bigint;
+  createDate?: Date;
+  createDateChapter?: Date;
+  lastModifiedDateChapter?: Date;
+  lastModifiedDate?: Date;
+  genreList?: string[] | { genreId?: number; genre?: string; }[];
+  chapterList?: { chapterId?: number; chapterNumber: string; createDate?: Date; lastModifiedDate?: Date; fileDataList?: FileData[] }[];
+}

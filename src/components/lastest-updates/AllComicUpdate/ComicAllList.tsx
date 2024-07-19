@@ -92,11 +92,21 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
                       />
 
                       <div>
-                        <ul>
-                          <li className="font-bold sm:text-base text-sm">
+                      <ul>
+      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
+        // Checking if the first item has chapterNumberConcat
+        <li>
+          {'chapterNumberConcat' in comicItem.chapterList[0] && comicItem.chapterList[0].chapterNumberConcat
+            ? comicItem.chapterList[0].chapterNumberConcat
+            : 'No chapter number available'}
+        </li>
+      ) : (
+        <li>No chapters available</li>
+      )}
+    </ul>
+                          {/* <li className="font-bold sm:text-base text-sm">
                             {comicItem.chapterList[0]}
-                          </li>
-                        </ul>
+                          </li> */}
                       </div>
                     </div>
 

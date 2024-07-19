@@ -1,6 +1,6 @@
 // src/context/StateContext.tsx
 import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { Comic, User } from '../components/constants/types';
+import { Comic, ComicFull, User } from '../components/constants/types';
 import UserService from '../components/constants/UserService';
 
 interface StateContextType {
@@ -8,12 +8,14 @@ interface StateContextType {
   setToken: React.Dispatch<React.SetStateAction<string>>;
   user: User | undefined;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-  comicList: Comic[] | undefined;
-  setComicList: React.Dispatch<React.SetStateAction<Comic[] | undefined>>;
+  comicList: ComicFull[] | undefined;
+  setComicList: React.Dispatch<React.SetStateAction<ComicFull[] | undefined>>;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   isOpenSidebar: boolean;
   setOpenIsSidebar: React.Dispatch<React.SetStateAction<boolean>>
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>
 }
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
@@ -21,11 +23,12 @@ const StateContext = createContext<StateContextType | undefined>(undefined);
 export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const [token, setToken] = useState('');
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [comicList, setComicList] = useState<Comic[] | undefined>([]);
+  const [comicList, setComicList] = useState<ComicFull[] | undefined>([]);
   const [selected, setSelected] = useState<string>("home");
   const [isOpenSidebar, setOpenIsSidebar] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const role = localStorage.getItem("role");
+  // const role = localStorage.getItem("role");
 
   useEffect(() => {
     const handleGetUserLogin = async () => {
@@ -59,11 +62,12 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
     if (user === undefined) {
         handleGetUserLogin();
     }
-}, [token, role, user]);
+}, []);
 
   return (
     <StateContext.Provider value={{ token, setToken, user, setUser, comicList, 
-    setComicList, selected, setSelected, isOpenSidebar, setOpenIsSidebar}}>
+    setComicList, selected, setSelected, isOpenSidebar, setOpenIsSidebar,
+    searchQuery, setSearchQuery}}>
       {children}
     </StateContext.Provider>
   );

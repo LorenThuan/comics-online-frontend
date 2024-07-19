@@ -43,6 +43,8 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
       sortByOption,
       genres
     );
+    console.log(result);
+    
     props.setComicQuerys(result);
     // window.location.reload();
   };

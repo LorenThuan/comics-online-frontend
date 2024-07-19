@@ -54,8 +54,17 @@ const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
                     className="w-[20px] h-[20px] select-none"
                   />
                   <ul>
-                    <li>{comicItem.chapterList[0]}</li>
-                  </ul>
+      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
+        // Checking if the first item has chapterNumberConcat
+        <li>
+          {'chapterNumberConcat' in comicItem.chapterList[0] && comicItem.chapterList[0].chapterNumberConcat
+            ? comicItem.chapterList[0].chapterNumberConcat
+            : 'No chapter number available'}
+        </li>
+      ) : (
+        <li>No chapters available</li>
+      )}
+    </ul>
                 </div>
 
                 <SidebarIcon icon={<FiMessageSquare size="16" />} />

@@ -6,20 +6,34 @@ import { FaRegEye } from "react-icons/fa";
 import SidebarIcon from '../icon/SidebarIcon';
 import { Comic } from '../constants/types';
 import Vnsvg from "../../assets/vn.svg"
+import useComicList from '../../hooks/CrudComicList';
+import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../../context/StateContext';
 
 interface SearchComicProps {
   data: Comic[];
 }
 
-class ListComicSearch extends React.PureComponent<SearchComicProps> {
-  render() {
-    const { data } = this.props;
+const ListComicSearch = ({data}: SearchComicProps) => {
+
+    const {comicListAll} = useComicList();
+    const navigate = useNavigate();
+    const {setSelected} = useStateContext();
+
+    const handleFindComic = async (comicId: number) => {
+      const comicItem = await comicListAll?.find(comic => comic.comicId === comicId);
+      navigate(`/title/${comicItem?.image_src}`, {
+        state: { comicItem },
+      })
+      setSelected("")
+    }
 
     return (
       <>
-        {data?.map((comicItem: Comic) => (
+        {data?.map((comicItem: any) => (
           <div
             key={comicItem.comicId}
+            onClick={() => handleFindComic(comicItem.comicId)}
             className='bg-gray-100 w-auto h-auto px-3 ml-3 mt-5 rounded-lg cursor-pointer hover:bg-gray-200'
           >
             <div className='flex space-x-4'>
@@ -53,8 +67,8 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
                 <div className='flex items-center gap-2'>
             <img src={Vnsvg} alt="Vietnamese icon" className='w-[20px] h-[20px] select-none'/>
             <ul>
-                <li>{comicItem.chapterList?.[0]?.toString()}</li>
-            </ul> 
+            <li className='text-blue-800'>{comicItem.chapterList?.[0]?.toString()}</li>
+            </ul>
       </div>
               </div>
             </div>
@@ -63,6 +77,6 @@ class ListComicSearch extends React.PureComponent<SearchComicProps> {
       </>
     );
   }
-}
+
 
 export default ListComicSearch;

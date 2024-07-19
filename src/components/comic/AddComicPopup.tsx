@@ -1,19 +1,19 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import GenreList from '../constants/genre_list'
 import chapterList from '../constants/chapter_list';
-import { Comic } from '../constants/types';
+import { Comic, ComicFull } from '../constants/types';
 import { ToastContainer } from 'react-toastify';
 
 interface AddComicPopupProps {
   isOpenForm?: boolean;
   closeFormAddPopup(): void
   setIsOpenForm: (isOpen: boolean) => void;
-  comicData?: Comic
+  comicData?: ComicFull
   handleChange(e: any): void; 
   handleCheckboxChange(genre: string): void; 
   handleChapterChange(e: any): void; 
   handleSubmit(e: any): void;
-  setComicData: React.Dispatch<React.SetStateAction<Comic>>;
+  setComicData: React.Dispatch<React.SetStateAction<ComicFull>>;
 }
 
 const AddComicPopup = (props: AddComicPopupProps) => {

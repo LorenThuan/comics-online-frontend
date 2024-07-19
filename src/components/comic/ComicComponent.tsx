@@ -2,15 +2,15 @@ import React, { useEffect } from 'react'
 import UserService from '../constants/UserService'
 import LoginRequired from '../user/login/LoginRequired';
 import axios from 'axios';
-import { Comic } from '../constants/types';
+import { Comic, ComicFull } from '../constants/types';
 import TableComicList from './TableComicList';
 import useComicList from '../../hooks/CrudComicList';
 const ComicComponent = () => {
   const adminOnly = UserService.adminOnly();
-  const [searchQuery, setSearchQuery] = React.useState("");  
+  const [searchQuery, setSearchQuery] = React.useState<string>("");  
   const {comicListFull} = useComicList();
 
-  const [comicSearch, setComicSearch] = React.useState<Comic[]>([]);
+  const [comicSearch, setComicSearch] = React.useState<ComicFull[]>([]);
   const [isFound, setIsFound] = React.useState(false);
 
   useEffect(() => {

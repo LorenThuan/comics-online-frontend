@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect } from 'react'
-import { Comic, User } from '../components/constants/types';
+import { Comic, ComicFull, User } from '../components/constants/types';
 import chapterList from '../components/constants/chapter_list';
 import UserService from '../components/constants/UserService';
 import axios from 'axios';
@@ -26,7 +26,7 @@ const ComicListManager = () => {
     return () => clearTimeout(debounceTimeout);
   }, []);
 
-  const [comicData, setComicData] = React.useState<Comic>({
+  const [comicData, setComicData] = React.useState<ComicFull>({
   nameComic: '',
   author: '',
   image_src: '',

@@ -4,10 +4,10 @@ import AddComicPopup from './AddComicPopup';
 import ComicListManager from '../../hooks/ComicListManager';
 import UpdateComicPopup from './UpdateComicPopup';
 import axios from 'axios';
-import { Comic } from '../constants/types';
+import { ComicFull } from '../constants/types';
 
 interface TableComicListProps {
-  data: Comic[];
+  data: ComicFull[] ;
 }
 
 const TableComicList = ({data}: TableComicListProps) => {

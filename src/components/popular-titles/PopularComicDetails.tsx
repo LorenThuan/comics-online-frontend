@@ -121,16 +121,23 @@ const PopularComicDetails = () => {
         </div>
       <div className='mt-10 pb-8'>
         <h2 className='text-lg text-orange-500 ml-3'>Chapter List</h2>
-        <ul className='p-6 rounded-lg shadow-md w-auto mr-4 mt-5 h-auto border border-slate-200 divide-y  divide-slate-200'>
-        {comicItem.chapterList.map((chapter:any, index:any) => (
-          <div className='flex justify-between'>
-           <li key={index} className="text-blue-500 cursor-pointer">{chapter}</li>
-           <li>{moment(comicItem.createDateChapter).fromNow()}</li>
+        <ul className='p-6 rounded-lg shadow-md w-auto mr-4 mt-5 h-auto border border-slate-200 divide-y divide-slate-200'>
+      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
+        comicItem.chapterList.map((chapter: any, index: number) => (
+          <div key={index} className='flex justify-between'>
+            <li>
+              {'chapterNumberConcat' in chapter && chapter.chapterNumberConcat
+                ? chapter.chapterNumberConcat
+                : 'No chapter number available'}
+            </li>
+            <li>{moment(comicItem.createDateChapter).fromNow()}</li>
           </div>
-                   
-                ))}
-          <div className='grid grid-cols-1 divide-y'></div>
-        </ul>
+        ))
+      ) : (
+        <li>No chapters available</li>
+      )}
+      <div className='grid grid-cols-1 divide-y'></div>
+    </ul>
       </div>
     </div>
   )
