@@ -11,6 +11,7 @@ import SearchUserManager from "./components/user/user_component/SearchUserManage
 import UserManagerComponent from "./components/user/user_component/UserManagerComponent";
 import { ContextProvider } from "./context/StateContext";
 import ComicManagement from "./components/comic/ComicManagement";
+import ChapterManager from "./components/chapter/ChapterManager";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             element={<UserManagerComponent />}
           />
           <Route path="/comics/comic-management" element={<ComicManagement />} />
+          <Route path="/chapter/*" element={<ChapterManager />} />
         </Route>
       </Routes>
     </BrowserRouter>

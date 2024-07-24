@@ -1,134 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Comic, ComicFull } from "../components/constants/types";
+import { ComicFull, ImageProps } from "../components/constants/types";
 import useOptions from "../components/constants/option_advanced_search";
 import moment from "moment";
 
 const useComicList = () => {
-  const [comicListAll, setComicListAll] = React.useState<Comic[]>([]);
+  const [comicListAll, setComicListAll] = React.useState<ComicFull[]>([]);
   const [comicListFull, setComicListFull] = React.useState<ComicFull[]>([]);
-  const [popularComic, setPopularComic] = React.useState<Comic[]>([]);
+  const [popularComic, setPopularComic] = React.useState<ComicFull[]>([]);
+  const [loadingLastComics, setLoadingLastComics] = React.useState<boolean>(false);
+  const [loadingPopularComics, setLoadingPopularComics] = React.useState<boolean>(false);
+  const [loadingAllComics, setLoadingAllComics] = React.useState<boolean>(false);
+  const [loadingAdvancedSearch, setLoadingAdvancedSearch] = React.useState<boolean>(false);
 
   /* Get Comic List */
-  useEffect(() => {
-    // Function to fetch comic list
-    const fetchComicList = async () => {
-      try {
-        // Check if comic list exists in localStorage
-        const cachedComicList = localStorage.getItem("comicList");
-        if (cachedComicList) {
-          // If exists, parse and set the comic list
-          setComicListAll(JSON.parse(cachedComicList));
-        } else {
-          // Otherwise, fetch from server
-          const response = await axios.get(
-            "http://localhost:8083/comic/last-comics"
-          );
-
-          setComicListAll(response.data);
-          // Store in localStorage for future use
-          localStorage.setItem("comicList", JSON.stringify(response.data));
-        }
+  const fetchComicList = async () => {
+    setLoadingLastComics(true);
+    try {
+        const response = await axios.get(
+        "http://localhost:8083/comic/last-comics");
+        setComicListAll(response.data);
       } catch (error) {
         console.error("Error fetching comic list:", error);
+      } finally {
+        setLoadingLastComics(false);
       }
     };
 
-    // Call the function to fetch comic list
-    fetchComicList();
-  }, []); // Empty dependency array to only run once on component mount
-
-  // /* Get Comic List Full*/
-  // useEffect(() => {
-  //   // Function to fetch comic list
-  //   const fetchComicList = async () => {
-  //     try {
-  //       // Check if comic list exists in localStorage
-  //       const cachedComicList = localStorage.getItem("comicListFull");
-  //       if (cachedComicList) {
-  //         // If exists, parse and set the comic list
-  //         setComicListFull(JSON.parse(cachedComicList));
-  //       } else {
-  //         // Otherwise, fetch from server
-  //         const response = await axios.get(
-  //           "http://localhost:8083/comics"
-  //         );
-          
-  //         setComicListFull(response.data);
-  //         // Store in localStorage for future use
-  //         // localStorage.setItem("comicListFull", JSON.stringify(response.data));
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching comic list:", error);
-  //     }
-  //   };
-
-  //   // Call the function to fetch comic list
-  //   fetchComicList();
-  // }, []); // Empty dependency array to only run once on component mount
-
-  useEffect(() => {
-    const fetchComicList = async () => {
-      try {
-        // Open cache storage
-        const cache = await caches.open('comic-cache');
-        
-        // Check if the request exists in cache
-        const cachedResponse = await cache.match('http://localhost:8083/comics');
-        if (cachedResponse) {
-          // If exists, parse and set the comic list
-          const data = await cachedResponse.json();
-          setComicListFull(data as ComicFull[]);
-        } else {
-          // Otherwise, fetch from server
-          const response = await axios.get<ComicFull[]>('http://localhost:8083/comics');
-          
-          setComicListFull(response.data);
-
-          // Store the response in cache
-          const responseToCache = new Response(JSON.stringify(response.data), {
-            headers: { 'Content-Type': 'application/json' }
-          });
-          cache.put('http://localhost:8083/comics', responseToCache);
-        }
-      } catch (error) {
-        console.error('Error fetching comic list:', error);
-      }
-    };
-
-    fetchComicList();
-  }, []); // Empty dependency array to only run once on component mount
-
-  /* Get Popular comic */
-  useEffect(() => {
-    // Function to fetch popular comic
     const fetchPopularComic = async () => {
+      setLoadingPopularComics(true);
       try {
-        // Check if popular comic exists in localStorage
-        const cachedPopularComic = localStorage.getItem("popularComic");
-        if (cachedPopularComic) {
-          // If exists, parse and set the popular comic
-          setPopularComic(JSON.parse(cachedPopularComic));
-        } else {
-          // Otherwise, fetch from server
           const response = await axios.get(
             "http://localhost:8083/comic/popular-comics"
           );
-          
           setPopularComic(response.data);
-          // Store in localStorage for future use
-          localStorage.setItem("popularComic", JSON.stringify(response.data));
-        }
       } catch (error) {
         console.error("Error fetching popular comic:", error);
+      } finally {
+        setLoadingPopularComics(false);
       }
     };
 
-    // Call the function to fetch popular comic
-    fetchPopularComic();
-  }, []); // Empty dependency array to only run once on component mount
+    const fetchComicListAll = async () => {
+      setLoadingAllComics(true);
+      try {
+          // Otherwise, fetch from server
+          const response = await axios.get("http://localhost:8083/comics");
+          
+          setComicListFull(response.data);
+      } catch (error) {
+        console.error("Error fetching comic list:", error);
+      } finally {
+        setLoadingAllComics(false);
+      }
+    };
 
-  const [comicsQuery, setComicQuerys] = React.useState<Comic[]>([]);
+    useEffect(() => {
+      fetchComicListAll()
+    }, []) 
+
+    useEffect(() => {
+      fetchPopularComic();
+    }, []);
+  
+    useEffect(() => {
+      fetchComicList();
+    }, []);
+
+  const [comicsQuery, setComicQuerys] = React.useState<ComicFull[]>([]);
   const [selectedGenres, setSelectedGenres] = React.useState<string[]>([]);
 
   // Handler for checkbox change
@@ -165,6 +104,7 @@ const useComicList = () => {
     sortByOption: string,
     genres: string
   ) => {
+    setLoadingAdvancedSearch(true);
     try {
       console.log("Fetching data from server");
       const response = await axios.get("http://localhost:8083/titles/find", {
@@ -182,10 +122,12 @@ const useComicList = () => {
     } catch (error) {
       console.error("Error fetching search comic:", error);
       return [];
+    } finally {
+      setLoadingAdvancedSearch(false);
     }
   };
 
-  function getClosestDate({ createDate, createDateChapter, lastModifiedDateChapter, lastModifiedDate}: Comic ): Date | null {
+  function getClosestDate({ createDate, createDateChapter, lastModifiedDateChapter, lastModifiedDate}: ComicFull ): Date | null {
     const dates = [createDate, createDateChapter, lastModifiedDateChapter, lastModifiedDate].filter(date => date) as Date[];
   
     if (dates.length === 0) return null;
@@ -203,6 +145,19 @@ const useComicList = () => {
     }
   
     return closestDate;
+  }
+
+  const [images, setImages] = useState<ImageProps[]>([]);
+
+  const fetchImages = async (chapterId: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8083/api/images/${chapterId}`);
+      console.log("Response data:", response);
+      
+      setImages(response.data);
+    } catch (error) {
+      console.log("Error fetching Images:", error);
+    }
   }
 
   return {
@@ -226,7 +181,8 @@ const useComicList = () => {
     setComicQuerys,
     comicListFull,
     setComicListFull,
-    getClosestDate
+    getClosestDate, loadingLastComics, loadingPopularComics, loadingAllComics,
+    fetchImages, images, loadingAdvancedSearch
   };
 };
 

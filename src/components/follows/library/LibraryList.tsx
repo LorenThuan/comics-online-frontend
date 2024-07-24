@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 const LibraryList = () => {
   const {comicList, setSelected} = useStateContext();
   console.log(comicList);
-  const { comicListAll } = useComicList();
+  const { comicListAll, comicListFull } = useComicList();
   const navigate = useNavigate();
 
   const handleLibrary = (comicId: number) => {
-    const comicItem =  comicListAll.find(comic => comic.comicId === comicId);
+    const comicItem =  comicListFull.find(comic => comic.comicId === comicId);
     try {
       if (comicItem) {
           console.log(comicItem);

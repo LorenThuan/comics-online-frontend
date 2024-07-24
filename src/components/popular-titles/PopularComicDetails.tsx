@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import UserService from '../constants/UserService';
-import { User } from '../constants/types';
 import { useStateContext } from '../../context/StateContext';
+import useComicList from '../../hooks/CrudComicList';
+import { Chapter, ComicFull } from '../constants/types';
+
+const exactChapterNumber = (chapterNumber: string): number => {
+  const parts = chapterNumber.split(' ');
+  const num = parts[1];
+  return parseInt(num, 10);
+}
 
 const PopularComicDetails = () => {
   let location = useLocation();
@@ -11,17 +18,15 @@ const PopularComicDetails = () => {
 
   const {setComicList, comicList, setSelected} = useStateContext();
   const navigate = useNavigate();
+  const {getClosestDate} = useComicList();
 
-  const handleAddToLibrary = async (comicId: number) => {
-    console.log(comicId);
+  const handleAddToLibrary = async () => {
+
     const token = localStorage.getItem("token");
-    console.log(token);
     if (token) {
-     
-        const result = await UserService.addToLibrary(comicId, token);
+        const result = await UserService.addToLibrary(comicItem.comicId, token);
         console.log(result);
         // console.log(result.comicList);  
-       
         if (result) {
           setComicList(result.comicList);
           const debounceTimeout = setTimeout(() => {
@@ -36,33 +41,72 @@ const PopularComicDetails = () => {
         } else {
           console.error('Comic already in library'); 
         }
-
-
     } else {
       console.error('No token found in localStorage'); // Handle the case where the token is not found
     }
   }
 
-  const handleSetState = () => {
-    alert("Value really exist in library");
-  }
-
   const [stateValue, setStateValue] = React.useState<string>('');
 
   useEffect(() => {
-    const handleFound = async () => {
-      const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comicId);
-      if (foundComic) {
-          console.log(foundComic);
-          setStateValue("Reading")
-      } else {
-        setStateValue("Add to Library")
-      }
-    }
-    
     handleFound();
   }, [comicItem])
-  
+
+  const handleFound = async () => {
+    const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comicId);
+    if (foundComic) {
+        console.log(foundComic);
+        setStateValue("Reading")
+    } else {
+      setStateValue("Add to Library")
+    }
+  }
+
+  const handleFirstRead = () => {
+    const chapterFind: any = 
+    comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === "Chương 1");
+    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+      state: {comicItem, chapterFind}
+    });
+    setStateValue("");
+  }
+
+  const handleNavigateReading = (chapter: Chapter) => {
+    const chapterFind = chapter;
+    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+      state: {comicItem, chapterFind}
+    });
+    setStateValue("");
+  }
+
+  const getMaxChapterNumber = (chapters: Chapter[]): number => {
+    return chapters.reduce((max, chapter:any) => {
+      const chapterNum = parseInt(chapter.chapterNumber.replace('Chương ', ''), 10);
+      return chapterNum > max ? chapterNum : max;
+    }, 0);
+  };
+
+  const handleLastRead = () => {
+    let chapterNumMax = getMaxChapterNumber(comicItem?.chapterList);
+    const chapterFind: any = 
+    comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === `Chương ${chapterNumMax}`);
+    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+      state: {comicItem, chapterFind}
+    });
+    setStateValue("");
+  }
+
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  useEffect(() => {
+    if (comicItem?.chapterList && comicItem?.chapterList?.length > 0) {
+      const sortedChapters: any =  comicItem?.chapterList?.sort((a: any, b:any) => {
+        const numA = exactChapterNumber(a.chapterNumber);
+        const numB = exactChapterNumber(b.chapterNumber);
+        return numB - numA;
+      });
+      setChapters([...sortedChapters]);
+    }
+  }, [chapters])
 
   return (
     <div className='h-screen w-auto'>
@@ -93,20 +137,29 @@ const PopularComicDetails = () => {
           </div>
 
           <ul className='grid grid-cols-4 gap-5 place-items-center sm:flex sm:space-x-2'>
-          {comicItem.genreList.map((genre:any, index:any) => (
-                    <li key={index} className="px-2 py-1.5 sm:p-1 text-sm rounded-lg bg-white-rgb2 text-center text-nowrap">{genre}</li>
+          {comicItem.genreList.map((genres:any, index:any) => (
+                    <li key={index} className="px-2 py-1.5 sm:p-1 text-sm rounded-lg bg-white-rgb2 text-center text-nowrap">{genres.genre}</li>
                 ))}
           </ul>
 
-          <div className='grid grid-cols-3 sm:grid-cols-4 gap-2 mt-2 sm:mt-0'>
-            <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary(comicItem.comicId) : handleSetState()}} 
+          <div className='grid grid-cols-3 sm:grid-cols-5 gap-2 mt-2 sm:mt-0'>
+            <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary() : handleFirstRead()}} 
  
             className='px-4 py-2 sm:px-6 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>
               {stateValue}
               </button>
-            <Link to="" className='px-4 py-2 sm:px-6 bg-green-400 text-center rounded-md hover:opacity-50 text-white duration-200'>First Read</Link>
-            <Link to="" className='px-4 py-2 sm:px-6 bg-red-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Followed</Link>
-            <Link to="" className='px-4 py-2 sm:px-6 bg-violet-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Liked</Link>
+            <button onClick={handleFirstRead} 
+            className='px-4 py-2 sm:px-6 bg-green-400 text-center rounded-md hover:opacity-50 
+            text-white duration-200'>
+              First Read
+              </button>
+              <button onClick={handleLastRead} 
+            className='px-4 py-2 sm:px-6 bg-yellow-400 text-center rounded-md hover:opacity-50 
+            text-white duration-200'>
+              Last Read
+              </button>
+            <button className='px-4 py-2 sm:px-6 bg-red-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Followed</button>
+            <button className='px-4 py-2 sm:px-6 bg-violet-400 text-center rounded-md hover:opacity-50 text-white duration-200'>Liked</button>
           </div>
 
         </div>
@@ -122,15 +175,18 @@ const PopularComicDetails = () => {
       <div className='mt-10 pb-8'>
         <h2 className='text-lg text-orange-500 ml-3'>Chapter List</h2>
         <ul className='p-6 rounded-lg shadow-md w-auto mr-4 mt-5 h-auto border border-slate-200 divide-y divide-slate-200'>
-      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
-        comicItem.chapterList.map((chapter: any, index: number) => (
+      {chapters.length > 0 ? (
+        chapters.map((chapter: any, index: number) => (
           <div key={index} className='flex justify-between'>
-            <li>
-              {'chapterNumberConcat' in chapter && chapter.chapterNumberConcat
-                ? chapter.chapterNumberConcat
+            <li onClick={() => handleNavigateReading(chapter)} className='hover:text-blue-500 cursor-pointer'>
+              {'chapterNumber' in chapter && chapter.chapterNumber
+                ? chapter.chapterNumber
                 : 'No chapter number available'}
             </li>
-            <li>{moment(comicItem.createDateChapter).fromNow()}</li>
+            <li onClick={(e) => e.preventDefault()} className="text-[describes-rgb] cursor-none">
+                {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
+                </li>
+            {/* <li>{moment(comicItem.createDateChapter).fromNow()}</li> */}
           </div>
         ))
       ) : (

@@ -6,14 +6,14 @@ import useComicList from "../../hooks/CrudComicList";
 const Random = () => {
   const navigate = useNavigate();
   const {setSelected, selected} = useStateContext();
-  const {comicListAll} = useComicList();
+  const {comicListAll, comicListFull} = useComicList();
 
   const handleRandom = () => {
 
   const maxComicId = comicListAll.length > 0 ? Math.max(...comicListAll.map(comic => comic.comicId)) : 0;
 
   const numberRandom =  Math.floor(Math.random() * maxComicId) + 1;
-  const comicItem =  comicListAll.find(comic => comic.comicId === numberRandom);
+  const comicItem =  comicListFull.find(comic => comic.comicId === numberRandom);
   if (comicItem) {
     setSelected("random");
     navigate(`/title/${comicItem.image_src}`, {

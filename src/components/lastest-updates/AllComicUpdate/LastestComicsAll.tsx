@@ -5,7 +5,7 @@ import Common from "../../common/Common";
 const LastestComicsAll = () => {
 
   return (
-    <Common className="grid grid-cols-1 w-full ml-[280px] mt-20" components={<LastestComicsContentAll/>}/>
+    <Common className="grid grid-cols-1 w-full mt-16" components={<LastestComicsContentAll/>}/>
   );
 };
 

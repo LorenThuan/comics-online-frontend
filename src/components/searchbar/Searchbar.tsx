@@ -6,7 +6,7 @@ import SearchbarPopup from "./SearchbarPopup";
 import { MdOutlineClose } from "react-icons/md";
 import { useStateContext } from "../../context/StateContext";
 import useComicList from "../../hooks/CrudComicList";
-import { Comic } from "../constants/types";
+import { ComicFull } from "../constants/types";
 import axios from "axios";
 
 const Searchbar = () => {
@@ -14,9 +14,8 @@ const Searchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isFound, setIsFound] = React.useState<boolean>(false);
 
-  const [searchComic, setSearchComic] = React.useState<Comic[]>([]);
+  const [searchComic, setSearchComic] = React.useState<ComicFull[]>([]);
   const cache: any = {};
-  console.log(searchQuery);
 
   useEffect(() => {
     const handle = async () => {
@@ -133,13 +132,14 @@ const Searchbar = () => {
             />
           )}
         </div>
-        <SearchbarPopup
-          searchPopup={searchPopup}
-          setSearchPopup={setSearchPopup}
-          searchComic={searchComic}
-          isFound={isFound}
-          searchQuery={searchQuery}
-        />
+        {searchPopup && 
+         <SearchbarPopup
+         setSearchPopup={setSearchPopup}
+         searchComic={searchComic}
+         isFound={isFound}
+         searchQuery={searchQuery}
+       />
+        }
       </div>
     </div>
   );

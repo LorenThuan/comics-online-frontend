@@ -1,6 +1,6 @@
 // src/context/StateContext.tsx
 import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { Comic, ComicFull, User } from '../components/constants/types';
+import { ComicFull, User } from '../components/constants/types';
 import UserService from '../components/constants/UserService';
 
 interface StateContextType {
@@ -28,41 +28,36 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
   const [isOpenSidebar, setOpenIsSidebar] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // const role = localStorage.getItem("role");
-
   useEffect(() => {
-    const handleGetUserLogin = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            
-                const result = await UserService.getYourProfile(token);
-                console.log("Full response:", result);
-
-                if (result && result.statusCode === 200 && result.user) {
-                    console.log("User:", result.user);
-                    
-                    if (result.user.comicList) {
-                        console.log("Comic List:", result.user.comicList);
-                        setComicList(result.user.comicList);
-                    } else {
-                        console.log("Comic List is empty or undefined");
-                    }
-
-                    setUser(result.user);
-                } else {
-                    console.error("User data is undefined or null:", result.user);
-                }
-            
-        } catch (error) {
-            console.error("Error fetching user profile:", error);
-        }
-    };
-
-    // Fetch user profile only when user is null
-    if (user === undefined) {
-        handleGetUserLogin();
-    }
+    handleGetUserLogin();
 }, []);
+
+const handleGetUserLogin = async () => {
+  const token = localStorage.getItem("token");
+  try {
+          const result = await UserService.getYourProfile(token);
+          console.log("Full response:", result);
+
+          if (result && result.statusCode === 200 && result.user) {
+              console.log("User:", result.user);
+              
+              if (result.user.comicList) {
+                  console.log("Comic List:", result.user.comicList);
+                  setComicList(result.user.comicList);
+              } else {
+                  console.log("Comic List is empty or undefined");
+              }
+
+              setUser(result.user);
+          } else {
+              console.error("User data is undefined or null:", result.user);
+          }
+      
+  } catch (error) {
+      console.error("Error fetching user profile:", error);
+  }
+};
+
 
   return (
     <StateContext.Provider value={{ token, setToken, user, setUser, comicList, 

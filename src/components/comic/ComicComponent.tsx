@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import UserService from '../constants/UserService'
 import LoginRequired from '../user/login/LoginRequired';
 import axios from 'axios';
-import { Comic, ComicFull } from '../constants/types';
+import { ComicFull } from '../constants/types';
 import TableComicList from './TableComicList';
 import useComicList from '../../hooks/CrudComicList';
 const ComicComponent = () => {
   const adminOnly = UserService.adminOnly();
   const [searchQuery, setSearchQuery] = React.useState<string>("");  
-  const {comicListFull} = useComicList();
+  const {comicListFull, loadingAllComics} = useComicList();
 
   const [comicSearch, setComicSearch] = React.useState<ComicFull[]>([]);
   const [isFound, setIsFound] = React.useState(false);
@@ -62,10 +62,10 @@ const ComicComponent = () => {
         />
       </div>
       {searchQuery === "" ? (
-        <TableComicList data={comicListFull} />
+        <TableComicList data={comicListFull} loadingAllComics={loadingAllComics}/>
       ) : (
         isFound ? (
-          <TableComicList data={comicSearch} />
+          <TableComicList data={comicSearch} loadingAllComics={loadingAllComics}/>
         ) : (
           <div className='bg-slate-200 flex justify-center items-center rounded p-2 mt-10 mr-4'>
             <div className='text-xl'>No results found.</div>

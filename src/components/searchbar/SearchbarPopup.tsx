@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import SidebarIcon from "../icon/SidebarIcon";
 import { GrLinkNext } from "react-icons/gr";
 import ListComicSearch from "./ListComicSearch";
-import useComicList from "../../hooks/CrudComicList";
-import { Comic } from "../constants/types";
-import { useStateContext } from "../../context/StateContext";
+import { ComicFull } from "../constants/types";
 
 interface PopupProps {
-  searchPopup: boolean;
   setSearchPopup: (isSearch: boolean) => void;
-  searchComic: Comic[];
+  searchComic: ComicFull[];
   isFound: boolean;
   searchQuery: string
 }
@@ -18,7 +15,6 @@ const SearchbarPopup = (props: PopupProps) => {
 
   return (
     <>
-      {props.searchPopup ? (
         <div className="h-auto w-screen fixed top-0 right-0 z-21 backdrop-brightness-95">
           {props.searchQuery === "" ? (
             <div className="left-1/3 sm:left-1/2 mt-20 h-14 fixed ml-[135px] sm:ml-[104px] -translate-y-1/2 -translate-x-2/3 sm:-translate-x-1 p-4 w-[350px] sm:w-[500px] rounded-lg bg-white shadow-md">
@@ -45,7 +41,6 @@ const SearchbarPopup = (props: PopupProps) => {
           )
           )}
         </div>
-      ) : null}
     </>
   );
 };

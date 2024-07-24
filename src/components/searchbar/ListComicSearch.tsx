@@ -4,24 +4,24 @@ import { AiFillLike } from "react-icons/ai";
 import { FaHeart } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa";
 import SidebarIcon from '../icon/SidebarIcon';
-import { Comic } from '../constants/types';
+import { ComicFull } from '../constants/types';
 import Vnsvg from "../../assets/vn.svg"
 import useComicList from '../../hooks/CrudComicList';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../context/StateContext';
 
 interface SearchComicProps {
-  data: Comic[];
+  data: ComicFull[];
 }
 
 const ListComicSearch = ({data}: SearchComicProps) => {
 
-    const {comicListAll} = useComicList();
+    const {comicListAll, comicListFull} = useComicList();
     const navigate = useNavigate();
     const {setSelected} = useStateContext();
 
     const handleFindComic = async (comicId: number) => {
-      const comicItem = await comicListAll?.find(comic => comic.comicId === comicId);
+      const comicItem = await comicListFull?.find(comic => comic.comicId === comicId);
       navigate(`/title/${comicItem?.image_src}`, {
         state: { comicItem },
       })

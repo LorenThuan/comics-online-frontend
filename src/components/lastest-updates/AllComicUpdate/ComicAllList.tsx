@@ -5,33 +5,17 @@ import { LuEye } from "react-icons/lu";
 import { LuClock4 } from "react-icons/lu";
 import { FiMessageSquare, FiUsers } from "react-icons/fi";
 import moment from "moment";
-import useSliderScrollUpdates from "../../../hooks/SlideScrollUpdates";
-import Slider from "react-slick";
-// Import css files
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import useComicList from "../../../hooks/CrudComicList";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../../context/StateContext";
+import { ComicFull } from "../../constants/types";
 
 interface LastestUpdateListProps {
-  data: any[];
+  data: ComicFull[];
 }
 
 const ComicAllList = ({ data }: LastestUpdateListProps) => {
-  const { settings, sliderRef } = useSliderScrollUpdates();
-
-  const next = (e: MouseEvent) => {
-    e.stopPropagation(); // Stop the click event from bubbling up to the parent
-    sliderRef.current?.slickNext();
-  };
-
-  const previous = (e: MouseEvent) => {
-    e.stopPropagation(); // Stop the click event from bubbling up to the parent
-    sliderRef.current?.slickPrev();
-  };
-
-  const {getClosestDate} = useComicList();
+  const {getClosestDate, loadingLastComics, comicListFull} = useComicList();
   const navigate = useNavigate();
   const {setSelected} = useStateContext();
 
@@ -54,17 +38,31 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
     }
   }
 
+  if (loadingLastComics) return (
+    <div className="text-blue-500 text-xl text-center">Loading...</div>
+  )
+
+  const handleLibrary = (comicId: number) => {
+    const comicItem = comicListFull.find(comic => comic.comicId === comicId);
+    try {
+      if (comicItem) {
+          console.log(comicItem);
+          navigate(`/title/${comicItem.image_src}`, {
+            state: {comicItem},
+          })
+          setSelected("");
+      }
+    } catch (error) {
+      console.log("Comic not found");
+      throw error;
+    }
+  };
+
   return (
     <>
-      {/* <Slider ref={sliderRef} {...settings}> */}
         {currentData?.map((comicItem: any) => (
           <div 
-          onClick={() => {
-            navigate(`/title/${comicItem.image_src}`, {
-              state: { comicItem },
-            })
-            setSelected("")
-          }}
+          onClick={() => handleLibrary(comicItem.comicId)}
           className=" bg-gray-100 cursor-pointer hover:bg-gray-200 mr-4 rounded-md">
             <div className="gap-2">
               <div className="flex gap-2">
@@ -93,20 +91,19 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
                       <div>
                       <ul>
-      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
-        // Checking if the first item has chapterNumberConcat
-        <li>
-          {'chapterNumberConcat' in comicItem.chapterList[0] && comicItem.chapterList[0].chapterNumberConcat
-            ? comicItem.chapterList[0].chapterNumberConcat
-            : 'No chapter number available'}
-        </li>
-      ) : (
-        <li>No chapters available</li>
-      )}
-    </ul>
-                          {/* <li className="font-bold sm:text-base text-sm">
-                            {comicItem.chapterList[0]}
-                          </li> */}
+                      {/* {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
+                      <li>
+                        {comicItem.chapterList[0].chapterNumber
+                          ? comicItem.chapterList[0].chapterNumber
+                          : 'No chapter number available'}
+                      </li>
+                      ) : (
+                      <li>No chapters available</li>
+                      )} */}
+                      <li className="font-bold sm:text-base text-sm">
+                        {comicItem.chapterList[0]}
+                      </li>
+                      </ul>
                       </div>
                     </div>
 
@@ -137,8 +134,8 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
                     <div className="flex items-center gap-x-8">
                       <ul className="text-[describes-rgb] flex gap-2 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[220px] sm:max-w-full">
-                        {comicItem.genreList.map((genre: any, index: any) => (
-                          <li key={index}>{genre}</li>
+                        {comicItem.genreList?.map((genre: any, index: any) => (
+                          <li key={index}>{genre.genre}</li>
                         ))}
                       </ul>
                       <div className="flex justify-center items-center">
@@ -156,48 +153,35 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
         <button 
         onClick={() => handlePageChange(1)}
         hidden={currentPage === 1}
-        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50">
+        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white">
           «
         </button>
         <button 
         onClick={() => handlePageChange(currentPage - 1)}
         hidden={currentPage === 1}
-        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50">
+        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white">
           ‹
         </button>
         {pageNumbers.map((page) => (
           <button key={page}
           onClick={() => handlePageChange(page)} 
-          className={`px-3.5 py-1 mx-1 border 
+          className={`px-3.5 py-1 mx-1 border hover:bg-orange-500 hover:text-white
             rounded ${currentPage === page ? 'bg-orange-500 text-white font-semibold' : ''}`}>
             {page}
           </button>
         ))}
         <button 
         onClick={() => handlePageChange(currentPage + 1)}
-        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50">
+        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white">
           ›
         </button>
         <button 
         onClick={() => handlePageChange(totalPages)}
         hidden={currentPage === totalPages}
-        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50">
+        className="px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white">
           »
         </button>
       </div>
-      {/* </Slider>
-      <div className="flex justify-between items-center mx-20">
-        <SidebarIcon
-          icon={<MdNavigateBefore size="28" />}
-          onClick={(e: MouseEvent) => previous(e)}
-          className="cursor-pointer p-0.5 rounded-full hover:bg-gray-200"
-        />
-        <SidebarIcon
-          icon={<MdNavigateNext size="28" />}
-          onClick={(e: MouseEvent) => next(e)}
-          className="cursor-pointer p-0.5 rounded-full hover:bg-gray-200"
-        /> */}
-      {/* </div> */}
     </>
   );
 };

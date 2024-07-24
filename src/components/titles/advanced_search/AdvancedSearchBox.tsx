@@ -3,11 +3,11 @@ import GenreList from "../../constants/genre_list";
 import i from "../../../assets/close-icon-30.png";
 import useComicList from "../../../hooks/CrudComicList";
 import useOptions from "../../constants/option_advanced_search";
-import { Comic } from "../../constants/types";
+import { ComicFull } from "../../constants/types";
 
 interface AdvancedSearchProps {
   setIsFindComic: (isFind: boolean) => void;
-  setComicQuerys: (comics: Comic[]) => void; // Change the type here
+  setComicQuerys: (comics: ComicFull[]) => void; // Change the type here
 }
 
 const AdvancedSearchModal = (props: AdvancedSearchProps) => {

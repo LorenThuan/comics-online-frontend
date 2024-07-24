@@ -39,9 +39,9 @@ const AdvancedSearchContainer = () => {
         setIsFindComic={setIsFindComic}
       />
       {isFindComic ? (
-        <SearchListValue data={comicsQuery} />
+        <SearchListValue data={comicsQuery} isFindComic={isFindComic} />
       ) : (
-        <SearchListValue data={comicListAll} />
+        <SearchListValue data={comicListAll} isFindComic={isFindComic}/>
       )}
     </div>
   );

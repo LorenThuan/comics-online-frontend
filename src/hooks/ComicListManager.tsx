@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect } from 'react'
-import { Comic, ComicFull, User } from '../components/constants/types';
+import { ComicFull, User } from '../components/constants/types';
 import chapterList from '../components/constants/chapter_list';
 import UserService from '../components/constants/UserService';
 import axios from 'axios';
@@ -11,20 +11,17 @@ const ComicListManager = () => {
   const {setComicListFull} = useComicList();
 
   useEffect(() => {
-    const handle = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const result = await UserService.getAllUsers(token);
-        console.log(result);
-        setUsersList(result.userList);
-      }
-    };
-    const debounceTimeout = setTimeout(() => {
-      handle();
-    }, 300); // Adjust the debounce delay as needed
-
-    return () => clearTimeout(debounceTimeout);
+    handle();
   }, []);
+
+  const handle = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const result = await UserService.getAllUsers(token);
+      console.log(result);
+      setUsersList(result.userList);
+    }
+  };
 
   const [comicData, setComicData] = React.useState<ComicFull>({
   nameComic: '',
@@ -82,10 +79,6 @@ const ComicListManager = () => {
     setIsOpenForm(false);
   };
 
-  const updateLocalStorage = (comicList:any) => {
-    localStorage.setItem('comicListFull', comicList);
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -96,16 +89,11 @@ const ComicListManager = () => {
         if (comicData.genreList?.length !== 0) {
           console.log('Form Data:', comicData);
           const response = await axios.post("http://localhost:8083/comic", comicData);
+          const newComcic = response.data;
           setComicListFull((prevList) => {
-            const updatedList = [...prevList, response.data];
-            updateLocalStorage(updatedList);
+            const updatedList = [...prevList, newComcic];
             return updatedList;
           });
-          const responseComicAll = await axios.get(
-            "http://localhost:8083/comic/last-comics"
-          );
-          // Store in localStorage for future use
-          localStorage.setItem("comicList", JSON.stringify(responseComicAll.data));
           closeFormAddPopup();
           alert("Add Comic successfully");
           setComicData({
@@ -128,7 +116,7 @@ const ComicListManager = () => {
   };
 
   const [isOpenUpdate, setIsOpenUpdate] = React.useState(false);
-  const [comicValue, setComicValue] = React.useState<Comic>({
+  const [comicValue, setComicValue] = React.useState<ComicFull>({
     nameComic: '',
     author: '',
     image_src: '',
@@ -204,15 +192,9 @@ const ComicListManager = () => {
           const updatedList = prevList.map((comic) => 
             comic.comicId === comicValue.comicId ? response.data : comic
           );
-          updateLocalStorage(updatedList);
           return updatedList;
           }
         );
-        const responseComicAll = await axios.get(
-          "http://localhost:8083/comic/last-comics"
-        );
-        // Store in localStorage for future use
-        localStorage.setItem("comicList", JSON.stringify(responseComicAll.data));
         closeUpdateForm();
         alert("Update Comic successfully");
       }
@@ -228,7 +210,7 @@ const ComicListManager = () => {
     handleChapterChange, handleSubmit, isOpenUpdate, handleOpenUpdate, 
     handleFormUpdate, closeUpdateForm, setIsOpenUpdate, comicValue, 
     handleChangeUpdate, handleUpdateCheckbox, setComicValue, setComicData,
-  isOpenForm, setIsOpenForm, closeFormAddPopup, updateLocalStorage}
+  isOpenForm, setIsOpenForm, closeFormAddPopup}
 }
 
 export default ComicListManager;

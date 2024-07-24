@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useComicList from '../../hooks/CrudComicList';
 import AddComicPopup from './AddComicPopup';
 import ComicListManager from '../../hooks/ComicListManager';
 import UpdateComicPopup from './UpdateComicPopup';
 import axios from 'axios';
 import { ComicFull } from '../constants/types';
+import { FaPager } from 'react-icons/fa6';
 
 interface TableComicListProps {
-  data: ComicFull[] ;
+  data?: ComicFull[];
+  loadingAllComics: boolean;
 }
 
-const TableComicList = ({data}: TableComicListProps) => {
+const TableComicList = (props: TableComicListProps) => {
   const {setComicListFull} = useComicList();
   const {comicData, handleChange, handleCheckboxChange, handleSubmit, 
     handleChapterChange, isOpenUpdate, handleOpenUpdate, 
     handleFormUpdate, closeUpdateForm, setIsOpenUpdate, 
     comicValue, handleChangeUpdate, handleUpdateCheckbox, 
-    setComicValue, setComicData, isOpenForm, setIsOpenForm, closeFormAddPopup,
-    updateLocalStorage} = ComicListManager();
+    setComicValue, setComicData, isOpenForm, setIsOpenForm, 
+    closeFormAddPopup} = ComicListManager();
 
   const handleOpenForm = () => {
     setIsOpenForm(!isOpenForm);
@@ -33,14 +35,8 @@ const TableComicList = ({data}: TableComicListProps) => {
         await axios.delete(`http://localhost:8083/comics/${comicId}`)
         setComicListFull((prevList) => {
           const updatedList = prevList.filter((comic) => comic.comicId !== comicId);
-          updateLocalStorage(updatedList);
           return updatedList;
         });
-        const responseComicAll = await axios.get(
-          "http://localhost:8083/comic/last-comics"
-        );
-        // Store in localStorage for future use
-        localStorage.setItem("comicList", JSON.stringify(responseComicAll.data));
         alert("Delete comic successfully");
       }
     } catch (error) {
@@ -48,6 +44,25 @@ const TableComicList = ({data}: TableComicListProps) => {
       throw error;
     }
   };
+  const itemsPerPage = 15;
+
+  const totalPages = Math.ceil(props.data?.length ?? 0/ itemsPerPage);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const currentData = props.data?.slice
+  ((currentPage - 1)*itemsPerPage, currentPage*itemsPerPage);
+
+  const pageNumbers = Array.from({length: totalPages}, (_, i) => i + 1);
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
+
+  if (props.loadingAllComics) return (
+    <div className='text-blue-500'>Loading...</div>
+  )
 
   return (
       <>
@@ -69,7 +84,7 @@ const TableComicList = ({data}: TableComicListProps) => {
         </thead>
 
         <tbody>
-          {data?.map((comicItem: any, index: number) => (
+          {currentData?.map((comicItem: any, index: number) => (
             <tr key={index} className="text-center">
               <td>{index}</td>
               <td className=''>
@@ -95,6 +110,47 @@ const TableComicList = ({data}: TableComicListProps) => {
           ))}
         </tbody>
       </table>
+      <div className='gap-2 sm:flex sm:justify-center mt-4'>
+        <button
+        onClick={() => handlePageChange(1)}
+        hidden={currentPage === 1}
+        className='px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white'
+        >
+          «
+        </button>
+        <button
+        onClick={() => handlePageChange(currentPage - 1)}
+        hidden={currentPage === 1}
+        className='px-3.5 py-1 mx-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white'
+        >
+        ‹
+        </button>
+        {pageNumbers.map((page: number) => (
+          <button
+          key={page}
+          onClick={() => handlePageChange(page)}
+          className={`px-3.5 py-1 mx-1 border rounded hover:text-white hover:bg-orange-500
+            disabled:opacity-50 ${currentPage === page ? 'bg-orange-500 text-white font-semibold' : ''}`}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+        onClick={() => handlePageChange(currentPage + 1)}
+        hidden={currentPage === totalPages}
+        className='px-3.5 py-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white'
+        >
+        ›
+        </button>
+        <button
+        onClick={() => handlePageChange(totalPages)}
+        hidden={currentPage === totalPages}
+        className='px-3.5 py-1 border rounded disabled:opacity-50 hover:bg-orange-500 hover:text-white'
+        >
+        »
+        </button>
+      </div>
+
     <UpdateComicPopup
       isOpenUpdate={isOpenUpdate}
       closeUpdateForm={closeUpdateForm}

@@ -11,7 +11,7 @@ const CrudUser = () => {
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
   // const [user, setUser] = React.useState<User | null>(null);
-  const {token, setToken, user, setUser} = useStateContext();
+  const {token, setToken} = useStateContext();
 
 
 
@@ -86,9 +86,9 @@ const CrudUser = () => {
     setSelectedUser(userItem);
   };
 
-  useEffect(() => {
-    console.log("isOpenUpdate:", isOpenUpdate);
-  }, [isOpenUpdate]);
+  // useEffect(() => {
+  //   console.log("isOpenUpdate:", isOpenUpdate);
+  // }, [isOpenUpdate]);
 
   const closeUpdatePopup = () => {
     setIsOpenUpdate(false);
@@ -102,19 +102,20 @@ const CrudUser = () => {
   });
 
   useEffect(() => {
-    const fetchUserDataById = async () => {
-      const token = localStorage.getItem("token");
-      const response = await UserService.getUserById(
-        selectedUser?.userId,
-        token
-      );
-      console.log(response);
-
-      const { name, email, password, role } = response.user;
-      setUserData({ name, email, password, role });
-    };
     fetchUserDataById();
-  }, [selectedUser?.userId]); //whenever change call update on td it change userId
+  }, [selectedUser?.userId]);
+
+  const fetchUserDataById = async () => {
+    const token = localStorage.getItem("token");
+    const response = await UserService.getUserById(
+      selectedUser?.userId,
+      token
+    );
+    console.log(response);
+
+    const { name, email, password, role } = response.user;
+    setUserData({ name, email, password, role });
+  };
 
   const [selectedValue, setSelectedValue] = React.useState("");
 
@@ -154,51 +155,43 @@ const CrudUser = () => {
   const [usersListSearch, setUsersListSearch] = React.useState<User[]>([]);
 
   useEffect(() => {
-    const fetchSearchUser = async () => {
-      try {
-        if (searchUser === "") {
-          console.error("Search query is empty");
-          return [];
-        }
+      fetchSearchUser();
+  }, [searchUser]);
 
-        const token = localStorage.getItem("token");
-        if (token) {
-          console.log("Fetching data from server");
-          const result = await UserService.findUserByName(searchUser, token);
-          console.log(result);
-          setUsersListSearch(result.userList);
-        }
-      } catch (error) {
-        console.error("Error fetching search by name:", error);
+  const fetchSearchUser = async () => {
+    try {
+      if (searchUser === "") {
+        console.error("Search query is empty");
         return [];
       }
-    };
 
-    const debounceTimeout = setTimeout(() => {
-      fetchSearchUser();
-    }, 300); // Adjust the debounce delay as needed
-
-    return () => clearTimeout(debounceTimeout);
-  }, [searchUser]);
+      const token = localStorage.getItem("token");
+      if (token) {
+        console.log("Fetching data from server");
+        const result = await UserService.findUserByName(searchUser, token);
+        console.log(result);
+        setUsersListSearch(result.userList);
+      }
+    } catch (error) {
+      console.error("Error fetching search by name:", error);
+      return [];
+    }
+  };
 
   const [userListMembers, setUserListMembers] = React.useState<User[]>([]);
 
   useEffect(() => {
-    const handle = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const result = await UserService.getAllUserMembers(token);
-        console.log(result);
-        setUserListMembers(result.userList);
-      }
-    };
-
-    const debounceTimeout = setTimeout(() => {
-      handle();
-    }, 300); // Adjust the debounce delay as needed
-
-    return () => clearTimeout(debounceTimeout);
+    handleGetAllUserMember();
   }, []);
+
+  const handleGetAllUserMember = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const result = await UserService.getAllUserMembers(token);
+      console.log(result);
+      setUserListMembers(result.userList);
+    }
+  };
 
   return {
     setEmail,

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef } from 'react'
-import { Chapter, Comic } from '../constants/types';
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import { Chapter, ComicFull } from '../constants/types';
 import GenreList from '../constants/genre_list';
 
 interface UpdateComicProps {
@@ -7,10 +7,16 @@ interface UpdateComicProps {
   closeUpdateForm(): void;
   handleFormUpdate(e: FormEvent): void;
   setIsOpenUpdate: (isOpen: boolean) => void;
-  comicValue: Comic;
+  comicValue: ComicFull;
   handleChangeUpdate(e: any): void;
   handleUpdateCheckbox(genre: string): void
-  setComicValue: React.Dispatch<React.SetStateAction<Comic>>;
+  setComicValue: React.Dispatch<React.SetStateAction<ComicFull>>;
+}
+
+const extractChapterNumber = (chapterNumber:string): number => {
+  const parts = chapterNumber.split(' ');
+  const num = parts[1];
+  return parseInt(num, 10);
 }
 
 const UpdateComicPopup = (props: UpdateComicProps) => {
@@ -71,6 +77,22 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  console.log(props.comicValue);
+
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+
+  useEffect(() => {
+    if (props.comicValue?.chapterList && props.comicValue.chapterList.length > 0) {
+      const sortedChapters:any = props.comicValue?.chapterList.sort((a: any, b: any) => {
+        const numA = extractChapterNumber(a.chapterNumber);
+        const numB = extractChapterNumber(b.chapterNumber);
+        return numB - numA;
+      });
+      setChapters([...sortedChapters]);
+    }
+    
+  }, [chapters])
 
   return (
     <>
@@ -213,13 +235,15 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
             name="chapterNumber"
             id="chapterNumber"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full px-4 py-2"
-            onChange={(e) => e.target.value}
+            // onChange={(e) => e.target.value}
           >
-            {props.comicValue?.chapterList?.map((chapter:any, index: number) => (
+            {chapters.length > 0 ? (
+              chapters.map((chapter: Chapter, index: number) => (
               <option key={index} value={chapter.chapterNumber}>
                 {chapter.chapterNumber}
               </option>
-               ))}
+               ))) : (<p>No chapters available</p>)
+            }
           </select>
                     </div>
                   </div>

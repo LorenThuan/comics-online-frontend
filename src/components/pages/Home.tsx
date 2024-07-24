@@ -4,9 +4,10 @@ import Featured from "../featured/Featured";
 import useComicList from "../../hooks/CrudComicList";
 import LastestUpdateMain from "../lastest-updates/LastestUpdateMain";
 import PopularTitles from "../popular-titles/PopularTitles";
+import ChapterManager from "../chapter/ChapterManager";
 
 const Home = () => {
-  const { popularComic } = useComicList();
+  const { popularComic, loadingPopularComics } = useComicList();
   //p-4 when close  sidebar
 
   return (
@@ -14,7 +15,10 @@ const Home = () => {
       className="grid grid-cols-1 w-full"
       components={
         <div>
-          <PopularTitles data={popularComic} />
+          <PopularTitles
+            data={popularComic}
+            loadingPopularComics={loadingPopularComics}
+          />
           <LastestUpdateMain />
           <Featured />
         </div>

@@ -2,36 +2,53 @@ import React from "react";
 import { FiMessageSquare, FiUsers } from "react-icons/fi";
 import Vnsvg from "../../assets/vn.svg";
 import SidebarIcon from "../icon/SidebarIcon";
-import { Comic } from "../constants/types";
+import { ComicFull } from "../constants/types";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import useComicList from "../../hooks/CrudComicList";
 import { useStateContext } from "../../context/StateContext";
 
 interface LastestUpdateListProps {
-  data: Comic[];
+  data: ComicFull[];
+  loadingLastComics: boolean;
 }
 
-{
-  /*fetch 6 comics new*/
-}
-const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
+/*fetch 6 comics new*/
+const LastestUpdateList = (props: LastestUpdateListProps) => {
   const navigate = useNavigate();
-  const {getClosestDate} = useComicList();
+  const {getClosestDate, comicListFull} = useComicList();
   const {setSelected} = useStateContext();
+
+  if (props.loadingLastComics) 
+    return (
+    <div className="text-blue-500 text-center text-xl">
+      Loading...
+    </div>
+  );
+
+  const handleLibrary = (comicId: number) => {
+    const comicItem = comicListFull.find(comic => comic.comicId === comicId);
+    try {
+      if (comicItem) {
+          console.log(comicItem);
+          navigate(`/title/${comicItem.image_src}`, {
+            state: {comicItem},
+          })
+          setSelected("");
+      }
+    } catch (error) {
+      console.log("Comic not found");
+      throw error;
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 gap-x-6 w-full bg-gray-100">
       <div className="grid gap-4 p-4">
-        {data?.slice(0, 6).map((comicItem: any) => (
+        {props.data?.slice(0, 6).map((comicItem: any, index: number) => (
           <div               
-          onClick={() => {
-            navigate(`/title/${comicItem.image_src}`, {
-              state: { comicItem },
-            }) 
-            setSelected("");
-          }}
-          className="flex gap-2" id={comicItem.comicId}>
+          onClick={() => handleLibrary(comicItem.comicId)}
+          className="flex gap-2" key={index}>
             <div className="flex items-center">
               <img
                 src={comicItem.image_src}
@@ -54,17 +71,17 @@ const LastestUpdateList = ({ data }: LastestUpdateListProps) => {
                     className="w-[20px] h-[20px] select-none"
                   />
                   <ul>
-      {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
-        // Checking if the first item has chapterNumberConcat
-        <li>
-          {'chapterNumberConcat' in comicItem.chapterList[0] && comicItem.chapterList[0].chapterNumberConcat
-            ? comicItem.chapterList[0].chapterNumberConcat
-            : 'No chapter number available'}
-        </li>
-      ) : (
-        <li>No chapters available</li>
-      )}
-    </ul>
+                  {/* {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
+                  <li>
+                    {comicItem.chapterList[0].chapterNumber
+                      ? comicItem.chapterList[0].chapterNumber
+                      : 'No chapter number available'}
+                  </li>
+                  ) : (
+                  <li>No chapters available</li>
+                  )} */}
+                   <li>{comicItem.chapterList?.[0]?.toString()}</li>
+                  </ul>
                 </div>
 
                 <SidebarIcon icon={<FiMessageSquare size="16" />} />

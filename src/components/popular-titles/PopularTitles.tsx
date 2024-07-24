@@ -2,30 +2,30 @@ import React, { useRef } from "react";
 import { MdNavigateBefore } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";
 import SidebarIcon from "../icon/SidebarIcon";
-import ImgDemo from "../../assets/demo.jpg";
 import useSlideScrollPopular from "../../hooks/SlideScrollPopular";
 import Slider from "react-slick";
 // Import css files
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ListNewComics from "../constants/list_comic_demo";
-import { Comic } from "../constants/types";
+import { ComicFull } from "../constants/types";
 import { useNavigate } from "react-router-dom";
-import useComicList from "../../hooks/CrudComicList";
 import { useStateContext } from "../../context/StateContext";
+import useComicList from "../../hooks/CrudComicList";
 
 // [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]
 // bg-img-bg
 
 interface PopularComicProps {
-  data: Comic[];
+  data: ComicFull[];
+  loadingPopularComics: boolean
 }
 
-const PopularTitles = ({ data }: PopularComicProps) => {
+const PopularTitles = (props: PopularComicProps) => {
   const navigate = useNavigate();
   const { settings } = useSlideScrollPopular();
   const sliderRef = useRef<Slider>(null);
   const {setSelected} = useStateContext();
+  const {comicListFull} = useComicList();
 
   const next = (e: MouseEvent) => {
     e.stopPropagation(); // Stop the click event from bubbling up to the parent
@@ -36,6 +36,29 @@ const PopularTitles = ({ data }: PopularComicProps) => {
     e.stopPropagation(); // Stop the click event from bubbling up to the parent
     sliderRef.current?.slickPrev();
   };
+
+  const handleLibrary = (comicId: number) => {
+    const comicItem = comicListFull.find(comic => comic.comicId === comicId);
+    try {
+      if (comicItem) {
+          console.log(comicItem);
+          navigate(`/title/${comicItem.image_src}`, {
+            state: {comicItem},
+          })
+          setSelected("");
+      }
+    } catch (error) {
+      console.log("Comic not found");
+      throw error;
+    }
+  };
+
+  if (props.loadingPopularComics) 
+    return (
+    <div className="text-blue-500 mt-4 text-center text-xl">
+      Loading...
+    </div>
+  );
 
   return (
     <>
@@ -58,16 +81,11 @@ const PopularTitles = ({ data }: PopularComicProps) => {
             </style>
             <Slider ref={sliderRef} {...settings}>
               {/*This is titles section*/}
-              {data?.map((comicItem: any, index: number) => (
+              {props.data?.map((comicItem: any, index: number) => (
                 <div
                   key={comicItem.comicId}
                   className="custom-slide gap-4 cursor-pointer"
-                  onClick={() => {
-                    navigate(`/title/${comicItem.image_src}`, {
-                      state: { comicItem },
-                    })
-                    setSelected("");
-                  }}
+                  onClick={() => handleLibrary(comicItem.comicId)}
                 >
                   <img
                     src={comicItem.image_src}

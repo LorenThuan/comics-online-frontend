@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import GenreList from '../constants/genre_list'
 import chapterList from '../constants/chapter_list';
-import { Comic, ComicFull } from '../constants/types';
+import { ComicFull } from '../constants/types';
 import { ToastContainer } from 'react-toastify';
 
 interface AddComicPopupProps {
@@ -49,6 +49,23 @@ const AddComicPopup = (props: AddComicPopupProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const folderInput = useRef<HTMLInputElement | null>(null);
+
+  const handleSelectFolder = (event: ChangeEvent<HTMLInputElement>) => {
+    // event.preventDefault();
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      // folderInput.current.setAttribute("webkitdirectory", '');
+      console.log(files);
+      // Example of how to work with the files
+      for (let i = 0; i < files.length; i++) {
+        console.log('File name:', files[i].name);
+        console.log('File path (relative to directory):', files[i].webkitRelativePath);
+      }
+      
+    } 
+  }
 
   // 
   return (
@@ -143,6 +160,20 @@ const AddComicPopup = (props: AddComicPopupProps) => {
                       Genre List
                     </label>
                     <div className="relative inline-block w-full" ref={dropdownRef}>
+
+                  <div className='sm:col-span-1'>
+                  <div className="">
+                <input
+                  type="file"  
+                  // @ts-ignore
+                  directory=""
+                  webkitdirectory=""                
+                  className=""
+                  // ref={folderInput}
+                  onChange={handleSelectFolder}
+                />
+              </div>
+                  </div>
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
