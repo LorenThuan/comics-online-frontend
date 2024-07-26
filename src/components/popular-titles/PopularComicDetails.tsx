@@ -29,15 +29,9 @@ const PopularComicDetails = () => {
         // console.log(result.comicList);  
         if (result) {
           setComicList(result.comicList);
-          const debounceTimeout = setTimeout(() => {
             alert("Add to library success")
-          }, 500); 
-      
-          return () => {
-            clearTimeout(debounceTimeout);
             navigate("/titles/follows");
             setSelected("library");
-          };
         } else {
           console.error('Comic already in library'); 
         }
@@ -98,13 +92,15 @@ const PopularComicDetails = () => {
 
   const [chapters, setChapters] = useState<Chapter[]>([]);
   useEffect(() => {
-    if (comicItem?.chapterList && comicItem?.chapterList?.length > 0) {
+    if (comicItem?.chapterList && comicItem?.chapterList?.length > 1) {
       const sortedChapters: any =  comicItem?.chapterList?.sort((a: any, b:any) => {
         const numA = exactChapterNumber(a.chapterNumber);
         const numB = exactChapterNumber(b.chapterNumber);
         return numB - numA;
       });
       setChapters([...sortedChapters]);
+    } else {
+      setChapters(comicItem?.chapterList);
     }
   }, [chapters])
 

@@ -162,6 +162,27 @@ class UserService {
     }
   }
 
+  static async removeComicFromLibrary(userId, comicList, comicListRemove) {
+
+    try {
+      const response = await axios.put(`http://localhost:8083/remove/comics/${userId}`,
+        {comicList: comicList, 
+        comicListRemove: comicListRemove
+        }, 
+        {
+        headers: {
+        'Content-Type': 'application/json'
+        }
+        }
+      );
+      return response.data;
+
+    } catch (error) {
+      console.error('Error remove comic from library:', error.response || error.message);
+      throw error;
+    }
+  }
+
   /* AUTHENCATION CHECK */
   static logout() {
     localStorage.removeItem('token');

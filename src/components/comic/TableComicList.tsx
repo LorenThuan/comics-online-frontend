@@ -45,8 +45,8 @@ const TableComicList = (props: TableComicListProps) => {
     }
   };
   const itemsPerPage = 15;
-
-  const totalPages = Math.ceil(props.data?.length ?? 0/ itemsPerPage);
+  // @ts-ignore
+  const totalPages = Math.ceil(props?.data?.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const currentData = props.data?.slice
@@ -110,7 +110,7 @@ const TableComicList = (props: TableComicListProps) => {
           ))}
         </tbody>
       </table>
-      <div className='gap-2 sm:flex sm:justify-center mt-4'>
+      <div className='gap-2 sm:flex sm:justify-center my-4'>
         <button
         onClick={() => handlePageChange(1)}
         hidden={currentPage === 1}
