@@ -13,12 +13,14 @@ const Searchbar = () => {
   const { searchPopup, setSearchPopup } = useSearchPopup();
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isFound, setIsFound] = React.useState<boolean>(false);
+  const [isLoadingSearch, setIsLoadingSearch] = React.useState<boolean>(false);
 
   const [searchComic, setSearchComic] = React.useState<ComicFull[]>([]);
   const cache: any = {};
 
   useEffect(() => {
     const handle = async () => {
+      setIsLoadingSearch(true);
       try {
         if (!searchQuery) {
           return [];
@@ -49,6 +51,8 @@ const Searchbar = () => {
       } catch (error) {
         console.error("Error fetching comic:", error);
         return [];
+      } finally {
+        setIsLoadingSearch(false);
       }
     };
 
@@ -138,6 +142,7 @@ const Searchbar = () => {
          searchComic={searchComic}
          isFound={isFound}
          searchQuery={searchQuery}
+         isLoadingSearch={isLoadingSearch}
        />
         }
       </div>

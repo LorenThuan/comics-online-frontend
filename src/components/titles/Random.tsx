@@ -15,13 +15,10 @@ const Random = () => {
   const numberRandom =  Math.floor(Math.random() * maxComicId) + 1;
   const comicItem =  comicListFull.find(comic => comic.comicId === numberRandom);
   if (comicItem) {
-    setSelected("random");
+    setSelected("");
     navigate(`/title/${comicItem.image_src}`, {
       state: { comicItem },
     });
-    setTimeout(() => {
-      setSelected('');
-    }, 700)
   }
 }
 

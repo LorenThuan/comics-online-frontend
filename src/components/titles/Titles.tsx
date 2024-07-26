@@ -1,10 +1,10 @@
 import React from "react";
 import AdvancedSearch from "./advanced_search/AdvancedSearch";
-import RecentlyAdded from "./RecentlyAdded";
 import LatestUpdates from "./LatestUpdates";
 import Random from "./Random";
 import { FiBookOpen } from "react-icons/fi";
 import SidebarIcon from "../icon/SidebarIcon";
+import RecentlyAdded from "./recently_add/RecentlyAdded";
 
 const Titles = () => {
   return (

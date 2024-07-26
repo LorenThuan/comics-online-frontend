@@ -7,7 +7,7 @@ import { useStateContext } from '../../context/StateContext'
 
 const LastestUpdateMain = () => {
   const navigate = useNavigate();
-  const {selected, setSelected} = useStateContext();
+  const {setSelected} = useStateContext();
 
   return (
     <div className='h-auto'>

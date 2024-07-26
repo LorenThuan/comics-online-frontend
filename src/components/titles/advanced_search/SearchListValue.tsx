@@ -68,15 +68,9 @@ const SearchListValue = ( props : SearchListValueProps) => {
                   <div className='text-base text-blue-800 font-bold whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[120px]'>{comicItem.nameComic}</div>
                 </div>
                 <ul>
-                  {props.isFindComic ? 
-                  (<li className='text-blue-800'>
+                 <li className='text-blue-800'>
                     {comicItem.chapterList?.[0]?.toString()}
-                    </li>
-                  )
-                  : (
-                  <li className='text-blue-800'>
-                    {comicItem.chapterList[0].chapterNumber}
-                  </li>)} 
+                 </li>
                 </ul>
               </div>
             </div>

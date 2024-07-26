@@ -43,18 +43,33 @@ const PopularComicDetails = () => {
   const [stateValue, setStateValue] = React.useState<string>('');
 
   useEffect(() => {
-    handleFound();
-  }, [comicItem])
-
-  const handleFound = async () => {
-    const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comicId);
-    if (foundComic) {
-        console.log(foundComic);
-        setStateValue("Reading")
-    } else {
-      setStateValue("Add to Library")
+    const handleFound = async () => {
+      const foundComic = await comicList?.find(comic => comic.comicId === comicItem.comicId);
+      if (foundComic) {
+        setStateValue("Reading");
+      } else {
+        setStateValue("Add to Library");
+      }
+    };
+    
+    if (comicItem) {
+      handleFound();
     }
-  }
+  }, [comicItem, comicList]);
+
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  useEffect(() => {
+    if (comicItem?.chapterList && comicItem?.chapterList?.length > 1) {
+      const sortedChapters: any =  comicItem?.chapterList?.sort((a: any, b:any) => {
+        const numA = exactChapterNumber(a.chapterNumber);
+        const numB = exactChapterNumber(b.chapterNumber);
+        return numB - numA;
+      });
+      setChapters([...sortedChapters]);
+    } else {
+      setChapters(comicItem?.chapterList || []);
+    }
+  }, [comicItem])
 
   const handleFirstRead = () => {
     const chapterFind: any = 
@@ -89,20 +104,6 @@ const PopularComicDetails = () => {
     });
     setStateValue("");
   }
-
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  useEffect(() => {
-    if (comicItem?.chapterList && comicItem?.chapterList?.length > 1) {
-      const sortedChapters: any =  comicItem?.chapterList?.sort((a: any, b:any) => {
-        const numA = exactChapterNumber(a.chapterNumber);
-        const numB = exactChapterNumber(b.chapterNumber);
-        return numB - numA;
-      });
-      setChapters([...sortedChapters]);
-    } else {
-      setChapters(comicItem?.chapterList);
-    }
-  }, [chapters])
 
   return (
     <div className='h-screen w-auto'>
@@ -177,7 +178,7 @@ const PopularComicDetails = () => {
             <li onClick={() => handleNavigateReading(chapter)} className='hover:text-blue-500 cursor-pointer'>
               {'chapterNumber' in chapter && chapter.chapterNumber
                 ? chapter.chapterNumber
-                : 'No chapter number available'}
+                : 'Loading...'}
             </li>
             <li onClick={(e) => e.preventDefault()} className="text-[describes-rgb] cursor-none">
                 {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}

@@ -12,6 +12,8 @@ const useComicList = () => {
   const [loadingPopularComics, setLoadingPopularComics] = React.useState<boolean>(false);
   const [loadingAllComics, setLoadingAllComics] = React.useState<boolean>(false);
   const [loadingAdvancedSearch, setLoadingAdvancedSearch] = React.useState<boolean>(false);
+  const [recentlyComic, setRecentlyComic] = React.useState<ComicFull[]>([]);
+  const [loadingRecentlyComics, setLoadingRecentlyComics] = React.useState<boolean>(false);
 
   /* Get Comic List */
   const fetchComicList = async () => {
@@ -55,9 +57,19 @@ const useComicList = () => {
       }
     };
 
-    useEffect(() => {
-      fetchComicListAll()
-    }, []) 
+    /* Get Comic List Recently Add*/
+  const fetchComicRecentlyAdd = async () => {
+    setLoadingRecentlyComics(true);
+    try {
+        const response = await axios.get(
+        "http://localhost:8083/comic/titles/recent");
+        setRecentlyComic(response.data);
+      } catch (error) {
+        console.error("Error fetching comic list:", error);
+      } finally {
+        setLoadingRecentlyComics(false);
+      }
+    };
 
     useEffect(() => {
       fetchPopularComic();
@@ -65,6 +77,14 @@ const useComicList = () => {
   
     useEffect(() => {
       fetchComicList();
+    }, []);
+
+    useEffect(() => {
+      fetchComicRecentlyAdd();
+    }, []);
+
+    useEffect(() => {
+      fetchComicListAll()
     }, []);
 
   const [comicsQuery, setComicQuerys] = React.useState<ComicFull[]>([]);
@@ -104,8 +124,8 @@ const useComicList = () => {
     sortByOption: string,
     genres: string
   ) => {
-    setLoadingAdvancedSearch(true);
     try {
+      setLoadingAdvancedSearch(true);
       console.log("Fetching data from server");
       const response = await axios.get("http://localhost:8083/titles/find", {
         params: {
@@ -182,7 +202,7 @@ const useComicList = () => {
     comicListFull,
     setComicListFull,
     getClosestDate, loadingLastComics, loadingPopularComics, loadingAllComics,
-    fetchImages, images, loadingAdvancedSearch
+    fetchImages, images, loadingAdvancedSearch, recentlyComic, loadingRecentlyComics
   };
 };
 

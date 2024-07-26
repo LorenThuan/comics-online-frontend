@@ -1,21 +1,3 @@
-// export interface Comic {
-//   author?: string;
-//   comicId?: number | any;
-//   nameComic?: string;
-//   followed?: number;
-//   image_src?: string;
-//   liked?: number;
-//   state?: string;
-//   views?: bigint;
-//   createDate?: Date;
-//   createDateChapter?: Date;
-//   lastModifiedDateChapter?: Date;
-//   lastModifiedDate?: Date;
-//   genreList?: string[] | { genreId?: number; genre?: string; }[];
-//   chapterList?: { chapterId?: number; chapterNumber?: string; }[] | string[];
-//   chapterNumber?: number;
-// }
-
 export interface User {
   userId?: number;
   name?: string;
@@ -63,7 +45,8 @@ export interface ComicFull {
   lastModifiedDateChapter?: Date;
   lastModifiedDate?: Date;
   genreList?: string[] | { genreId?: number; genre?: string; }[];
-  chapterList?: string[] | Chapter[];
+  chapterList?: string[] | {chapterId?: number; chapterNumber?: string; createDate?: Date; 
+  lastModifiedDate?: Date;}[];
   chapterNumber?: number;
 }
 

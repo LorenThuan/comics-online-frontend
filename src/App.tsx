@@ -12,6 +12,7 @@ import UserManagerComponent from "./components/user/user_component/UserManagerCo
 import { ContextProvider } from "./context/StateContext";
 import ComicManagement from "./components/comic/ComicManagement";
 import ChapterManager from "./components/chapter/ChapterManager";
+import RecentlyAddManager from "./components/titles/recently_add/RecentlyAddManager";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           />
           <Route path="/comics/comic-management" element={<ComicManagement />} />
           <Route path="/chapter/*" element={<ChapterManager />} />
+          <Route path="/titles/recent" element={<RecentlyAddManager />} />
         </Route>
       </Routes>
     </BrowserRouter>

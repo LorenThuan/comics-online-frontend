@@ -8,10 +8,14 @@ interface PopupProps {
   setSearchPopup: (isSearch: boolean) => void;
   searchComic: ComicFull[];
   isFound: boolean;
-  searchQuery: string
+  searchQuery: string;
+  isLoadingSearch: boolean;
 }
 
 const SearchbarPopup = (props: PopupProps) => {
+  if (props.isLoadingSearch) return (
+    <div className="left-1/3 sm:left-1/2 mt-40 h-14 fixed ml-[135px] sm:ml-[104px] -translate-y-1/2 -translate-x-2/3 sm:-translate-x-1 p-4 w-[350px] sm:w-[500px] text-blue-500">Loading...</div>
+  )
 
   return (
     <>

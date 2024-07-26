@@ -14,6 +14,6 @@ const AdvancedSearch = () => {
   }
   }>
     Advanced Search</div>;
-};
+    };
 
 export default AdvancedSearch;
