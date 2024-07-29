@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ComicFull } from '../constants/types';
 import TableComicList from './TableComicList';
 import useComicList from '../../hooks/CrudComicList';
+import UploadImages from './UploadImages';
 const ComicComponent = () => {
   const adminOnly = UserService.adminOnly();
   const [searchQuery, setSearchQuery] = React.useState<string>("");  
@@ -60,6 +61,9 @@ const ComicComponent = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         className='input-search relative bg-white-rgb w-full mr-4 mt-10'
         />
+      </div>
+      <div className=''>
+        {/* <UploadImages/> */}
       </div>
       {searchQuery === "" ? (
         <TableComicList data={comicListFull} loadingAllComics={loadingAllComics}/>

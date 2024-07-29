@@ -18,7 +18,7 @@ const ImageComponent = ({ contentType, data, filename }: ImageProps) => {
       <img
         src={imageDataUrl}
         alt={filename}
-        className="object-contain max-w-[700px] my-4"
+        className="object-contain max-w-[400px] sm:max-w-[700px] my-4"
         style={{ display: imageLoaded ? "inline-block" : "none" }}
       />
     </div>

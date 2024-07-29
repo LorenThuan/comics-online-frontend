@@ -74,18 +74,18 @@ const PopularComicDetails = () => {
   const handleFirstRead = () => {
     const chapterFind: any = 
     comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === "Chương 1");
-    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
+    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
       state: {comicItem, chapterFind}
     });
-    setStateValue("");
   }
 
-  const handleNavigateReading = (chapter: Chapter) => {
+  const handleNavigateReading = (chapter: any) => {
     const chapterFind = chapter;
-    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
+    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
       state: {comicItem, chapterFind}
     });
-    setStateValue("");
   }
 
   const getMaxChapterNumber = (chapters: Chapter[]): number => {
@@ -99,10 +99,10 @@ const PopularComicDetails = () => {
     let chapterNumMax = getMaxChapterNumber(comicItem?.chapterList);
     const chapterFind: any = 
     comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === `Chương ${chapterNumMax}`);
-    navigate(`/chapter/${comicItem.nameComic}/${chapterFind.chapterNumber}`, {
+    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
+    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
       state: {comicItem, chapterFind}
     });
-    setStateValue("");
   }
 
   return (

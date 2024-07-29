@@ -1,6 +1,8 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import { Chapter, ComicFull } from '../constants/types';
 import GenreList from '../constants/genre_list';
+import UploadImages from './UploadImages';
+import { toast } from 'react-toastify';
 
 interface UpdateComicProps {
   isOpenUpdate: boolean;
@@ -78,8 +80,6 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
     };
   }, []);
 
-  console.log(props.comicValue);
-
   const [chapters, setChapters] = useState<Chapter[]>([]);
 
   useEffect(() => {
@@ -92,7 +92,22 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
       setChapters([...sortedChapters]);
     }
     
-  }, [chapters])
+  }, [props.comicValue])
+
+  const [chapterSelected, setChapterSelected] = useState<string>("");
+  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
+  const [chapterFound, setChapterFound] = useState<any>();
+  const handleOpenUploadImages = (e:Event) => {
+    e.preventDefault();
+    const chapterFind = props?.comicValue?.chapterList?.find((c:any) => c.chapterNumber === chapterSelected);
+    setChapterFound(chapterFind);
+    if (chapterFind) {
+      setIsOpenUpload(true);
+      props.setIsOpenUpdate(false);
+    } else {
+      toast.error("Please select chapter you want upload image!");
+    }
+  }
 
   return (
     <>
@@ -228,15 +243,19 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
                  
                   <div className="sm:col-span-1">
                     <label htmlFor="chapterNumber" className="text-base font-semibold">
-                      Chapter
+                      Select chapter you want upload images
                     </label>
                     <div className=" ">
                     <select
             name="chapterNumber"
             id="chapterNumber"
+            value={chapterSelected}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full px-4 py-2"
-            // onChange={(e) => e.target.value}
+            onChange={(e) => {
+              setChapterSelected(e.target.value);
+            }}
           >
+            <option value="" disabled>Select chapter</option>
             {chapters.length > 0 ? (
               chapters.map((chapter: Chapter, index: number) => (
               <option key={index} value={chapter.chapterNumber}>
@@ -245,6 +264,11 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
                ))) : (<p>No chapters available</p>)
             }
           </select>
+          <button
+          onClick={(e:any) => handleOpenUploadImages(e)}
+          className='px-4 py-2 w-fit rounded text-white bg-violet-500 hover:bg-violet-600'>
+            Open upload popup
+          </button>
                     </div>
                   </div>
                
@@ -266,8 +290,8 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
             </form>
       </div>
     </div>}
+    {isOpenUpload && <UploadImages comicValue={props.comicValue} chapterFound={chapterFound} setIsOpenUpload={setIsOpenUpload}/>}
     </>
-
   )
 }
 

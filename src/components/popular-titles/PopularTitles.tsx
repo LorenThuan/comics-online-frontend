@@ -55,9 +55,17 @@ const PopularTitles = (props: PopularComicProps) => {
 
   if (props.loadingPopularComics) 
     return (
-    <div className="text-blue-500 mt-4 text-center text-xl">
-      Loading...
-    </div>
+      <div className="pb-8 sm:pb-0 mt-16">
+        {/*This is img section*/}
+        <div className="flex flex-col gap-8">
+          <div className="">
+            <h1 className="text-2xl font-semibold">Popular New Titles</h1>
+            <div className="text-blue-500 mt-4 text-center text-xl">
+              Loading...
+            </div>
+          </div>
+          </div>
+          </div>
   );
 
   return (
@@ -94,7 +102,7 @@ const PopularTitles = (props: PopularComicProps) => {
                   />
 
                   <div className="grid grid-cols-1 w-full">
-                    <h1 className="text-2xl font-bold font-sans  whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[500px]">
+                    <h1 className="text-2xl font-bold font-sans whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[500px]">
                       {comicItem.nameComic}
                     </h1>
 

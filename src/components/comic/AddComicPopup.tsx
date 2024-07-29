@@ -50,27 +50,9 @@ const AddComicPopup = (props: AddComicPopupProps) => {
     };
   }, []);
 
-  const folderInput = useRef<HTMLInputElement | null>(null);
-
-  const handleSelectFolder = (event: ChangeEvent<HTMLInputElement>) => {
-    // event.preventDefault();
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      // folderInput.current.setAttribute("webkitdirectory", '');
-      console.log(files);
-      // Example of how to work with the files
-      for (let i = 0; i < files.length; i++) {
-        console.log('File name:', files[i].name);
-        console.log('File path (relative to directory):', files[i].webkitRelativePath);
-      }
-      
-    } 
-  }
-
-  // 
   return (
     <>
-    <ToastContainer/>
+    <ToastContainer autoClose={1000}/>
     {props.isOpenForm &&
     <div className='h-screen w-screen fixed left-0 top-0 backdrop:brightness-90 overflow-auto overflow-y-scroll overscroll-contain'>
       <div className='fixed left-1/4 top-14 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
@@ -160,20 +142,6 @@ const AddComicPopup = (props: AddComicPopupProps) => {
                       Genre List
                     </label>
                     <div className="relative inline-block w-full" ref={dropdownRef}>
-
-                  <div className='sm:col-span-1'>
-                  <div className="">
-                <input
-                  type="file"  
-                  // @ts-ignore
-                  directory=""
-                  webkitdirectory=""                
-                  className=""
-                  // ref={folderInput}
-                  onChange={handleSelectFolder}
-                />
-              </div>
-                  </div>
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

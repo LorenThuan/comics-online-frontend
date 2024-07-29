@@ -12,7 +12,9 @@ import { useNavigate } from "react-router-dom";
 const SearchUserComponent = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const isAuthenticated = UserService.isAuthenticated();
-  const { searchUser, setSearchUser, usersListSearch, userListMembers } = CrudUser();
+  const { searchUser, setSearchUser, usersListSearch, userListMembers,
+    isLoadingMembers, isLoadingSearchUser
+   } = CrudUser();
   const {setSelected} = useStateContext();
   const navigate = useNavigate();
 
@@ -64,6 +66,8 @@ const SearchUserComponent = () => {
               usersListSearch={usersListSearch}
               searchUser={searchUser}
               userListMembers={userListMembers}
+              isLoadingMembers={isLoadingMembers}
+              isLoadingSearchUser={isLoadingSearchUser}
             />
         </div>
       ) : (

@@ -13,8 +13,6 @@ const CrudUser = () => {
   // const [user, setUser] = React.useState<User | null>(null);
   const {token, setToken} = useStateContext();
 
-
-
   const handle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -153,12 +151,14 @@ const CrudUser = () => {
 
   const [searchUser, setSearchUser] = React.useState("");
   const [usersListSearch, setUsersListSearch] = React.useState<User[]>([]);
+  const [isLoadingSearchUser, setIsLoadingSearchUser] = React.useState<boolean>(false);
 
   useEffect(() => {
       fetchSearchUser();
   }, [searchUser]);
 
   const fetchSearchUser = async () => {
+    setIsLoadingSearchUser(true);
     try {
       if (searchUser === "") {
         console.error("Search query is empty");
@@ -169,16 +169,18 @@ const CrudUser = () => {
       if (token) {
         console.log("Fetching data from server");
         const result = await UserService.findUserByName(searchUser, token);
-        console.log(result);
         setUsersListSearch(result.userList);
       }
     } catch (error) {
       console.error("Error fetching search by name:", error);
       return [];
+    } finally {
+      setIsLoadingSearchUser(false);
     }
   };
 
   const [userListMembers, setUserListMembers] = React.useState<User[]>([]);
+  const [isLoadingMembers, setIsLoadingMembers] = React.useState<boolean>(false);
 
   useEffect(() => {
     handleGetAllUserMember();
@@ -186,11 +188,19 @@ const CrudUser = () => {
 
   const handleGetAllUserMember = async () => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const result = await UserService.getAllUserMembers(token);
-      console.log(result);
-      setUserListMembers(result.userList);
+    setIsLoadingMembers(true);
+    try {
+      if (token) {
+        const result = await UserService.getAllUserMembers(token);
+        console.log(result);
+        setUserListMembers(result.userList);
+      }
+    } catch(error){
+      console.error("Can't fetch list user members", error); 
+    } finally {
+      setIsLoadingMembers(false);
     }
+    
   };
 
   return {
@@ -217,7 +227,7 @@ const CrudUser = () => {
     usersListSearch,
     userListMembers,
     confirmPw,
-    setConfirmPw
+    setConfirmPw, isLoadingMembers, isLoadingSearchUser
   };
 };
 

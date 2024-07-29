@@ -4,7 +4,7 @@ import ChapterComponent from './ChapterComponent'
 
 const ChapterManager = () => {
   return (
-    <Common className="grid grid-cols-1 w-full mt-16" components={<ChapterComponent/>}/>
+    <Common className="grid grid-cols-1 w-full my-24" components={<ChapterComponent/>}/>
   )
 }
 

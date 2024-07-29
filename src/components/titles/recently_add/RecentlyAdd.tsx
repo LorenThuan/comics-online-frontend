@@ -42,17 +42,32 @@ const RecentlyAdd = () => {
   };
 
   if (loadingRecentlyComics)
-    return <div className="text-blue-500 text-xl mt-4">Loading...</div>;
+    return (
+      <div className=" pb-8">
+      <div className="flex justify-between items-center mb-6">
+          <h1 className="font-sans font-semibold text-2xl cursor-pointer">
+            Recently Added
+          </h1>
+          <div className="cursor-pointer p-3 rounded-full hover:bg-gray-200">
+            <SidebarIcon 
+            onClick={() => {
+              setSelected("recently_add")
+              navigate("/titles/recent")
+            }}
+            icon={<GrLinkNext size="18" />} />
+          </div>
+        </div>
+        <div className="text-blue-500 text-xl mt-4 text-center">Loading...</div>
+        </div>
+        ) 
 
   return (
     <div className="h-auto" onWheel={handleSliderWheel}>
       <div className=" pb-8">
         <div className="flex justify-between items-center mb-6">
-          <div className="">
             <h1 className="font-sans font-semibold text-2xl cursor-pointer">
               Recently Added
             </h1>
-          </div>
           <div className="cursor-pointer p-3 rounded-full hover:bg-gray-200">
             <SidebarIcon 
             onClick={() => {

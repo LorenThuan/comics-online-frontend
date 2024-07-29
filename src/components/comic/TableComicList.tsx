@@ -6,6 +6,7 @@ import UpdateComicPopup from './UpdateComicPopup';
 import axios from 'axios';
 import { ComicFull } from '../constants/types';
 import { FaPager } from 'react-icons/fa6';
+import { ToastContainer } from 'react-toastify';
 
 interface TableComicListProps {
   data?: ComicFull[];
@@ -66,6 +67,7 @@ const TableComicList = (props: TableComicListProps) => {
 
   return (
       <>
+      <ToastContainer autoClose={1000}/>
       <button
       onClick={handleOpenForm} 
       className='p-1 rounded-lg bg-violet-400 hover:bg-violet-600 text-white mt-5'>

@@ -8,7 +8,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <ToastContainer/>
+      <ToastContainer autoClose={1000}/>
       <form
         onSubmit={handle}
         className="flex justify-center items-center h-screen bg-blue-300"
