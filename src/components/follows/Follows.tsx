@@ -3,7 +3,7 @@ import Updates from "./Updates";
 import Library from "./library/Library";
 import MDLists from "./MDLists";
 import MyGroups from "./MyGroups";
-import ReadingHistory from "./ReadingHistory";
+import ReadingHistory from "./reading_history/ReadingHistory";
 import { FaRegBookmark } from "react-icons/fa";
 import SidebarIcon from "../icon/SidebarIcon";
 

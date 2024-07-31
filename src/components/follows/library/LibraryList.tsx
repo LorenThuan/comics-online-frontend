@@ -8,6 +8,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import UserService from "../../constants/UserService";
+import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg"
 
 const LibraryList = () => {
   const {comicList, setSelected, setUser, user, setComicList} = useStateContext();
@@ -85,6 +86,10 @@ const LibraryList = () => {
           src={comicItem.image_src}
           alt="Demo"
           className="w-[180px] h-[233px] object-cover rounded-lg shadow-sm"
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null; //prevent looping
+            currentTarget.src = `${ALT_IMAGE}`
+          }}
         />
       </div>
       <div className="mt-2">

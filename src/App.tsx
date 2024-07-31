@@ -14,6 +14,7 @@ import ComicManagement from "./components/comic/ComicManagement";
 import ChapterManager from "./components/chapter/ChapterManager";
 import RecentlyAddManager from "./components/titles/recently_add/RecentlyAddManager";
 import ProfileUserViewManager from "./components/user/profile/ProfileUserViewManager";
+import ReadingHistoryManager from "./components/follows/reading_history/ReadingHistoryManager";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/chapter/*" element={<ChapterManager />} />
           <Route path="/titles/recent" element={<RecentlyAddManager />} />
           <Route path="/user/*" element={<ProfileUserViewManager />} />
+          <Route path="/my/history" element={<ReadingHistoryManager />} />
         </Route>
       </Routes>
     </BrowserRouter>

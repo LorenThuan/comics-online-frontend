@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import useComicList from "../../../hooks/CrudComicList";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../../context/StateContext";
+import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
 
 declare module "react" {
   interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> {
@@ -101,6 +102,10 @@ const RecentlyAdd = () => {
                     src={comic.image_src}
                     alt="Cover image"
                     className="object-cover h-fit w-full shadow-md rounded cursor-pointer"
+                    onError={({currentTarget}) => {
+                      currentTarget.onerror = null; //prevent looping
+                      currentTarget.src = `${ALT_IMAGE}`
+                    }}
                   />
                   <p 
                   className="font-sans text-describes-rgb cursor-pointer

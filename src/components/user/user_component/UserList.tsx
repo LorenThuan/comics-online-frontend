@@ -1,5 +1,5 @@
 import React from 'react'
-import Neko from "../../../assets/MangaDex.png"
+import Logo from "../../../assets/Logo.jpg"
 import { User } from '../../constants/types'
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../../context/StateContext';
@@ -37,7 +37,7 @@ const UserList = (props:UserListProps) => {
       className='bg-slate-200 p-2 w-full flex items-center justify-between 
       cursor-pointer rounded-md hover:bg-slate-300'>
         <div className='flex space-x-2'>
-          <img src={Neko} alt="" className='w-6 h-6 object-cover rounded-full'/>
+          <img src={Logo} alt="" className='w-6 h-6 object-cover rounded-full'/>
           <h2 className='font-semibold'>{user?.name}</h2>
         </div>
         <div className='bg-gray-100 px-2 py-0.5 text-center rounded'>

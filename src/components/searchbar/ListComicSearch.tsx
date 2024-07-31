@@ -9,6 +9,7 @@ import Vnsvg from "../../assets/vn.svg"
 import useComicList from '../../hooks/CrudComicList';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../context/StateContext';
+import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
 
 interface SearchComicProps {
   data: ComicFull[];
@@ -47,7 +48,15 @@ const ListComicSearch = ({data}: SearchComicProps) => {
           >
             <div className='flex space-x-4'>
               <div className='flex items-center'>
-                <img src={comicItem.image_src} alt="img-search" className='object-cover w-16 h-24 rounded-md' />
+                <img 
+                src={comicItem.image_src} 
+                alt="img-search" 
+                className='object-cover w-16 h-24 rounded-md'
+                onError={({currentTarget}) => {
+                  currentTarget.onerror = null; //prevent looping
+                  currentTarget.src = `${ALT_IMAGE}`
+                }} 
+                />
               </div>
               <div className='grid grid-cols-1 gap-3'>
                 <div 

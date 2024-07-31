@@ -5,6 +5,7 @@ import {ComicFull } from '../../constants/types';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../../context/StateContext';
 import useComicList from '../../../hooks/CrudComicList';
+import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
 
 interface SearchListValueProps {
   data: ComicFull[];
@@ -59,7 +60,15 @@ const SearchListValue = ( props : SearchListValueProps) => {
           onClick={() => handleFindComicAdvanced(comicItem.comicId)}
           className="m-2 cursor-pointer">
             <div className='flex justify-center'>
-              <img src={comicItem.image_src} alt="Demo" className='w-[145px] sm:w-[180px] h-[187px] sm:h-[233px] object-cover rounded-lg shadow-sm' />
+              <img 
+              src={comicItem.image_src} 
+              alt="Demo" 
+              className='w-[145px] sm:w-[180px] h-[187px] sm:h-[233px] object-cover rounded-lg shadow-sm'
+              onError={({currentTarget}) => {
+                currentTarget.onerror = null; //prevent looping
+                currentTarget.src = `${ALT_IMAGE}`
+              }} 
+              />
             </div>
             <div className='mt-2'>
               <div className='flex items-center flex-col'>

@@ -8,7 +8,6 @@ import RecentlyAdded from "../titles/recently_add/RecentlyAdd";
 
 const Home = () => {
   const { popularComic, loadingPopularComics } = useComicList();
-  //p-4 when close  sidebar
 
   return (
     <Common

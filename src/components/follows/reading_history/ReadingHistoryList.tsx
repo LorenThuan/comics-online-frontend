@@ -1,36 +1,42 @@
-import React, { useState } from "react";
-import Vnsvg from "../../../assets/vn.svg";
-import SidebarIcon from "../../icon/SidebarIcon";
-import { LuEye } from "react-icons/lu";
-import { LuClock4 } from "react-icons/lu";
-import { FiMessageSquare, FiUsers } from "react-icons/fi";
-import moment from "moment";
-import useComicList from "../../../hooks/CrudComicList";
-import { useNavigate } from "react-router-dom";
-import { useStateContext } from "../../../context/StateContext";
-import { ComicFull } from "../../constants/types";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../../../context/StateContext';
+import moment from 'moment';
+import SidebarIcon from '../../icon/SidebarIcon';
+import { LuClock4, LuEye } from 'react-icons/lu';
+import { FiMessageSquare, FiUsers } from 'react-icons/fi';
+import useComicList from '../../../hooks/CrudComicList';
+import { ComicFull } from '../../constants/types';
 import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
+import Vnsvg from "../../../assets/vn.svg";
 
-interface LastestUpdateListProps {
-  data: ComicFull[];
-}
-
-const ComicAllList = ({ data }: LastestUpdateListProps) => {
-  const {getClosestDate, loadingLastComics, comicListFull} = useComicList();
+const ReadingHistoryList = () => {
+  const {getClosestDate} = useComicList();
   const navigate = useNavigate();
   const {setSelected} = useStateContext();
+  const [data, setData] = useState<ComicFull[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  
+  useEffect(() => {
+    const comicHistoryData = localStorage.getItem("reading-history");
+    if (comicHistoryData) {
+      try {
+        setData(JSON.parse(comicHistoryData));
+      } catch (error) {
+        console.error("Can't parse reading history:", error);
+      }
+    }
+    setIsLoading(false);
+  }, []);
 
   const itemsPerPage = 15;
-
   const [currentPage, setCurrentPage] = useState(1);
-
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const currentData = data.slice(
     (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage 
   );
-
   const pageNumbers = Array.from({length: totalPages}, (_, i) => i + 1);
 
   const handlePageChange = (page: number) => {
@@ -39,12 +45,11 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
     }
   }
 
-  if (loadingLastComics) return (
+  if (isLoading) return (
     <div className="text-blue-500 text-xl text-center">Loading...</div>
   )
 
-  const handleLibrary = (comicId: number) => {
-    const comicItem = comicListFull.find(comic => comic.comicId === comicId);
+  const handleLibrary = (comicItem: ComicFull) => {
     try {
       if (comicItem) {
           console.log(comicItem);
@@ -61,10 +66,11 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
   return (
     <>
-        {currentData?.map((comicItem: any) => (
-          <div 
+        {currentData?.map((comicItem: any, index: number) => (
+          <div
+          key={index} 
           onClick={() => handleLibrary(comicItem.comicId)}
-          className=" bg-gray-100 cursor-pointer hover:bg-gray-200 mr-4 rounded-md">
+          className=" bg-gray-100 cursor-pointer hover:bg-gray-200 mr-4 rounded-md mb-2">
             <div className="gap-2">
               <div className="flex gap-2">
                 <div className="flex justify-center ">
@@ -96,17 +102,8 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
                       <div>
                       <ul>
-                      {/* {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
-                      <li>
-                        {comicItem.chapterList[0].chapterNumber
-                          ? comicItem.chapterList[0].chapterNumber
-                          : 'No chapter number available'}
-                      </li>
-                      ) : (
-                      <li>No chapters available</li>
-                      )} */}
                       <li className="font-bold sm:text-base text-sm">
-                        {comicItem.chapterList[0]}
+                      {comicItem.chapterList[0]?.chapterNumber ?? 'No chapter available'}
                       </li>
                       </ul>
                       </div>
@@ -115,9 +112,6 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
                     <div className="flex items-center gap-4 mr-3">
                       <div className="flex items-center gap-2">
                         <SidebarIcon icon={<LuClock4 size="16" />} />
-                        {/* <p className="text-[describes-rgb]">
-                          {moment(comicItem.createDate).fromNow()}
-                        </p> */}
                          <p className="text-[describes-rgb]">
                         {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
                         </p>
@@ -189,6 +183,6 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
       </div>
     </>
   );
-};
+}
 
-export default ComicAllList;
+export default ReadingHistoryList

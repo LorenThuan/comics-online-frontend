@@ -11,6 +11,7 @@ import { ComicFull } from "../constants/types";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../context/StateContext";
 import useComicList from "../../hooks/CrudComicList";
+import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
 
 // [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]
 // bg-img-bg
@@ -99,6 +100,10 @@ const PopularTitles = (props: PopularComicProps) => {
                     src={comicItem.image_src}
                     className="w-[200px] h-[284.375px] object-cover"
                     alt="popular titles"
+                    onError={({currentTarget}) => {
+                      currentTarget.onerror = null; //prevent looping
+                      currentTarget.src = `${ALT_IMAGE}`
+                    }}
                   />
 
                   <div className="grid grid-cols-1 w-full">

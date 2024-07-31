@@ -47,7 +47,7 @@ const ChapterSelectPopup = (props: ChapterSelectProps) => {
         {props.data?.chapterList?.map((chapter: Chapter, index: number) => (
           <div key={index} 
           onClick={() => handleNavigateReading(chapter)}
-          className={`py-1 bg-white cursor-pointer disabled:opacity-50 
+          className={`py-1 h-fit w-fit bg-white cursor-pointer disabled:opacity-50 
           rounded border-2 border-solid ${chapter === props.chapterFind ? 
             'border-orange-500' : ''}  hover:border-gray-700`}
           >

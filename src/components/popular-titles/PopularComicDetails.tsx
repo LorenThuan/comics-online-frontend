@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import UserService from '../constants/UserService';
 import { useStateContext } from '../../context/StateContext';
 import useComicList from '../../hooks/CrudComicList';
 import { Chapter, ComicFull } from '../constants/types';
+import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
 
 const exactChapterNumber = (chapterNumber: string): number => {
   const parts = chapterNumber.split(' ');
@@ -26,7 +27,6 @@ const PopularComicDetails = () => {
     if (token) {
         const result = await UserService.addToLibrary(comicItem.comicId, token);
         console.log(result);
-        // console.log(result.comicList);  
         if (result) {
           setComicList(result.comicList);
             alert("Add to library success")
@@ -36,7 +36,8 @@ const PopularComicDetails = () => {
           console.error('Comic already in library'); 
         }
     } else {
-      console.error('No token found in localStorage'); // Handle the case where the token is not found
+      console.error('No token found in localStorage');
+      navigate("/auth/login");
     }
   }
 
@@ -71,21 +72,23 @@ const PopularComicDetails = () => {
     }
   }, [comicItem])
 
+  const navigateToChapter = (chapterNumber: string) => {
+    const chapterFind = comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === chapterNumber);
+    if (chapterFind) {
+      const chapterNumberValue = exactChapterNumber(chapterFind.chapterNumber);
+      navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumberValue}`, {
+        state: { comicItem, chapterFind }
+      });
+    }
+  };
+
   const handleFirstRead = () => {
-    const chapterFind: any = 
-    comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === "Chương 1");
-    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
-    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
-      state: {comicItem, chapterFind}
-    });
+    const chapterFind = comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === "Chương 1");
+    navigateToChapter(chapterFind.chapterNumber)
   }
 
   const handleNavigateReading = (chapter: any) => {
-    const chapterFind = chapter;
-    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
-    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
-      state: {comicItem, chapterFind}
-    });
+    navigateToChapter(chapter.chapterNumber);
   }
 
   const getMaxChapterNumber = (chapters: Chapter[]): number => {
@@ -96,13 +99,11 @@ const PopularComicDetails = () => {
   };
 
   const handleLastRead = () => {
-    let chapterNumMax = getMaxChapterNumber(comicItem?.chapterList);
-    const chapterFind: any = 
-    comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === `Chương ${chapterNumMax}`);
-    const chapterNumber = exactChapterNumber(chapterFind.chapterNumber);
-    navigate(`/chapter/${comicItem.nameComic}/Chương-${chapterNumber}`, {
-      state: {comicItem, chapterFind}
-    });
+    const maxChapterNumber = getMaxChapterNumber(comicItem?.chapterList || []);
+    const chapterFind = comicItem.chapterList?.find((chapter: any) => chapter.chapterNumber === `Chương ${maxChapterNumber}`);
+    if (chapterFind) {
+      navigateToChapter(chapterFind.chapterNumber);
+    }
   }
 
   return (
@@ -110,7 +111,15 @@ const PopularComicDetails = () => {
 
       <div className='flex flex-col items-center sm:items-start sm:flex-row space-x-7 pb-8 mt-10'>
         <div className='flex item-center'>
-          <img src={comicItem.image_src} alt="img demo" className='rounded-md shadow-lg object-cover w-[193px] h-[250px]'/>
+          <img 
+          src={comicItem.image_src} 
+          alt="img demo" 
+          className='rounded-md shadow-lg object-cover w-[193px] h-[250px]'
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null; //prevent looping
+            currentTarget.src = `${ALT_IMAGE}`
+          }}
+          />
         </div>
         <div className='grid grid-cols-1 gap-2 place-items-center sm:place-items-start mt-5 sm:mt-0'>
           <h2 className='text-xl font-semibold'>{comicItem.nameComic}</h2>

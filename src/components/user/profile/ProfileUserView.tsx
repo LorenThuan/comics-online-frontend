@@ -1,5 +1,5 @@
 import React from 'react'
-import avartar from "../../../assets/avatar.png";
+import avartar from "../../../assets/Logo.jpg";
 import SidebarIcon from '../../icon/SidebarIcon';
 import { FaRegCircle } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';

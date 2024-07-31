@@ -6,16 +6,15 @@ import LoginPopup from "../user/login/LoginPopup";
 import useLoginPopup from "../../hooks/LoginPopup";
 import SidebarIcon from "../icon/SidebarIcon";
 import { BiMenuAltLeft } from "react-icons/bi";
-import Logo from "../../assets/MangaDex.png";
+import Logo from "../../assets/Logo.jpg";
 import { useStateContext } from "../../context/StateContext";
 import classNames from "classnames";
-import useComicList from "../../hooks/CrudComicList";
-import ImageComponent from "../chapter/image/ImageComponent";
-import { ImageProps } from "../constants/types";
+import { useNavigate } from "react-router-dom";
 
 const Common = ({ className, components }: any) => {
   const { setLoginPopup, loginPopup, handleLoginPopup } = useLoginPopup();
-  const { isOpenSidebar, setOpenIsSidebar } = useStateContext();
+  const { isOpenSidebar, setOpenIsSidebar, setSelected } = useStateContext();
+  const navigate = useNavigate();
 
   const combinedClasses = classNames(className, "ml-[16px]", {
     "sm:ml-[290px]": isOpenSidebar,
@@ -33,14 +32,19 @@ const Common = ({ className, components }: any) => {
           className="cursor-pointer hover:bg-gray-200 rounded-full p-1 mt-1"
           icon={<BiMenuAltLeft size={28} />}
         />
-        <div className="flex items-center cursor-pointer">
+        <div
+        onClick={() => {
+          navigate("/")
+          setSelected("home")
+        }} 
+        className="flex items-center cursor-pointer space-x-2">
           <img
             src={Logo}
-            alt="MangaDex"
-            className="w-10 h-8 rounded-xl cursor-pointer"
+            alt="ComicRead"
+            className="w-10 h-10 rounded-full"
           />
-          <div className="text-2xl font-sans font-bold cursor-pointer tracking-tight">
-            MangaDex
+          <div className="text-2xl font-sans font-bold tracking-tight">
+            ComicRead
           </div>
         </div>
       </div>

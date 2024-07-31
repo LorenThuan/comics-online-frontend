@@ -1,10 +1,10 @@
 import React from "react";
-import Logo from "../../assets/MangaDex.png";
+import Logo from "../../assets/Logo.jpg";
 import Home from "../Home";
 import Follows from "../follows/Follows";
 import Titles from "../titles/Titles";
 import Community from "../community/Community";
-import MangaDex from "../mangadex/MangaDex";
+import MangaDex from "../comicread/ComicRead";
 import SidebarIcon from "../icon/SidebarIcon";
 import { MdOutlineClose } from "react-icons/md";
 import Footer from "../footer/Footer";
@@ -33,11 +33,11 @@ const   Sidebar = () => {
           className="flex items-center cursor-pointer">
             <img
               src={Logo}
-              alt="MangaDex"
-              className="w-10 h-8 rounded-xl cursor-pointer"
+              alt="ComicRead"
+              className="w-10 h-10 rounded-full"
             />
-            <div className="text-2xl font-sans font-bold cursor-pointer tracking-tight">
-              MangaDex
+            <div className="text-2xl font-sans font-bold tracking-tight">
+              ComicRead
             </div>
           </div>
 

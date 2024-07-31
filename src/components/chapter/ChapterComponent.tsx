@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Chapter, ImageProps } from '../constants/types';
+import { Chapter, ComicFull, ImageProps } from '../constants/types';
 import ImageComponent from './ImageComponent';
 import useComicList from '../../hooks/CrudComicList';
 import ChapterSelectPopup from './ChapterSelectPopup';
@@ -23,6 +23,20 @@ const ChapterComponent = () => {
   const {images, fetchImages} = useComicList();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [comicHistory, setComicHistory] = useState<ComicFull[]>(
+    () => {
+      const savedHistory = localStorage.getItem("reading-history");
+      return savedHistory ? JSON.parse(savedHistory) : [];
+    });
+
+  useEffect(() => {
+    setComicHistory((prevList) => {
+      const comicFilter = prevList.filter((comic:any) => comic.comicId !== comicItem.comicId);
+      const updatedList = [...comicFilter, comicItem];
+      localStorage.setItem("reading-history", JSON.stringify(updatedList));
+      return updatedList;
+  });
+  }, [])
 
   useEffect(() => {
     fetchImages(chapterFind.chapterId);

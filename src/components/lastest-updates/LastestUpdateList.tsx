@@ -7,6 +7,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import useComicList from "../../hooks/CrudComicList";
 import { useStateContext } from "../../context/StateContext";
+import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
 
 interface LastestUpdateListProps {
   data: ComicFull[];
@@ -54,6 +55,10 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
                 src={comicItem.image_src}
                 alt="demo"
                 className="cursor-pointer min-w-[60px] max-w-[60px] h-[80px] object-contain"
+                onError={({currentTarget}) => {
+                  currentTarget.onerror = null; //prevent looping
+                  currentTarget.src = `${ALT_IMAGE}`
+                }}
               />
             </div>
 
@@ -71,15 +76,6 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
                     className="w-[20px] h-[20px] select-none"
                   />
                   <ul>
-                  {/* {comicItem.chapterList && comicItem.chapterList.length > 0 ? (
-                  <li>
-                    {comicItem.chapterList[0].chapterNumber
-                      ? comicItem.chapterList[0].chapterNumber
-                      : 'No chapter number available'}
-                  </li>
-                  ) : (
-                  <li>No chapters available</li>
-                  )} */}
                    <li>{comicItem.chapterList?.[0]?.toString()}</li>
                   </ul>
                 </div>

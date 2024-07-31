@@ -1,5 +1,5 @@
 import React from "react";
-import avartar from "../../../assets/avatar.png";
+import avartar from "../../../assets/Logo.jpg";
 import { FaRegCircle } from "react-icons/fa";
 import SidebarIcon from "../../icon/SidebarIcon";
 import CrudUser from "../../../hooks/CrudUser";
