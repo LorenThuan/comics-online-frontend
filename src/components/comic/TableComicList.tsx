@@ -41,7 +41,7 @@ const TableComicList = (props: TableComicListProps) => {
         alert("Delete comic successfully");
       }
     } catch (error) {
-      console.log("Error deleted comic", error);
+      // console.log("Error deleted comic", error);
       throw error;
     }
   };

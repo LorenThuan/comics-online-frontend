@@ -18,7 +18,7 @@ const ComicListManager = () => {
     const token = localStorage.getItem("token");
     if (token) {
       const result = await UserService.getAllUsers(token);
-      console.log(result);
+      // console.log(result);
       setUsersList(result.userList);
     }
   };
@@ -87,7 +87,7 @@ const ComicListManager = () => {
       );
       if (confirmAdd) {
         if (comicData.genreList?.length !== 0) {
-          console.log('Form Data:', comicData);
+          // console.log('Form Data:', comicData);
           const response = await axios.post("http://localhost:8083/comic", comicData);
           const newComcic = response.data;
           setComicListFull((prevList) => {
@@ -110,7 +110,7 @@ const ComicListManager = () => {
       }
 
     } catch (error: any) {
-      console.log("Error add comic", error);
+      // console.log("Error add comic", error);
       throw error;
     }
   };
@@ -127,13 +127,13 @@ const ComicListManager = () => {
 
     const handleOpenUpdate = async (comicId: number) => {
     setIsOpenUpdate((prevState) => !prevState);
-    console.log(comicId);
     try {
       const response = await axios.get(`http://localhost:8083/comics/${comicId}`);       
-      console.log(response);
+      // console.log(response);
       setComicValue(response.data);
     } catch (error) {
-      console.log("Error while fetch comic by id ", error);
+      // console.log("Error while fetch comic by id ", error);
+      throw error;
     }
   };
 
@@ -185,7 +185,7 @@ const ComicListManager = () => {
         "Are you sure want to update this comic?"
       );
       if (confirmUpdate) {
-        console.log('Form Data:', comicValue);
+        // console.log('Form Data:', comicValue);
         const response = await axios.put(`http://localhost:8083/comics/${comicValue.comicId}`, comicValue)
         setComicListFull((prevList) => 
           {
@@ -200,7 +200,7 @@ const ComicListManager = () => {
       }
 
     } catch (error: any) {
-      console.log("Error while update comic", error);
+      // console.log("Error while update comic", error);
       throw error;
     }
     

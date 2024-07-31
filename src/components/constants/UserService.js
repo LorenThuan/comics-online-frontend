@@ -6,7 +6,7 @@ class UserService {
   static async login(email, password) {
     try {
       const response = await axios.post('http://localhost:8083/auth/login', {email, password});
-      console.log(response);
+      
       return response.data;
 
     } catch (error) {
@@ -93,7 +93,7 @@ class UserService {
           headers: {Authorization: `Bearer ${token}`}
         }
       );
-      console.log(response);
+      
       return response.data;
 
     } catch (error) {

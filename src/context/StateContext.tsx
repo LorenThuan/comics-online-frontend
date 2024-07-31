@@ -56,7 +56,7 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
     let token: string | null = localStorage.getItem("token");
     
     if (!token) {
-      console.error("No token found in localStorage");
+      // console.error("No token found in localStorage");
       return;
     }
 
@@ -72,16 +72,14 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
       }
 
       const result = await UserService.getYourProfile(token);
-      console.log("Full response:", result);
+      // console.log("Full response:", result);
 
       if (result && result.statusCode === 200 && result.user) {
-        console.log("User:", result.user);
+        // console.log("User:", result.user);
         
         if (result.user.comicList) {
-          console.log("Comic List:", result.user.comicList);
+          // console.log("Comic List:", result.user.comicList);
           setComicList(result.user.comicList);
-        } else {
-          console.log("Comic List is empty or undefined");
         }
 
         setUser(result.user);

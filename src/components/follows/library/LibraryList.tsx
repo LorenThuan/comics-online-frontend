@@ -26,7 +26,7 @@ const LibraryList = () => {
           setSelected("");
       }
     } catch (error) {
-      console.log("Comic not found");
+      // console.log("Comic not found");
       throw error;
     }
   };
@@ -44,7 +44,7 @@ const LibraryList = () => {
     })
   }
 
-  console.log(comicListRemove);
+  // console.log(comicListRemove);
 
   const handleRemoveComic = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,16 +62,17 @@ const LibraryList = () => {
             comicList: newComicList,
           }));
           setComicList(newComicList);
-          console.log(comicList);
+          // console.log(comicList);
           const response = await UserService.removeComicFromLibrary(user?.userId, comicList, comicListRemove);
-          console.log("Comics Remove:", response);
+          // console.log("Comics Remove:", response);
           
           setComicListRemove([]);
           alert("Delete Successfully");
         }
       }
     } catch (error) {
-      console.log("Error removing comics, please try again!", error);
+      throw error;
+      // console.log("Error removing comics, please try again!", error);
     }
   };
   

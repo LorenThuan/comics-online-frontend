@@ -79,7 +79,7 @@ const useSliderScroll = () => {
   const handleWheel =  (e: React.WheelEvent) => {
     const { deltaY } = e;
 
-    console.log(deltaY);
+    // console.log(deltaY);
     
     if(deltaY >= 0) {
       /* Scrolling right */

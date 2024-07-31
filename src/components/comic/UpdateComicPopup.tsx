@@ -29,7 +29,6 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
 
   const [number, setNumber] = React.useState<number>(0);
 
-  // console.log(JSON.stringify(props.comicValue?.chapterList));
   const chapterListPresent:any = [...props.comicValue?.chapterList || []]; // Create a shallow copy
 
   const getMaxChapterNumber = (chapters: Chapter[]): number => {
@@ -46,7 +45,7 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
     for (let i = chapterNumMax + 1; i <= chapterNumMax + number; i++) {
       chapterListPresent.push({ chapterNumber: "Chương "  + i});
     }
-    // console.log(JSON.stringify(chapterListPresent));
+
     props.setComicValue((prevData:any) => ({
         ...prevData,
         chapterList: chapterListPresent

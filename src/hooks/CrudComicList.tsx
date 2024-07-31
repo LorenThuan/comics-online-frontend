@@ -97,10 +97,10 @@ const useComicList = () => {
     // Update selectedGenres based on checkbox state
     if (checked && !selectedGenres.includes(value)) {
       setSelectedGenres([...selectedGenres, value]);
-      console.log(selectedGenres);
+      // console.log(selectedGenres);
     } else {
       setSelectedGenres(selectedGenres.filter((genre) => genre !== value));
-      console.log(selectedGenres);
+      // console.log(selectedGenres);
     }
   };
 
@@ -126,7 +126,7 @@ const useComicList = () => {
   ) => {
     try {
       setLoadingAdvancedSearch(true);
-      console.log("Fetching data from server");
+      // console.log("Fetching data from server");
       const response = await axios.get("http://localhost:8083/titles/find", {
         params: {
           stateCheckBox: stateCheckBox,
@@ -135,8 +135,8 @@ const useComicList = () => {
           genres: genres,
         },
       });
-      console.log("API response status:", response.status);
-      console.log("API response data:", response.data);
+      // console.log("API response status:", response.status);
+      // console.log("API response data:", response.data);
 
       return response.data;
     } catch (error) {
@@ -172,11 +172,12 @@ const useComicList = () => {
   const fetchImages = async (chapterId: number) => {
     try {
       const response = await axios.get(`http://localhost:8083/api/images/${chapterId}`);
-      console.log("Response data:", response);
+      // console.log("Response data:", response);
       
       setImages(response.data);
     } catch (error) {
-      console.log("Error fetching Images:", error);
+      // console.log("Error fetching Images:", error);
+      throw error;
     }
   }
 

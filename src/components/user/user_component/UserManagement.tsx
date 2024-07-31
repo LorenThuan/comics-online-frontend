@@ -35,7 +35,7 @@ const UserManagement = () => {
         window.location.reload();
       }
     } catch (error) {
-      console.log("Error deleted user", error);
+      // console.log("Error deleted user", error);
       throw error;
     }
   };

@@ -18,7 +18,6 @@ interface AddComicPopupProps {
 
 const AddComicPopup = (props: AddComicPopupProps) => {
   const genreList = GenreList[0].gerne.split(", ");
-  // console.log(genreList);
   
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

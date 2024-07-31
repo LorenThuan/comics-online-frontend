@@ -31,14 +31,13 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
     const comicItem = comicListFull.find(comic => comic.comicId === comicId);
     try {
       if (comicItem) {
-          console.log(comicItem);
           navigate(`/title/${comicItem.image_src}`, {
             state: {comicItem},
           })
           setSelected("");
       }
     } catch (error) {
-      console.log("Comic not found");
+      // console.log("Comic not found");
       throw error;
     }
   };

@@ -26,7 +26,7 @@ const PopularComicDetails = () => {
     const token = localStorage.getItem("token");
     if (token) {
         const result = await UserService.addToLibrary(comicItem.comicId, token);
-        console.log(result);
+        // console.log(result);
         if (result) {
           setComicList(result.comicList);
             alert("Add to library success")

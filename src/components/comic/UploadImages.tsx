@@ -15,10 +15,6 @@ const UploadImages = (props: UploadImageProps) => {
   const [folderPath, setFolderPath] = useState<string>("C:\\Users\\thuan\\Desktop\\MyFiles");
   const [listStringFile, setListStringFile] = useState<FileList | null>(null);
   const clickOutSideRef = useRef<HTMLDivElement>(null);
-  console.log(folderPath);
-  console.log(listStringFile);
-  console.log(props.chapterFound);
-  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,8 +61,8 @@ const UploadImages = (props: UploadImageProps) => {
           }
         );
 
-        console.log("API response status:", response.status);
-        console.log("API response data:", response.data);
+        // console.log("API response status:", response.status);
+        // console.log("API response data:", response.data);
         if (response.status === 200) {
           if (response.data.some((message: string) => message === "File data already in file")) {
             alert("File data already in file!");

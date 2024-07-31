@@ -17,20 +17,19 @@ const CrudUser = () => {
     event.preventDefault();
     try {
       const userData = await UserService.login(email, password);
-      console.log(userData);
+      // console.log(userData);
 
       if (userData.token && userData.statusCode === 200 && userData.token) {
         localStorage.setItem("token", userData.token);
         localStorage.setItem("role", userData.role);
         setToken(userData.token);
-        console.log(token);
         navigate("/", { replace: true });  
       } else {
         setError(userData.message);
         toast.error("Username or Password incorrect!")
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       setError(error);
       setTimeout(() => {
         setError("");
@@ -69,7 +68,7 @@ const CrudUser = () => {
         alert("Password and confirm default password do not match!");
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       throw error;
     }
   };
@@ -109,7 +108,7 @@ const CrudUser = () => {
       selectedUser?.userId,
       token
     );
-    console.log(response);
+    // console.log(response);
 
     const { name, email, password, role } = response.user;
     setUserData({ name, email, password, role });
@@ -134,9 +133,9 @@ const CrudUser = () => {
       );
       if (confirmUpdate) {
         const token = localStorage.getItem("token");
-        console.log(selectedUser);
+        // console.log(selectedUser);
         const userId = selectedUser?.userId;
-        console.log(userData);
+        // console.log(userData);
 
         await UserService.updateUser(userId, userData, token);
         alert("Update information successfully");
@@ -144,7 +143,7 @@ const CrudUser = () => {
       }
 
     } catch (error: any) {
-      console.log("Error updating user", error);
+      // console.log("Error updating user", error);
       throw error;
     }
   };
@@ -161,13 +160,12 @@ const CrudUser = () => {
     setIsLoadingSearchUser(true);
     try {
       if (searchUser === "") {
-        console.error("Search query is empty");
         return [];
       }
 
       const token = localStorage.getItem("token");
       if (token) {
-        console.log("Fetching data from server");
+        // console.log("Fetching data from server");
         const result = await UserService.findUserByName(searchUser, token);
         setUsersListSearch(result.userList);
       }
@@ -192,7 +190,7 @@ const CrudUser = () => {
     try {
       if (token) {
         const result = await UserService.getAllUserMembers(token);
-        console.log(result);
+        // console.log(result);
         setUserListMembers(result.userList);
       }
     } catch(error){

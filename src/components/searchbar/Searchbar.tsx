@@ -28,7 +28,7 @@ const Searchbar = () => {
           return cache[searchQuery];
         }
   
-        console.log("Fetching data from server");
+        // console.log("Fetching data from server");
         const response = await axios.get(
           "http://localhost:8083/comics/search-list",
           {
@@ -37,8 +37,8 @@ const Searchbar = () => {
             },
           }
         );
-        console.log("API response status:", response.status);
-        console.log("API response data:", response.data);
+        // console.log("API response status:", response.status);
+        // console.log("API response data:", response.data);
         if (response.data.length > 0) {
           setIsFound(true);
           setSearchComic(response.data)

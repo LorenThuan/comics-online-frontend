@@ -44,7 +44,6 @@ const LoginPopup = (props: PopupProps) => {
       // @ts-ignore: Object is possibly 'null'.
       if (loginRef.current && !loginRef.current?.contains(e.target)) {
         onClose();
-        console.log(loginRef.current);
       }
     };
 

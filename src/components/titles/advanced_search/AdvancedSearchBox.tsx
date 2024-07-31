@@ -12,8 +12,6 @@ interface AdvancedSearchProps {
 
 const AdvancedSearchModal = (props: AdvancedSearchProps) => {
   const genres = GenreList[0].gerne.split(", ");
-  const genresList = GenreList[0].gerne;
-  console.log(genresList);
   
   const {
     selectedGenres,
@@ -25,7 +23,6 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
     selectedOptionSort,
     setSelectedOptionSort,
     fetchSearchAdvanced,
-    comicsQuery,
   } = useComicList();
   const [isOpen, setIsOpen] = React.useState(true);
   const { optionState, optionNumChapter, optionSortBy } = useOptions();
@@ -45,7 +42,6 @@ const AdvancedSearchModal = (props: AdvancedSearchProps) => {
     );
     
     props.setComicQuerys(result);
-    // window.location.reload();
   };
 
   return (

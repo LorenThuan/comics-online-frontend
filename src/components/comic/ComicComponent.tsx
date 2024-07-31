@@ -21,7 +21,7 @@ const ComicComponent = () => {
           return [];
         }
   
-        console.log("Fetching data from server");
+        // console.log("Fetching data from server");
         const response = await axios.get(
           "http://localhost:8083/comics/search-comics",
           {
@@ -30,8 +30,8 @@ const ComicComponent = () => {
             },
           }
         );
-        console.log("API response status:", response.status);
-        console.log("API response data:", response.data);
+        // console.log("API response status:", response.status);
+        // console.log("API response data:", response.data);
         if (response.status === 200) {
           setIsFound(true);
           setComicSearch(response.data)
