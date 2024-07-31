@@ -26,6 +26,21 @@ class UserService {
     }
   }
 
+ static async refreshToken(refreshToken) {
+    try {
+      const response = await axios.post('http://localhost:8083/auth/refresh', { token: refreshToken });
+      if (response.status === 200) {
+        const { token, refreshToken } = response.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
+        return token;
+      }
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      // Handle token refresh failure (e.g., logout user)
+    }
+  }
+
   static async getAllUsers(token) {
     try {
       const response = await axios.get('http://localhost:8083/admin/get-all-users',
@@ -186,6 +201,7 @@ class UserService {
   /* AUTHENCATION CHECK */
   static logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('role');
     localStorage.removeItem('user');
   }

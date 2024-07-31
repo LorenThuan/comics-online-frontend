@@ -19,7 +19,7 @@ const CrudUser = () => {
       const userData = await UserService.login(email, password);
       console.log(userData);
 
-      if (userData.token) {
+      if (userData.token && userData.statusCode === 200 && userData.token) {
         localStorage.setItem("token", userData.token);
         localStorage.setItem("role", userData.role);
         setToken(userData.token);
