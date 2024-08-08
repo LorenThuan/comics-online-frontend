@@ -21,15 +21,7 @@ export interface Chapter {
   chapterNumber?: string;
   createDate?: Date; 
   lastModifiedDate?: Date;
-  // fileDataList?: FileData[];
 };
-
-// export interface FileData {
-//   id?: bigint;
-//   name?: string;
-//   type?: string;
-//   filePath?: string;
-// }
 
 export interface ComicFull {
   author?: string;

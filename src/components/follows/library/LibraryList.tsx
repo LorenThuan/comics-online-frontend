@@ -3,17 +3,17 @@ import VnLogo from "../../../assets/vn.svg";
 import { useStateContext } from "../../../context/StateContext";
 import useComicList from "../../../hooks/CrudComicList";
 import { useNavigate } from "react-router-dom";
-import { ComicFull, User } from "../../constants/types";
+import { ComicFull } from "../../constants/types";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 import UserService from "../../constants/UserService";
 import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg"
 
 const LibraryList = () => {
   const {comicList, setSelected, setUser, user, setComicList} = useStateContext();
   
-  const { comicListFull } = useComicList();
+  // const { comicListFull } = useComicList();
+  const {comicListFull} = useStateContext();
   const navigate = useNavigate();
 
   const handleLibrary = (comicId: number) => {
@@ -46,31 +46,32 @@ const LibraryList = () => {
 
   // console.log(comicListRemove);
 
-  const handleRemoveComic = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleRemoveComic = async (event: Event) => {
+    event.preventDefault();
     try {
-      const confirmRemove = window.confirm("Are you sure you want to delete the selected comics?");
-      if (confirmRemove) {
         if (comicListRemove.length <= 0) {
           toast.error("Please select comics you want to remove!");
         } else {
-          const newComicList = user?.comicList?.filter((comicItem: any) => 
-            !comicListRemove.some((removeItem) => removeItem.comicId === comicItem.comicId)
-          );
-          setUser((prevData: any) => ({
-            ...prevData,
-            comicList: newComicList,
-          }));
-          setComicList(newComicList);
-          // console.log(comicList);
-          const response = await UserService.removeComicFromLibrary(user?.userId, comicList, comicListRemove);
-          // console.log("Comics Remove:", response);
+          const confirmRemove = window.confirm("Are you sure you want to delete the selected comics?");
+          if (confirmRemove) {
+            const newComicList = comicList?.filter((comicItem: any) => 
+              !comicListRemove.some((removeItem) => removeItem.comicId === comicItem.comicId)
+            );
+            setUser((prevData: any) => ({
+              ...prevData,
+              comicList: newComicList,
+            }));
+            setComicList(newComicList);
+            // console.log(comicList);
+            await UserService.removeComicFromLibrary(user?.userId, comicList, comicListRemove);
+            // console.log("Comics Remove:", response);
+            
+            setComicListRemove([]);
+            toast.success("Delete Successfully");
+          }
           
-          setComicListRemove([]);
-          alert("Delete Successfully");
         }
-      }
-    } catch (error) {
+      } catch (error) {
       throw error;
       // console.log("Error removing comics, please try again!", error);
     }
@@ -78,7 +79,6 @@ const LibraryList = () => {
   
   return (
     <>
-    <ToastContainer/>
     <div className='mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6'>
     {comicList?.map((comicItem: any, index: number) => (
       <div key={index} className="m-2">
@@ -108,19 +108,19 @@ const LibraryList = () => {
         <input type="checkbox" 
         className="text-green-500"
         checked={comicListRemove.some(c => c.comicId === comicItem.comicId)}
-        onChange={(e) => handleAddListRemove(comicItem, e)}
+        onChange={(event) => handleAddListRemove(comicItem, event)}
         />
       </div>
     </div>
     ))}
     </div>
-    {comicList && 
+    {comicList?.length ?? 0 > 0 ? (
     <div className="fixed bottom-0 right-0 mb-4 mr-4">
     <button
-    onClick={handleRemoveComic} 
+    onClick={(event:any) => handleRemoveComic(event)} 
     className="px-3.5 py-1 text-center bg-red-500 rounded text-white font-semibold
     hover:bg-red-600">Delete</button>
-    </div>}
+    </div>) : <span></span>}
     
     </>
   );

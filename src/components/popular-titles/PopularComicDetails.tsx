@@ -6,6 +6,7 @@ import { useStateContext } from '../../context/StateContext';
 import useComicList from '../../hooks/CrudComicList';
 import { Chapter, ComicFull } from '../constants/types';
 import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
+import { toast } from 'react-toastify';
 
 const exactChapterNumber = (chapterNumber: string): number => {
   const parts = chapterNumber.split(' ');
@@ -16,6 +17,7 @@ const exactChapterNumber = (chapterNumber: string): number => {
 const PopularComicDetails = () => {
   let location = useLocation();
   const { comicItem } = location.state || {};
+  
 
   const {setComicList, comicList, setSelected} = useStateContext();
   const navigate = useNavigate();
@@ -28,15 +30,13 @@ const PopularComicDetails = () => {
         const result = await UserService.addToLibrary(comicItem.comicId, token);
         // console.log(result);
         if (result) {
+          toast.success("Add to library success");
           setComicList(result.comicList);
-            alert("Add to library success")
-            navigate("/titles/follows");
-            setSelected("library");
-        } else {
-          console.error('Comic already in library'); 
+          setSelected("library");
+          navigate("/titles/follows");
         }
     } else {
-      console.error('No token found in localStorage');
+      // console.error('No token found in localStorage');
       navigate("/auth/login");
     }
   }
@@ -148,7 +148,7 @@ const PopularComicDetails = () => {
                 ))}
           </ul>
 
-          <div className='grid grid-cols-3 sm:grid-cols-5 gap-2 mt-2 sm:mt-0'>
+          <div className='grid grid-cols-3 sm:grid-cols-5 gap-2 mt-2 sm:mt-0 mr-4'>
             <button onClick={() => {stateValue === "Add to Library" ?  handleAddToLibrary() : handleFirstRead()}} 
  
             className='px-4 py-2 sm:px-6 bg-blue-400 text-center rounded-md hover:opacity-50 text-white duration-200'>

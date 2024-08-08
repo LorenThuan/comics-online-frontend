@@ -6,7 +6,8 @@ import useComicList from "../../hooks/CrudComicList";
 const Random = () => {
   const navigate = useNavigate();
   const {setSelected, selected} = useStateContext();
-  const {comicListAll, comicListFull} = useComicList();
+  const {comicListAll} = useComicList();
+  const {comicListFull} = useStateContext();
 
   const handleRandom = () => {
 

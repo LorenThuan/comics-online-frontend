@@ -9,24 +9,32 @@ import useComicList from '../../../hooks/CrudComicList';
 import { ComicFull } from '../../constants/types';
 import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
 import Vnsvg from "../../../assets/vn.svg";
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 const ReadingHistoryList = () => {
   const {getClosestDate} = useComicList();
   const navigate = useNavigate();
-  const {setSelected} = useStateContext();
+  const {setSelected, comicListFull} = useStateContext();
   const [data, setData] = useState<ComicFull[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
-  useEffect(() => {
+
+  const fetchComicHistory = () => {
     const comicHistoryData = localStorage.getItem("reading-history");
     if (comicHistoryData) {
       try {
         setData(JSON.parse(comicHistoryData));
+        
       } catch (error) {
-        console.error("Can't parse reading history:", error);
+        // console.error("Can't parse reading history:", error);
+        throw error;
       }
     }
     setIsLoading(false);
+  }
+  
+  useEffect(() => {
+    fetchComicHistory();
   }, []);
 
   const itemsPerPage = 15;
@@ -49,7 +57,8 @@ const ReadingHistoryList = () => {
     <div className="text-blue-500 text-xl text-center">Loading...</div>
   )
 
-  const handleLibrary = (comicItem: ComicFull) => {
+  const handleLibrary = (comicId: number) => {
+    const comicItem = comicListFull.find(comic => comic.comicId === comicId);
     try {
       if (comicItem) {
           // console.log(comicItem);
@@ -92,7 +101,7 @@ const ReadingHistoryList = () => {
                   <hr className="border-1 border-solid border-gray-400 my-2 h-fit mr-4" />
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1.5">
-                      <SidebarIcon icon={<LuEye size="16" />} />
+                      {/* <SidebarIcon icon={<LuEye size="16" />} /> */}
 
                       <img
                         src={Vnsvg}
@@ -103,7 +112,7 @@ const ReadingHistoryList = () => {
                       <div>
                       <ul>
                       <li className="font-bold sm:text-base text-sm">
-                      {comicItem.chapterList[0]?.chapterNumber ?? 'No chapter available'}
+                      {/* {comicItem.chapterList[0]?.chapterNumber ?? 'No chapter available'} */}
                       </li>
                       </ul>
                       </div>
@@ -111,9 +120,9 @@ const ReadingHistoryList = () => {
 
                     <div className="flex items-center gap-4 mr-3">
                       <div className="flex items-center gap-2">
-                        <SidebarIcon icon={<LuClock4 size="16" />} />
+                        {/* <SidebarIcon icon={<LuClock4 size="16" />} /> */}
                          <p className="text-[describes-rgb]">
-                        {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
+                        {/* {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'} */}
                         </p>
                       </div>
 

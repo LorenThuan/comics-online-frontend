@@ -3,7 +3,6 @@ import Common from "../common/Common";
 import useComicList from "../../hooks/CrudComicList";
 import LastestUpdateMain from "../lastest-updates/LastestUpdateMain";
 import PopularTitles from "../popular-titles/PopularTitles";
-import ChapterManager from "../chapter/ChapterManager";
 import RecentlyAdded from "../titles/recently_add/RecentlyAdd";
 
 const Home = () => {

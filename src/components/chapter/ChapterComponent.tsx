@@ -8,8 +8,10 @@ import SidebarIcon from '../icon/SidebarIcon';
 import { FaAngleDown } from 'react-icons/fa';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import { useStateContext } from '../../context/StateContext';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { TfiMenuAlt } from 'react-icons/tfi';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 const exactChapterNumber = (chapterNumber:string): number => {
   const parts = chapterNumber.split(' ');
@@ -29,13 +31,17 @@ const ChapterComponent = () => {
       return savedHistory ? JSON.parse(savedHistory) : [];
     });
 
-  useEffect(() => {
+  const handleAddComicHistory = () => {
     setComicHistory((prevList) => {
       const comicFilter = prevList.filter((comic:any) => comic.comicId !== comicItem.comicId);
       const updatedList = [...comicFilter, comicItem];
       localStorage.setItem("reading-history", JSON.stringify(updatedList));
-      return updatedList;
+      return updatedList;    
   });
+  }
+
+  useEffect(() => {
+  handleAddComicHistory();
   }, [])
 
   useEffect(() => {
@@ -79,7 +85,6 @@ const ChapterComponent = () => {
 
   return (
     <div className=''>
-      <ToastContainer autoClose={1000}/>
       <div className='my-2 text-center'>
       <div className='text-xl'>{chapterFind.chapterNumber}</div>
       <div className='text-orange-400'>{comicItem.nameComic}</div>

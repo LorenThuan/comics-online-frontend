@@ -10,6 +10,7 @@ import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
 interface SearchListValueProps {
   data: ComicFull[];
   isFindComic: boolean;
+  loadingAdvancedSearch: boolean
 }
 
 const SearchListValue = ( props : SearchListValueProps) => {
@@ -36,8 +37,8 @@ const SearchListValue = ( props : SearchListValueProps) => {
   };
   
   const navigate = useNavigate();
-  const {setSelected} = useStateContext();
-  const {comicListFull, loadingAdvancedSearch} = useComicList();
+  const {setSelected, comicListFull} = useStateContext();
+  // const {loadingAdvancedSearch} = useComicList();
 
   const handleFindComicAdvanced = async (comicId: number) => {
     const comicItem = await comicListFull?.find(comic => comic.comicId === comicId);
@@ -47,7 +48,7 @@ const SearchListValue = ( props : SearchListValueProps) => {
     setSelected("")
   }
 
-  if (loadingAdvancedSearch) return (
+  if (props.loadingAdvancedSearch) return (
   <div className='text-center mt-4 text-blue-500 text-xl'>Loading...</div>
   )
 

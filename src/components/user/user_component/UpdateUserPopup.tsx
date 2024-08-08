@@ -3,12 +3,11 @@ import CrudUser from "../../../hooks/CrudUser";
 import { User } from "../../constants/types";
 
 interface updateUserProps {
-  isOpenUpdate: boolean;
+  isOpenUpdate?: boolean;
   closeUpdatePopup(): void;
-  userData: User;
+  userData?: User;
   handleChangeUpdate(event: any): void; // Adjust this according to your needs
   handleFormUpdate(event: React.FormEvent<HTMLFormElement>): void;
-  selectedValue: string;
 }
 
 const UpdateUserPopup = (props: updateUserProps) => {
@@ -20,7 +19,7 @@ const UpdateUserPopup = (props: updateUserProps) => {
   return (
     <>
       {props.isOpenUpdate && (
-        <div className="fixed h-screen w-screen right-0 top-0 backdrop-brightness-90">
+        <div className="fixed h-screen w-screen right-0 top-0 backdrop-brightness-75">
           <div className="fixed shadow-md rounded-md left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white">
             <form
               onSubmit={props.handleFormUpdate}
@@ -56,7 +55,7 @@ const UpdateUserPopup = (props: updateUserProps) => {
                       <input
                         type="email"
                         required
-                        value={props.userData.email}
+                        value={props?.userData?.email}
                         onChange={props.handleChangeUpdate}
                         placeholder="email"
                         name="email"
@@ -76,7 +75,7 @@ const UpdateUserPopup = (props: updateUserProps) => {
                       <input
                         type="password"
                         required
-                        value={props.userData.password}
+                        value={props?.userData?.password}
                         onChange={props.handleChangeUpdate}
                         name="password"
                         placeholder="password"

@@ -10,9 +10,9 @@ interface RecentlyAddProps {
 }
 
 const RecentlyAddAll = ({data}: RecentlyAddProps) => {
-  const {comicListFull, loadingRecentlyComics} = useComicList();
+  const {loadingRecentlyComics} = useComicList();
   const navigate = useNavigate();
-  const {setSelected} = useStateContext();
+  const {setSelected, comicListFull} = useStateContext();
 
   const itemsPerPage = 15;
 

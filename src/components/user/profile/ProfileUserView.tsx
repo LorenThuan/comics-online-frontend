@@ -3,12 +3,16 @@ import avartar from "../../../assets/Logo.jpg";
 import SidebarIcon from '../../icon/SidebarIcon';
 import { FaRegCircle } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
+import UserService from '../../constants/UserService';
+import LoginRequired from '../login/LoginRequired';
 
 const ProfileUserView = () => {
+  const isAuthenticated = UserService.isAuthenticated();
   let location = useLocation();
   const {user} = location.state || {};
   return (
     <>
+    {isAuthenticated ? (
         <div className="flex justify-center items-center">
           <div className="bg-violet-300 w-fit rounded-md p-2">
             <div className="flex items-center space-x-4">
@@ -37,6 +41,9 @@ const ProfileUserView = () => {
             </div>
           </div>
         </div>
+        ) : (
+          <LoginRequired />
+        )}
     </>
   )
 }

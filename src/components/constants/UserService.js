@@ -36,8 +36,7 @@ class UserService {
         return token;
       }
     } catch (error) {
-      console.error('Token refresh failed:', error);
-      // Handle token refresh failure (e.g., logout user)
+      throw error;
     }
   }
 
@@ -172,7 +171,7 @@ class UserService {
       return response.data;
 
     } catch (error) {
-      console.error('Error adding to library:', error.response || error.message);
+      // console.error('Error adding to library:', error.response || error.message);
       throw error;
     }
   }
@@ -193,17 +192,18 @@ class UserService {
       return response.data;
 
     } catch (error) {
-      console.error('Error remove comic from library:', error.response || error.message);
+      // console.error('Error remove comic from library:', error.response || error.message);
       throw error;
     }
   }
 
   /* AUTHENCATION CHECK */
   static logout() {
-    localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('role');
-    localStorage.removeItem('user');
+    // localStorage.removeItem('name');
+    localStorage.removeItem('token');
+    localStorage.removeItem('profile');
   }
 
   static isAuthenticated() {

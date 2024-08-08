@@ -8,8 +8,13 @@ import LoginRequired from "../login/LoginRequired";
 import { useStateContext } from "../../../context/StateContext";
 
 const MyProfile = () => {
-  const { user } = useStateContext();
+  // const { user } = useStateContext();
   const isAuthenticated = UserService.isAuthenticated();
+  let profile: any = localStorage.getItem("profile");
+  if (profile) {
+    profile = JSON.parse(profile);
+  }
+
   return (
     <>
       {isAuthenticated ? (
@@ -22,10 +27,10 @@ const MyProfile = () => {
                 className="object-cover w-[120px] h-[120px] rounded-full border border-solid border-white-rgb"
               />
               <div className="flex flex-col space-y-6">
-                <h2 className="font-bold text-2xl">{user?.name}</h2>
+                <h2 className="font-bold text-2xl">{profile?.name}</h2>
                 <div>
                   <p className="font-semibold text-xl">User Id</p>
-                  <p>{user?.userId}</p>
+                  <p>{profile?.userId}</p>
                 </div>
 
                 <div>
@@ -34,7 +39,7 @@ const MyProfile = () => {
                     <SidebarIcon
                       icon={<FaRegCircle size="14" color="gray" />}
                     />
-                    <p>{user?.role}</p>
+                    <p>{profile?.role}</p>
                   </div>
                 </div>
               </div>

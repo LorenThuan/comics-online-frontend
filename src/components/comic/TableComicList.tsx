@@ -5,16 +5,14 @@ import ComicListManager from '../../hooks/ComicListManager';
 import UpdateComicPopup from './UpdateComicPopup';
 import axios from 'axios';
 import { ComicFull } from '../constants/types';
-import { FaPager } from 'react-icons/fa6';
-import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 interface TableComicListProps {
-  data?: ComicFull[];
+  comicListFull?: ComicFull[];
   loadingAllComics: boolean;
 }
 
 const TableComicList = (props: TableComicListProps) => {
-  const {setComicListFull} = useComicList();
   const {comicData, handleChange, handleCheckboxChange, handleSubmit, 
     handleChapterChange, isOpenUpdate, handleOpenUpdate, 
     handleFormUpdate, closeUpdateForm, setIsOpenUpdate, 
@@ -26,7 +24,6 @@ const TableComicList = (props: TableComicListProps) => {
     setIsOpenForm(!isOpenForm);
   };
 
-
   const handleDelete = async (comicId: number) => {
     try {
       const confirmDelete = window.confirm(
@@ -34,11 +31,7 @@ const TableComicList = (props: TableComicListProps) => {
       );
       if (confirmDelete) {
         await axios.delete(`http://localhost:8083/comics/${comicId}`)
-        setComicListFull((prevList) => {
-          const updatedList = prevList.filter((comic) => comic.comicId !== comicId);
-          return updatedList;
-        });
-        alert("Delete comic successfully");
+        toast.success("Delete comic successfully"); 
       }
     } catch (error) {
       // console.log("Error deleted comic", error);
@@ -47,10 +40,10 @@ const TableComicList = (props: TableComicListProps) => {
   };
   const itemsPerPage = 15;
   // @ts-ignore
-  const totalPages = Math.ceil(props?.data?.length / itemsPerPage);
+  const totalPages = Math.ceil(props.comicListFull?.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const currentData = props.data?.slice
+  const currentData = props.comicListFull?.slice
   ((currentPage - 1)*itemsPerPage, currentPage*itemsPerPage);
 
   const pageNumbers = Array.from({length: totalPages}, (_, i) => i + 1);
@@ -67,7 +60,6 @@ const TableComicList = (props: TableComicListProps) => {
 
   return (
       <>
-      <ToastContainer autoClose={1000}/>
       <button
       onClick={handleOpenForm} 
       className='p-1 rounded-lg bg-violet-400 hover:bg-violet-600 text-white mt-5'>

@@ -10,6 +10,7 @@ const RecentlyAddComponent = () => {
   const navigate = useNavigate();
   const {setSelected} = useStateContext();
   const {recentlyComic} = useComicList();
+  
   return (
   <>
       <div className="pb-8 grid grid-cols-1 justify-center">

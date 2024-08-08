@@ -38,7 +38,7 @@ const UploadImages = (props: UploadImageProps) => {
   const handleUploadImages = async () => {
    
     if (!listStringFile) {
-      alert("Please select files to upload.");
+      toast.success("Please select files to upload.");
       return;
     }
 
@@ -65,18 +65,18 @@ const UploadImages = (props: UploadImageProps) => {
         // console.log("API response data:", response.data);
         if (response.status === 200) {
           if (response.data.some((message: string) => message === "File data already in file")) {
-            alert("File data already in file!");
+            toast.success("File data already in file!");
             return;
           }
-          alert("Upload successfully!");
+          toast.success("Upload successfully!");
           props.setIsOpenUpload(false);
         } else {
-          alert("Can't find chapterId!");
+          toast.success("Can't find chapterId!");
           return;
         }
       }
     } catch (error) {
-      console.error("Error when uploading images", error);
+      // console.error("Error when uploading images", error);
       toast.error("Image upload failed, please select correct image type!");
     }
   }

@@ -1,14 +1,12 @@
-import React, { ChangeEvent, FormEvent, useEffect } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ComicFull, User } from '../components/constants/types';
 import chapterList from '../components/constants/chapter_list';
 import UserService from '../components/constants/UserService';
 import axios from 'axios';
-import useComicList from './CrudComicList';
 import { toast } from 'react-toastify';
 
 const ComicListManager = () => {
   const [usersList, setUsersList] = React.useState<User[]>([]);
-  const {setComicListFull} = useComicList();
 
   useEffect(() => {
     handle();
@@ -36,6 +34,11 @@ const ComicListManager = () => {
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    // if (name === "image_src" && !/^https:\/\/.*/.test(value)) {
+    //   e.target.setCustomValidity("The URL must start with 'https://'");
+    // } else {
+    //   e.target.setCustomValidity("");
+    // }
     setComicData({ ...comicData, [name]: value });
   };
 
@@ -58,19 +61,19 @@ const ComicListManager = () => {
 
   const handleChapterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    const selectedChapter = chapterList.find(chapter => chapter.chapterNumber === value);
-    if (selectedChapter) {
+    // const selectedChapter = chapterList.find(chapter => chapter.chapterNumber === value);
+
       setComicData((prevData:any) => {
-        const chapterExists = prevData.chapterList?.some((ch:any) => ch.chapterNumber === value);
-        if (!chapterExists) {
+        // const chapterExists = prevData.chapterList?.some((ch:any) => ch.chapterNumber === value);
+        // if (!chapterExists) {
           return {
             ...prevData,
-            chapterList: [...(prevData.chapterList || []), selectedChapter],
+            chapterList: value,
           };
-        }
-        return prevData;
+        
+        // return prevData;
       });
-    }
+    
   };
 
   const [isOpenForm, setIsOpenForm] = React.useState(false);
@@ -88,21 +91,18 @@ const ComicListManager = () => {
       if (confirmAdd) {
         if (comicData.genreList?.length !== 0) {
           // console.log('Form Data:', comicData);
-          const response = await axios.post("http://localhost:8083/comic", comicData);
-          const newComcic = response.data;
-          setComicListFull((prevList) => {
-            const updatedList = [...prevList, newComcic];
-            return updatedList;
-          });
+          await axios.post("http://localhost:8083/comic", comicData);
+          // await fetchComicListAll();
+          
           closeFormAddPopup();
-          alert("Add Comic successfully");
+          toast.success("Add Comic successfully");
           setComicData({
             nameComic: '',
             author: '',
             image_src: '',
             state: 'Đang Cập Nhật',
             genreList: [],
-            chapterList: [],
+            chapterList: comicData.chapterList,
           })
         } else {
           toast.error("Please Select Genres valid!");
@@ -186,17 +186,9 @@ const ComicListManager = () => {
       );
       if (confirmUpdate) {
         // console.log('Form Data:', comicValue);
-        const response = await axios.put(`http://localhost:8083/comics/${comicValue.comicId}`, comicValue)
-        setComicListFull((prevList) => 
-          {
-          const updatedList = prevList.map((comic) => 
-            comic.comicId === comicValue.comicId ? response.data : comic
-          );
-          return updatedList;
-          }
-        );
+        await axios.put(`http://localhost:8083/comics/${comicValue.comicId}`, comicValue);
         closeUpdateForm();
-        alert("Update Comic successfully");
+        toast.success("Update Comic successfully");
       }
 
     } catch (error: any) {

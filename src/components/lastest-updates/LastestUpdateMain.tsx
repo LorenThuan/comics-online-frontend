@@ -4,6 +4,7 @@ import SidebarIcon from '../icon/SidebarIcon'
 import { GrLinkNext } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import { useStateContext } from '../../context/StateContext'
+import ComicListManager from '../../hooks/ComicListManager'
 
 const LastestUpdateMain = () => {
   const navigate = useNavigate();

@@ -47,7 +47,7 @@ const Searchbar = () => {
           setIsFound(false);
         }
       } catch (error) {
-        console.error("Error fetching comic:", error);
+        // console.error("Error fetching comic:", error);
         return [];
       }
     };
@@ -138,6 +138,7 @@ const Searchbar = () => {
          searchComic={searchComic}
          isFound={isFound}
          searchQuery={searchQuery}
+         setIsOpen={setIsOpen}
        />
         }
       </div>

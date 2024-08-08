@@ -15,6 +15,7 @@ import ChapterManager from "./components/chapter/ChapterManager";
 import RecentlyAddManager from "./components/titles/recently_add/RecentlyAddManager";
 import ProfileUserViewManager from "./components/user/profile/ProfileUserViewManager";
 import ReadingHistoryManager from "./components/follows/reading_history/ReadingHistoryManager";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    <ToastContainer autoClose={1000}/>
     </ContextProvider>
   );
 }

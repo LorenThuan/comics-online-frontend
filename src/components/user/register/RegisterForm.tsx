@@ -28,6 +28,7 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   placeholder="name"
                   name="name"
+                  autoComplete="username"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>
@@ -45,6 +46,7 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   placeholder="email"
                   name="email"
+                  autoComplete="email"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>
@@ -62,6 +64,7 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   name="password"
                   placeholder="password"
+                  autoComplete="current-password"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>
@@ -79,6 +82,7 @@ const RegisterForm = () => {
                   onChange={(e) => setConfirmPw(e.target.value)}
                   name="confirmPw"
                   placeholder="password"
+                  autoComplete="new-password"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>

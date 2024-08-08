@@ -16,7 +16,9 @@ interface LastestUpdateListProps {
 }
 
 const ComicAllList = ({ data }: LastestUpdateListProps) => {
-  const {getClosestDate, loadingLastComics, comicListFull} = useComicList();
+  // const {getClosestDate, loadingLastComics, comicListFull} = useComicList();
+  const {getClosestDate, loadingLastComics} = useComicList();
+  const {comicListFull} = useStateContext();
   const navigate = useNavigate();
   const {setSelected} = useStateContext();
 
@@ -60,8 +62,9 @@ const ComicAllList = ({ data }: LastestUpdateListProps) => {
 
   return (
     <>
-        {currentData?.map((comicItem: any) => (
-          <div 
+        {currentData?.map((comicItem: any, index:number) => (
+          <div
+          key={index} 
           onClick={() => handleLibrary(comicItem.comicId)}
           className=" bg-gray-100 cursor-pointer hover:bg-gray-200 mr-4 rounded-md">
             <div className="gap-2">

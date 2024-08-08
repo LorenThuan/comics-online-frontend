@@ -4,12 +4,12 @@ import LoginRequired from '../user/login/LoginRequired';
 import axios from 'axios';
 import { ComicFull } from '../constants/types';
 import TableComicList from './TableComicList';
-import useComicList from '../../hooks/CrudComicList';
-import UploadImages from './UploadImages';
+import { useStateContext } from '../../context/StateContext';
 const ComicComponent = () => {
   const adminOnly = UserService.adminOnly();
   const [searchQuery, setSearchQuery] = React.useState<string>("");  
-  const {comicListFull, loadingAllComics} = useComicList();
+  // const {comicListFull, loadingAllComics} = useComicList();
+  const {loadingAllComics, comicListFull} = useStateContext();
 
   const [comicSearch, setComicSearch] = React.useState<ComicFull[]>([]);
   const [isFound, setIsFound] = React.useState(false);
@@ -39,16 +39,11 @@ const ComicComponent = () => {
           setIsFound(false);
         }
       } catch (error) {
-        console.error("Error fetching comic:", error);
+        // console.error("Error fetching comic:", error);
         return [];
       }
     };
-
-    const debounceTimeout = setTimeout(() => {
-      handle();
-    }, 300); // Adjust the debounce delay as needed
-
-    return () => clearTimeout(debounceTimeout);
+    handle();
   }, [searchQuery]);
 
   return (
@@ -63,13 +58,12 @@ const ComicComponent = () => {
         />
       </div>
       <div className=''>
-        {/* <UploadImages/> */}
       </div>
       {searchQuery === "" ? (
-        <TableComicList data={comicListFull} loadingAllComics={loadingAllComics}/>
+        <TableComicList comicListFull={comicListFull} loadingAllComics={loadingAllComics}/>
       ) : (
         isFound ? (
-          <TableComicList data={comicSearch} loadingAllComics={loadingAllComics}/>
+          <TableComicList comicListFull={comicSearch} loadingAllComics={loadingAllComics}/>
         ) : (
           <div className='bg-slate-200 flex justify-center items-center rounded p-2 mt-10 mr-4'>
             <div className='text-xl'>No results found.</div>

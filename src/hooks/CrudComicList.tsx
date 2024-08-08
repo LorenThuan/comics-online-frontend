@@ -3,17 +3,21 @@ import axios from "axios";
 import { ComicFull, ImageProps } from "../components/constants/types";
 import useOptions from "../components/constants/option_advanced_search";
 import moment from "moment";
+import { useStateContext } from "../context/StateContext";
+import { Client } from "@stomp/stompjs";
+import SockJS from 'sockjs-client';
 
 const useComicList = () => {
   const [comicListAll, setComicListAll] = React.useState<ComicFull[]>([]);
-  const [comicListFull, setComicListFull] = React.useState<ComicFull[]>([]);
+  // const [comicListFull, setComicListFull] = React.useState<ComicFull[]>([]);
   const [popularComic, setPopularComic] = React.useState<ComicFull[]>([]);
   const [loadingLastComics, setLoadingLastComics] = React.useState<boolean>(false);
   const [loadingPopularComics, setLoadingPopularComics] = React.useState<boolean>(false);
-  const [loadingAllComics, setLoadingAllComics] = React.useState<boolean>(false);
+  // const [loadingAllComics, setLoadingAllComics] = React.useState<boolean>(false);
   const [loadingAdvancedSearch, setLoadingAdvancedSearch] = React.useState<boolean>(false);
   const [recentlyComic, setRecentlyComic] = React.useState<ComicFull[]>([]);
   const [loadingRecentlyComics, setLoadingRecentlyComics] = React.useState<boolean>(false);
+  const {comicListFull} = useStateContext();
 
   /* Get Comic List */
   const fetchComicList = async () => {
@@ -23,7 +27,8 @@ const useComicList = () => {
         "http://localhost:8083/comic/last-comics");
         setComicListAll(response.data);
       } catch (error) {
-        console.error("Error fetching comic list:", error);
+        // console.error("Error fetching comic list:", error);
+        throw error;
       } finally {
         setLoadingLastComics(false);
       }
@@ -37,25 +42,27 @@ const useComicList = () => {
           );
           setPopularComic(response.data);
       } catch (error) {
-        console.error("Error fetching popular comic:", error);
+        // console.error("Error fetching popular comic:", error);
+        throw error;
       } finally {
         setLoadingPopularComics(false);
       }
     };
 
-    const fetchComicListAll = async () => {
-      setLoadingAllComics(true);
-      try {
-          // Otherwise, fetch from server
-          const response = await axios.get("http://localhost:8083/comics");
+    // const fetchComicListAll = async () => {
+    //   setLoadingAllComics(true);
+    //   try {
+    //       // Otherwise, fetch from server
+    //       const response = await axios.get("http://localhost:8083/comics");
           
-          setComicListFull(response.data);
-      } catch (error) {
-        console.error("Error fetching comic list:", error);
-      } finally {
-        setLoadingAllComics(false);
-      }
-    };
+    //       setComicListFull(response.data);
+    //   } catch (error) {
+    //     // console.error("Error fetching comic list:", error);
+    //     throw error;
+    //   } finally {
+    //     setLoadingAllComics(false);
+    //   }
+    // };
 
     /* Get Comic List Recently Add*/
   const fetchComicRecentlyAdd = async () => {
@@ -65,26 +72,40 @@ const useComicList = () => {
         "http://localhost:8083/comic/titles/recent");
         setRecentlyComic(response.data);
       } catch (error) {
-        console.error("Error fetching comic list:", error);
+        // console.error("Error fetching comic list:", error);
+        throw error;
       } finally {
         setLoadingRecentlyComics(false);
       }
     };
 
     useEffect(() => {
-      fetchPopularComic();
-    }, []);
-  
-    useEffect(() => {
-      fetchComicList();
-    }, []);
-
-    useEffect(() => {
       fetchComicRecentlyAdd();
     }, []);
 
     useEffect(() => {
-      fetchComicListAll()
+      fetchComicList();
+  
+      const socket = new SockJS('http://localhost:8083/ws');
+      const stompClient = new Client({
+        webSocketFactory: () => socket,
+      onConnect: () => {
+        stompClient.subscribe('/topic/comicUpdates', (message) => {
+          // console.log("Received message:", message.body);
+          fetchComicList();
+        });
+      }
+    });
+
+    stompClient.activate();
+  
+      return () => {
+        stompClient.deactivate();
+      };
+    }, []);
+
+    useEffect(() => {
+      fetchPopularComic();
     }, []);
 
   const [comicsQuery, setComicQuerys] = React.useState<ComicFull[]>([]);
@@ -124,8 +145,8 @@ const useComicList = () => {
     sortByOption: string,
     genres: string
   ) => {
+    setLoadingAdvancedSearch(true);
     try {
-      setLoadingAdvancedSearch(true);
       // console.log("Fetching data from server");
       const response = await axios.get("http://localhost:8083/titles/find", {
         params: {
@@ -146,9 +167,9 @@ const useComicList = () => {
       setLoadingAdvancedSearch(false);
     }
   };
-
-  function getClosestDate({ createDate, createDateChapter, lastModifiedDateChapter, lastModifiedDate}: ComicFull ): Date | null {
-    const dates = [createDate, createDateChapter, lastModifiedDateChapter, lastModifiedDate].filter(date => date) as Date[];
+/* lastModifiedDate: I just want see chapter and comic new been add */
+  function getClosestDate({ createDate, createDateChapter, lastModifiedDateChapter }: ComicFull ): Date | null {
+    const dates = [createDate, createDateChapter, lastModifiedDateChapter].filter(date => date) as Date[];
   
     if (dates.length === 0) return null;
   
@@ -200,10 +221,12 @@ const useComicList = () => {
     setIsFindComic,
     fetchSearchAdvanced,
     setComicQuerys,
-    comicListFull,
-    setComicListFull,
-    getClosestDate, loadingLastComics, loadingPopularComics, loadingAllComics,
-    fetchImages, images, loadingAdvancedSearch, recentlyComic, loadingRecentlyComics
+    // comicListFull,
+    // setComicListFull,
+    // loadingAllComics,
+    getClosestDate, loadingLastComics, loadingPopularComics,
+    fetchImages, images, loadingAdvancedSearch, recentlyComic, loadingRecentlyComics,
+    setLoadingLastComics, fetchComicList
   };
 };
 

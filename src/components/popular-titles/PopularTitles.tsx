@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../context/StateContext";
 import useComicList from "../../hooks/CrudComicList";
 import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
+import "./index.css";
 
 // [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]
 // bg-img-bg
@@ -26,7 +27,8 @@ const PopularTitles = (props: PopularComicProps) => {
   const { settings } = useSlideScrollPopular();
   const sliderRef = useRef<Slider>(null);
   const {setSelected} = useStateContext();
-  const {comicListFull} = useComicList();
+  // const {comicListFull} = useComicList();
+  const {comicListFull} = useStateContext();
 
   const next = (e: MouseEvent) => {
     e.stopPropagation(); // Stop the click event from bubbling up to the parent
@@ -43,7 +45,7 @@ const PopularTitles = (props: PopularComicProps) => {
     try {
       if (comicItem) {
           navigate(`/title/${comicItem.image_src}`, {
-            state: {comicItem},
+            state: {comicItem}
           })
           setSelected("");
       }
@@ -78,15 +80,6 @@ const PopularTitles = (props: PopularComicProps) => {
               <h1 className="text-2xl font-semibold">Popular New Titles</h1>
             </div>
 
-            <style jsx global>
-              {`
-                .custom-slide {
-                  width: 100% !important;
-                  display: flex !important;
-                  flex-direction: row !important;
-                }
-              `}
-            </style>
             <Slider ref={sliderRef} {...settings}>
               {/*This is titles section*/}
               {props.data?.map((comicItem: any, index: number) => (

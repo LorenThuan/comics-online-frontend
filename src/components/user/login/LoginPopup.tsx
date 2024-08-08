@@ -8,7 +8,7 @@ import UserService from "../../constants/UserService";
 import { ImProfile } from "react-icons/im";
 import { FaUsers } from "react-icons/fa6";
 import { FaBook } from "react-icons/fa";
-import { useStateContext } from "../../../context/StateContext";
+import { toast } from "react-toastify";
 
 interface PopupProps {
   loginPopup: boolean;
@@ -20,9 +20,14 @@ const LoginPopup = (props: PopupProps) => {
   let loginRef = useRef(null);
 
   const navigate = useNavigate();
+  
 
   // const { user } = CrudUser();
-  const {user} = useStateContext();
+  // const {user} = useStateContext();
+  let profile: any = localStorage.getItem("profile");
+  if (profile) {
+    profile = JSON.parse(profile);
+  }
 
   const isAuthenticated = UserService.isAuthenticated();
   const adminOnly = UserService.adminOnly();
@@ -54,13 +59,34 @@ const LoginPopup = (props: PopupProps) => {
     };
   }, []);
 
+  const handleDelete = async () => {
+    try {
+      if (profile?.userId) {
+        const confirmDelete = window.confirm(
+          "Are you sure want to delete your account ?");
+          if (confirmDelete) {
+            const token = localStorage.getItem("token");
+            await UserService.deleteUser(profile?.userId, token);
+            UserService.logout();
+            toast.success("Delete successfully!");
+            navigate("/", {replace: true});
+          }
+      }
+    } catch (error) {
+      // console.log("Error deleted user", error);
+      throw error;
+    }
+  };
+
   return (
     <>
       {props.loginPopup ? (
-        <div className="h-screen w-screen fixed top-0 left-0 z-20 backdrop-brightness-75">
+        <div 
+        className="h-screen w-screen fixed top-0 left-0 z-20 backdrop-brightness-75">
           <div
             className="fixed sm:left-3/4 sm:top-1/3 sm:-translate-y-1/4 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/4 sm:-translate-x-0 bg-white
-      p-[24px] h-screen sm:h-auto rounded-md shadow-md min-w-[256px] max-w-[320px] w-[302.906px]
+      p-[24px]   rounded-md shadow-md min-w-[256px] 
+      max-w-[320px] w-[302.906px] overflow-y-auto h-[480px]
       "
             ref={loginRef}
           >
@@ -69,7 +95,7 @@ const LoginPopup = (props: PopupProps) => {
               <SidebarIcon icon={<FiUser size="46" />} />
               <h1 className="text-2xl font-sans font-bold">
                 {isAuthenticated ? (
-                  <span>{user?.name}</span>
+                  <span>{profile?.name}</span>
                 ) : (
                   <span>Guest</span>
                 )}
@@ -90,7 +116,7 @@ const LoginPopup = (props: PopupProps) => {
               )}
 
               {adminOnly && (
-                <div className="ml-6 flex flex-col space-y-3">
+                <div className="ml-6 flex flex-col space-y-1">
                   <div
                   onClick={() => navigate("/admin/user-manager")}
                   className="flex items-center gap-2 hover:bg-gray-200 cursor-pointer "
@@ -166,12 +192,19 @@ const LoginPopup = (props: PopupProps) => {
                 ) : (
                   <div className="flex flex-col gap-4">
                     <button
+                    onClick={handleDelete}
+                    className="px-10 py-2 text-lg text-center rounded-lg bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+                    >
+                    Delete My Account
+                  </button>
+                    <button
                       className="px-10 py-2 text-lg bg-red-500 rounded-lg text-white font-bold text-center
               hover:bg-red-700"
                       onClick={handleLogout}
                     >
                       Log out
                     </button>
+
                   </div>
                 )}
               </div>

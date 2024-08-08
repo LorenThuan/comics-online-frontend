@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 import UpdateUserPopup from "./UpdateUserPopup";
 import { User } from "../../constants/types";
 import ComicListManager from "../../../hooks/ComicListManager";
+import { useStateContext } from "../../../context/StateContext";
+import { toast } from "react-toastify";
 
 const UserManagement = () => {
   const {
     handleOpenUpdate,
     isOpenUpdate,
     closeUpdatePopup,
-    selectedValue,
     handleChangeUpdate,
     userData,
     handleFormUpdate,
@@ -21,18 +22,36 @@ const UserManagement = () => {
   const {usersList} = ComicListManager();
   const adminOnly = UserService.adminOnly();
   const navigate = useNavigate();
+  let profile: any = localStorage.getItem("profile");
+  if (profile) {
+    profile = JSON.parse(profile);
+  }
 
   const handleDelete = async (userItem: any) => {
     try {
-      const confirmDelete = window.confirm(
+      if (profile?.userId === userItem?.userId) {
+        const confirmDelete = window.confirm(
+          "Are you sure want to delete yourself, note, you will log out of website?");
+          if (confirmDelete) {
+            const token = localStorage.getItem("token");
+            await UserService.deleteUser(userItem?.userId, token);
+            toast.success("Delete user successfully");
+            UserService.logout();
+            navigate("/", {replace: true})
+          }
+      }
+      else { 
+        const confirmDelete = window.confirm(
         "Are you sure you want to delete this user?"
-      );
-      if (confirmDelete) {
-        const token = localStorage.getItem("token");
-        const userId = userItem?.userId;
-        await UserService.deleteUser(userId, token);
-        alert("Delete user successfully");
-        window.location.reload();
+        );
+        if (confirmDelete) {
+          const token = localStorage.getItem("token");
+          const userId = userItem?.userId;
+          
+          await UserService.deleteUser(userId, token);
+          toast.success("Delete user successfully");
+          window.location.reload();
+        }
       }
     } catch (error) {
       // console.log("Error deleted user", error);
@@ -55,16 +74,16 @@ const UserManagement = () => {
           </thead>
 
           <tbody>
-            {usersList?.map((userItem: any, index: number) => (
+            {usersList?.map((userItem: User, index: number) => (
               <tr key={index} className="text-center">
                 <td>{userItem.userId}</td>
                 <td>{userItem.name}</td>
                 <td>{userItem.email}</td>
                 <td>{userItem.role}</td>
-                <td className="flex justify-evenly p-1">
+                <td className="p-1">
                   <button
                     onClick={() => handleOpenUpdate(userItem)}
-                    className="p-1 rounded-lg bg-blue-400 text-white hover:bg-blue-600"
+                    className="p-1 mx-1 rounded-lg bg-blue-400 text-white hover:bg-blue-600"
                   >
                     Update
                   </button>
@@ -88,7 +107,6 @@ const UserManagement = () => {
         userData={userData}
         handleChangeUpdate={handleChangeUpdate}
         handleFormUpdate={handleFormUpdate}
-        selectedValue={selectedValue}
       />
     </>
   );

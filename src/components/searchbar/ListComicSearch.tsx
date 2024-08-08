@@ -13,22 +13,27 @@ import ALT_IMAGE from "../../assets/from-the-hero-in-his-past.jpg";
 
 interface SearchComicProps {
   data: ComicFull[];
+  setSearchPopup: (isSearch: boolean) => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const ListComicSearch = ({data}: SearchComicProps) => {
+const ListComicSearch = (props: SearchComicProps) => {
 
-    const {comicListAll, comicListFull} = useComicList();
+    const {comicListAll} = useComicList();
+    
     const navigate = useNavigate();
-    const {setSelected} = useStateContext();
+    const {setSelected, comicListFull} = useStateContext();
 
     const handleLibrary = (comicId: number) => {
       const comicItem = comicListFull.find(comic => comic.comicId === comicId);
       try {
         if (comicItem) {
             navigate(`/title/${comicItem.image_src}`, {
-              state: {comicItem},
+              state: {comicItem}
             })
             setSelected("");
+            props.setIsOpen(false);
+            props.setSearchPopup(false);
         }
       } catch (error) {
         // console.log("Comic not found");
@@ -39,7 +44,7 @@ const ListComicSearch = ({data}: SearchComicProps) => {
     return (
       <>
       <div className="overflow-y-auto h-[480px]">
-        {data?.map((comicItem: any, index: number) => (
+        {props.data?.map((comicItem: any, index: number) => (
           <div
             key={index}
             onClick={() => handleLibrary(comicItem.comicId)}

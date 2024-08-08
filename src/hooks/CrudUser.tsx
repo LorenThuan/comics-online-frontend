@@ -1,14 +1,13 @@
 import React, { InputHTMLAttributes, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../components/constants/UserService";
-import { AuthLogin, User } from "../components/constants/types";
+import { User } from "../components/constants/types";
 import { useStateContext } from "../context/StateContext";
 import { toast } from "react-toastify";
 
 const CrudUser = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
   const navigate = useNavigate();
   // const [user, setUser] = React.useState<User | null>(null);
   const {token, setToken} = useStateContext();
@@ -19,21 +18,19 @@ const CrudUser = () => {
       const userData = await UserService.login(email, password);
       // console.log(userData);
 
-      if (userData.token && userData.statusCode === 200 && userData.token) {
+      if (userData.token && userData.statusCode === 200) {
         localStorage.setItem("token", userData.token);
         localStorage.setItem("role", userData.role);
+      //   localStorage.setItem("name", userData.name);
+        localStorage.setItem("profile", JSON.stringify(userData));
         setToken(userData.token);
-        navigate("/", { replace: true });  
+        navigate("/", { replace: true });
       } else {
-        setError(userData.message);
         toast.error("Username or Password incorrect!")
       }
-    } catch (error: any) {
+    } catch (error) {
       // console.log(error);
-      setError(error);
-      setTimeout(() => {
-        setError("");
-      }, 4000);
+      throw error
     }
   };
 
@@ -56,16 +53,15 @@ const CrudUser = () => {
     try {
       if (formData.password === confirmPw) {
         const response = await UserService.register(formData);
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-          role: "ROLE_USER",
-        });
-        alert("User Registered successfully");
-        navigate("/auth/login", { replace: true });
+        
+        if (response.statusCode === 500) {
+          toast.error("Email already exists");
+          return;
+        }
+          toast.success("User Registered successfully");
+          navigate("/auth/login", {replace: true, state: {formData} });
       } else {
-        alert("Password and confirm default password do not match!");
+          toast.success("Password and confirm default password do not match!");
       }
     } catch (error: any) {
       // console.log(error);
@@ -78,9 +74,10 @@ const CrudUser = () => {
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User>();
 
-  const handleOpenUpdate = (userItem: any) => {
+  const handleOpenUpdate = (userItem: User) => {
     setIsOpenUpdate((prevState) => !prevState);
     setSelectedUser(userItem);
+    fetchUserDataById(userItem?.userId);
   };
 
   // useEffect(() => {
@@ -95,30 +92,37 @@ const CrudUser = () => {
     name: "",
     email: "",
     password: "",
-    role: "",
+    role: ""
   });
 
-  useEffect(() => {
-    fetchUserDataById();
-  }, [selectedUser?.userId]);
+  // useEffect(() => {
+  //   fetchUserDataById();
+  // }, [selectedUser?.userId]);
 
-  const fetchUserDataById = async () => {
+  const fetchUserDataById = async (userId: any) => {
     const token = localStorage.getItem("token");
-    const response = await UserService.getUserById(
-      selectedUser?.userId,
-      token
-    );
-    // console.log(response);
-
-    const { name, email, password, role } = response.user;
-    setUserData({ name, email, password, role });
+    if (token) {
+      try {
+        const response = await UserService.getUserById(
+          userId,
+          token
+        );
+        // console.log(response);
+    
+        const { name, email, password, role } = response.user;
+        
+        setUserData({ name, email, password, role });
+      } catch (error) {
+        throw error;
+      }
+    }
   };
 
-  const [selectedValue, setSelectedValue] = React.useState("");
+  // const [selectedValue, setSelectedValue] = React.useState("");
 
   const handleChangeUpdate = async (e: any) => {
     const { name, value } = e.target;
-    setSelectedValue(e.target.value);
+    // setSelectedValue(e.target.value);
     setUserData((preUserData) => ({
       ...preUserData,
       [name]: value,
@@ -138,8 +142,9 @@ const CrudUser = () => {
         // console.log(userData);
 
         await UserService.updateUser(userId, userData, token);
-        alert("Update information successfully");
-        window.location.reload();
+          toast.success("Update information successfully");
+          window.location.reload();
+        
       }
 
     } catch (error: any) {
@@ -170,7 +175,7 @@ const CrudUser = () => {
         setUsersListSearch(result.userList);
       }
     } catch (error) {
-      console.error("Error fetching search by name:", error);
+      // console.error("Error fetching search by name:", error);
       return [];
     } finally {
       setIsLoadingSearchUser(false);
@@ -194,7 +199,8 @@ const CrudUser = () => {
         setUserListMembers(result.userList);
       }
     } catch(error){
-      console.error("Can't fetch list user members", error); 
+      // console.error("Can't fetch list user members", error); 
+      throw error;
     } finally {
       setIsLoadingMembers(false);
     }
@@ -204,7 +210,6 @@ const CrudUser = () => {
   return {
     setEmail,
     setPassword,
-    error,
     handle,
     handleChange,
     handleForm,
@@ -216,7 +221,6 @@ const CrudUser = () => {
     setIsOpenUpdate,
     closeUpdatePopup,
     selectedUser,
-    selectedValue,
     handleChangeUpdate,
     userData,
     handleFormUpdate,

@@ -50,7 +50,7 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
         ...prevData,
         chapterList: chapterListPresent
       }));
-    alert("Add number of chapter successfully!");
+        toast.success("Add number of chapter successfully!");
     }
 
   useEffect(() => {
@@ -108,13 +108,23 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
     }
   }
 
+  const handleFormUpdate = (e: FormEvent) => {
+    e.preventDefault();
+    const imageSrcInput = document.getElementById('image_src') as HTMLInputElement;
+    if (!imageSrcInput.checkValidity()) {
+      imageSrcInput.reportValidity();
+      return;
+    }
+    props.handleFormUpdate(e);
+  };
+
   return (
     <>
     {props.isOpenUpdate &&    
-    <div className='fixed h-screen w-screen left-0 top-0 backdrop:brightness-90'>
-      <div className='fixed left-1/4 top-12 -translate-x-10  sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
+    <div className='fixed h-screen w-screen left-0 top-0 backdrop-brightness-75'>
+      <div className='fixed left-1/4 top-0 -translate-x-10 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
       <form
-              onSubmit={props.handleFormUpdate}
+              onSubmit={handleFormUpdate}
               className="flex justify-center items-center bg-blue-300 p-4 rounded shadow-sm"
             >
               <div className="rounded-lg">
@@ -260,7 +270,7 @@ const UpdateComicPopup = (props: UpdateComicProps) => {
               <option key={index} value={chapter.chapterNumber}>
                 {chapter.chapterNumber}
               </option>
-               ))) : (<p>No chapters available</p>)
+               ))) : (<option disabled>No chapters available</option>)
             }
           </select>
           <button

@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CrudUser from "../../../hooks/CrudUser";
-import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Link, useLocation } from "react-router-dom";
 
 const LoginForm = () => {
-  const { setEmail, setPassword, error, handle } = CrudUser();
+  const { setEmail, setPassword, handle, email, password } = CrudUser();
+  const location = useLocation();
+
+  const {formData} = location.state || {};
+  
+    /*input email & password change when have data from formData */
+   useEffect(() => {
+    if (formData) {
+      setEmail(formData.email);
+      setPassword(formData.password);
+    }
+  }, [formData, setEmail, setPassword]);
 
   return (
     <>
-      <ToastContainer autoClose={1000}/>
       <form
         onSubmit={handle}
         className="flex justify-center items-center h-screen bg-blue-300"
@@ -29,6 +38,8 @@ const LoginForm = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="email"
                   name="email"
+                  value={email}
+                  autoComplete="username"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>
@@ -45,6 +56,8 @@ const LoginForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   name="password"
                   placeholder="password"
+                  value={password}
+                  autoComplete="current-password"
                   className="block py-1.5 pl-2 border-1 focus:ring-0 bg-gray-200 shadow-sm rounded-lg sm:leading-6 sm:text-md"
                 />
               </div>

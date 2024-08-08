@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FiMessageSquare, FiUsers } from "react-icons/fi";
 import Vnsvg from "../../assets/vn.svg";
 import SidebarIcon from "../icon/SidebarIcon";
@@ -17,8 +17,9 @@ interface LastestUpdateListProps {
 /*fetch 6 comics new*/
 const LastestUpdateList = (props: LastestUpdateListProps) => {
   const navigate = useNavigate();
-  const {getClosestDate, comicListFull} = useComicList();
-  const {setSelected} = useStateContext();
+  const {getClosestDate} = useComicList();
+  // const {getClosestDate, comicListFull} = useComicList();
+  const {setSelected, comicListFull} = useStateContext();
 
   if (props.loadingLastComics) 
     return (
@@ -29,6 +30,7 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
 
   const handleLibrary = (comicId: number) => {
     const comicItem = comicListFull.find(comic => comic.comicId === comicId);
+    
     try {
       if (comicItem) {
           navigate(`/title/${comicItem.image_src}`, {
@@ -45,7 +47,7 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
   return (
     <div className="grid grid-cols-1 gap-x-6 w-full bg-gray-100">
       <div className="grid gap-4 p-4">
-        {props.data?.slice(0, 6).map((comicItem: any, index: number) => (
+        {props.data?.slice(0, 6).map((comicItem: ComicFull, index: number) => (
           <div               
           onClick={() => handleLibrary(comicItem.comicId)}
           className="flex gap-2" key={index}>
@@ -74,9 +76,14 @@ const LastestUpdateList = (props: LastestUpdateListProps) => {
                     alt="Vietnamese icon"
                     className="w-[20px] h-[20px] select-none"
                   />
-                  <ul>
+                  {/* <ul>
                    <li>{comicItem.chapterList?.[0]?.toString()}</li>
-                  </ul>
+                  </ul> */}
+                  <ul>
+  {comicItem.chapterList && comicItem.chapterList.length > 0 && (
+    <li>{comicItem.chapterList[0].toString()}</li>
+  )}
+</ul>
                 </div>
 
                 <SidebarIcon icon={<FiMessageSquare size="16" />} />

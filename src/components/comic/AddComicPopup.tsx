@@ -1,8 +1,7 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import GenreList from '../constants/genre_list'
 import chapterList from '../constants/chapter_list';
 import { ComicFull } from '../constants/types';
-import { ToastContainer } from 'react-toastify';
 
 interface AddComicPopupProps {
   isOpenForm?: boolean;
@@ -49,14 +48,23 @@ const AddComicPopup = (props: AddComicPopupProps) => {
     };
   }, []);
 
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const imageSrcInput = document.getElementById('image_src') as HTMLInputElement;
+    if (!imageSrcInput.checkValidity()) {
+      imageSrcInput.reportValidity();
+      return;
+    }
+    props.handleSubmit(e);
+  };
+
   return (
     <>
-    <ToastContainer autoClose={1000}/>
     {props.isOpenForm &&
-    <div className='h-screen w-screen fixed left-0 top-0 backdrop:brightness-90 overflow-auto overflow-y-scroll overscroll-contain'>
-      <div className='fixed left-1/4 top-14 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
+    <div className='h-screen w-screen fixed left-0 top-0 backdrop-brightness-75 overflow-auto overflow-y-scroll overscroll-contain'>
+      <div className='fixed left-1/4 top-14 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 rounded-md shadow-md bg-white' ref={clickOutSideRef}>
       <form
-              onSubmit={props.handleSubmit}
+              onSubmit={handleFormSubmit}
               className="flex justify-center items-center bg-blue-300 p-4 rounded shadow-sm"
             >
               <div className="rounded-lg">
@@ -178,7 +186,7 @@ const AddComicPopup = (props: AddComicPopupProps) => {
             name="chapterNumber"
             id="chapterNumber"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full px-4 py-2"
-            onChange={props.handleChapterChange}
+            // onChange={props.handleChapterChange}
           >
             {chapterList.map((chapter) => (
               <option key={chapter.chapterId} value={chapter.chapterNumber}>

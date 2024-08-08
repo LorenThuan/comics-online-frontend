@@ -15,6 +15,7 @@ const AdvancedSearchContainer = () => {
     isFindComic,
     setIsFindComic,
     setComicQuerys,
+    loadingAdvancedSearch
   } = useComicList();
 
   const {setSelected} = useStateContext();
@@ -39,9 +40,9 @@ const AdvancedSearchContainer = () => {
         setIsFindComic={setIsFindComic}
       />
       {isFindComic ? (
-        <SearchListValue data={comicsQuery} isFindComic={isFindComic} />
+        <SearchListValue data={comicsQuery} isFindComic={isFindComic} loadingAdvancedSearch={loadingAdvancedSearch}/>
       ) : (
-        <SearchListValue data={comicListAll} isFindComic={isFindComic}/>
+        <SearchListValue data={comicListAll} isFindComic={isFindComic} loadingAdvancedSearch={loadingAdvancedSearch}/>
       )}
     </div>
   );
