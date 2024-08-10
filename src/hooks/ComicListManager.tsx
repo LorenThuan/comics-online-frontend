@@ -4,12 +4,15 @@ import chapterList from '../components/constants/chapter_list';
 import UserService from '../components/constants/UserService';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useStateContext } from '../context/StateContext';
 
 const ComicListManager = () => {
   const [usersList, setUsersList] = React.useState<User[]>([]);
+  const {fetchDataRealTime} = useStateContext();
 
   useEffect(() => {
     handle();
+    fetchDataRealTime("/topic/userUpdates", handle);
   }, []);
 
   const handle = async () => {

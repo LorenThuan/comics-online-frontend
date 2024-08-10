@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../../context/StateContext';
-import moment from 'moment';
 import SidebarIcon from '../../icon/SidebarIcon';
 import { LuClock4, LuEye } from 'react-icons/lu';
 import { FiMessageSquare, FiUsers } from 'react-icons/fi';
@@ -9,8 +8,6 @@ import useComicList from '../../../hooks/CrudComicList';
 import { ComicFull } from '../../constants/types';
 import ALT_IMAGE from "../../../assets/from-the-hero-in-his-past.jpg";
 import Vnsvg from "../../../assets/vn.svg";
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 
 const ReadingHistoryList = () => {
   const {getClosestDate} = useComicList();

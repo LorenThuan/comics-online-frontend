@@ -4,8 +4,6 @@ import { ComicFull, ImageProps } from "../components/constants/types";
 import useOptions from "../components/constants/option_advanced_search";
 import moment from "moment";
 import { useStateContext } from "../context/StateContext";
-import { Client } from "@stomp/stompjs";
-import SockJS from 'sockjs-client';
 
 const useComicList = () => {
   const [comicListAll, setComicListAll] = React.useState<ComicFull[]>([]);
@@ -17,7 +15,7 @@ const useComicList = () => {
   const [loadingAdvancedSearch, setLoadingAdvancedSearch] = React.useState<boolean>(false);
   const [recentlyComic, setRecentlyComic] = React.useState<ComicFull[]>([]);
   const [loadingRecentlyComics, setLoadingRecentlyComics] = React.useState<boolean>(false);
-  const {comicListFull} = useStateContext();
+  const {fetchDataRealTime} = useStateContext();
 
   /* Get Comic List */
   const fetchComicList = async () => {
@@ -85,23 +83,7 @@ const useComicList = () => {
 
     useEffect(() => {
       fetchComicList();
-  
-      const socket = new SockJS('http://localhost:8083/ws');
-      const stompClient = new Client({
-        webSocketFactory: () => socket,
-      onConnect: () => {
-        stompClient.subscribe('/topic/comicUpdates', (message) => {
-          // console.log("Received message:", message.body);
-          fetchComicList();
-        });
-      }
-    });
-
-    stompClient.activate();
-  
-      return () => {
-        stompClient.deactivate();
-      };
+      fetchDataRealTime("/topic/comicUpdates", fetchComicList);
     }, []);
 
     useEffect(() => {
@@ -167,7 +149,7 @@ const useComicList = () => {
       setLoadingAdvancedSearch(false);
     }
   };
-/* lastModifiedDate: I just want see chapter and comic new been add */
+/* lastModifiedDate: chapter and comic new been add */
   function getClosestDate({ createDate, createDateChapter, lastModifiedDateChapter }: ComicFull ): Date | null {
     const dates = [createDate, createDateChapter, lastModifiedDateChapter].filter(date => date) as Date[];
   

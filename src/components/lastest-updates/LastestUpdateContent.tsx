@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from "react";
 import LastestUpdateList from "./LastestUpdateList";
 import useComicList from "../../hooks/CrudComicList";
-import { useStateContext } from "../../context/StateContext";
-import axios from "axios";
-import { ComicFull } from "../constants/types";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
 
 const LastestUpdateContent = () => {
   const { comicListAll, loadingLastComics } = useComicList();

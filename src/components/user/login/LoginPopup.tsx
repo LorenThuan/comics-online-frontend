@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiUser } from "react-icons/fi";
 import SidebarIcon from "../../icon/SidebarIcon";
 import { IoSettingsOutline, IoWaterOutline } from "react-icons/io5";
@@ -9,6 +9,8 @@ import { ImProfile } from "react-icons/im";
 import { FaUsers } from "react-icons/fa6";
 import { FaBook } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { User } from "../../constants/types";
+import { useStateContext } from "../../../context/StateContext";
 
 interface PopupProps {
   loginPopup: boolean;
@@ -18,16 +20,12 @@ interface PopupProps {
 
 const LoginPopup = (props: PopupProps) => {
   let loginRef = useRef(null);
-
   const navigate = useNavigate();
-  
-
+  const [profile, setProfile] = useState<User>(() => {
+    const savedProfile = localStorage.getItem("profile");
+    return savedProfile ? JSON.parse(savedProfile) : null;
+  })
   // const { user } = CrudUser();
-  // const {user} = useStateContext();
-  let profile: any = localStorage.getItem("profile");
-  if (profile) {
-    profile = JSON.parse(profile);
-  }
 
   const isAuthenticated = UserService.isAuthenticated();
   const adminOnly = UserService.adminOnly();

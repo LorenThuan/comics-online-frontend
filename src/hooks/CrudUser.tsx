@@ -69,14 +69,12 @@ const CrudUser = () => {
     }
   };
 
-
-
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User>();
+  // const [selectedUser, setSelectedUser] = useState<User>();
 
   const handleOpenUpdate = (userItem: User) => {
     setIsOpenUpdate((prevState) => !prevState);
-    setSelectedUser(userItem);
+    // setSelectedUser(userItem);
     fetchUserDataById(userItem?.userId);
   };
 
@@ -89,6 +87,7 @@ const CrudUser = () => {
   };
 
   const [userData, setUserData] = React.useState<User>({
+    userId: 0,
     name: "",
     email: "",
     password: "",
@@ -99,19 +98,19 @@ const CrudUser = () => {
   //   fetchUserDataById();
   // }, [selectedUser?.userId]);
 
-  const fetchUserDataById = async (userId: any) => {
+  const fetchUserDataById = async (userIdGet: any) => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const response = await UserService.getUserById(
-          userId,
+          userIdGet,
           token
         );
         // console.log(response);
     
-        const { name, email, password, role } = response.user;
+        const { userId, name, email, password, role } = response.user;
         
-        setUserData({ name, email, password, role });
+        setUserData({userId, name, email, password, role });
       } catch (error) {
         throw error;
       }
@@ -138,10 +137,10 @@ const CrudUser = () => {
       if (confirmUpdate) {
         const token = localStorage.getItem("token");
         // console.log(selectedUser);
-        const userId = selectedUser?.userId;
+        // const userId = userData?.userId;
         // console.log(userData);
 
-        await UserService.updateUser(userId, userData, token);
+        await UserService.updateUser(userData?.userId, userData, token);
           toast.success("Update information successfully");
           window.location.reload();
         
@@ -184,9 +183,11 @@ const CrudUser = () => {
 
   const [userListMembers, setUserListMembers] = React.useState<User[]>([]);
   const [isLoadingMembers, setIsLoadingMembers] = React.useState<boolean>(false);
+  const {fetchDataRealTime} = useStateContext();
 
   useEffect(() => {
     handleGetAllUserMember();
+    fetchDataRealTime("/topic/userUpdates", handleGetAllUserMember);
   }, []);
 
   const handleGetAllUserMember = async () => {
@@ -220,7 +221,6 @@ const CrudUser = () => {
     handleOpenUpdate,
     setIsOpenUpdate,
     closeUpdatePopup,
-    selectedUser,
     handleChangeUpdate,
     userData,
     handleFormUpdate,

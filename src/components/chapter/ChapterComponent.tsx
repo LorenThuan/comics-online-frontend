@@ -7,11 +7,8 @@ import ChapterSelectPopup from './ChapterSelectPopup';
 import SidebarIcon from '../icon/SidebarIcon';
 import { FaAngleDown } from 'react-icons/fa';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
-import { useStateContext } from '../../context/StateContext';
 import { toast } from 'react-toastify';
 import { TfiMenuAlt } from 'react-icons/tfi';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 
 const exactChapterNumber = (chapterNumber:string): number => {
   const parts = chapterNumber.split(' ');

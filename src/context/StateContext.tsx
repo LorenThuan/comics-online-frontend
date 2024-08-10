@@ -22,6 +22,8 @@ interface StateContextType {
   setComicListFull: React.Dispatch<React.SetStateAction<ComicFull[]>>;
   loadingAllComics: boolean;
   fetchComicListAll: () => Promise<void>;
+  fetchDataRealTime: 
+  (destination:string, fetchData: (() => Promise<void> | void | any)) => void;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   isOpenSidebar: boolean;
@@ -47,6 +49,12 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
       const result = await UserService.refreshToken({ token });
       if (result && result.statusCode === 200 && result.token) {
         localStorage.setItem("token", result.token);
+
+        // Handle refreshToken if returned by the API
+        if (result.refreshToken) {
+          localStorage.setItem("refreshToken", result.refreshToken);
+        }
+        
         return result.token;
       } else {
         throw new Error("Unable to refresh token");
@@ -63,23 +71,23 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
 
   useEffect(() => {
     fetchComicListAll();
+    fetchDataRealTime('/topic/comicUpdates', fetchComicListAll);
+    // const socket = new SockJS('http://localhost:8083/ws');
+    //   const stompClient = new Client({
+    //     webSocketFactory: () => socket,
+    //   onConnect: () => {
+    //     stompClient.subscribe('/topic/comicUpdates', (message) => {
+    //       // console.log("Received message:", message.body);
+    //       fetchComicListAll();
+    //     });
+    //   }
+    // });
 
-    const socket = new SockJS('http://localhost:8083/ws');
-      const stompClient = new Client({
-        webSocketFactory: () => socket,
-      onConnect: () => {
-        stompClient.subscribe('/topic/comicUpdates', (message) => {
-          // console.log("Received message:", message.body);
-          fetchComicListAll();
-        });
-      }
-    });
-
-    stompClient.activate();
+    // stompClient.activate();
   
-      return () => {
-        stompClient.deactivate();
-      };
+    //   return () => {
+    //     stompClient.deactivate();
+    //   };
   }, []);
 
   const handleGetUserLogin = async () => {
@@ -135,11 +143,32 @@ export const ContextProvider = ({ children }: PropsWithChildren<{}>): JSX.Elemen
     }
   };
 
+  const fetchDataRealTime = (destination:string, fetchData: (() => 
+    Promise<void> | void)) => {
+    const socket = new SockJS('http://localhost:8083/ws');
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+    onConnect: () => {
+      stompClient.subscribe(destination, (message) => {
+        // console.log("Received message:", message.body);
+        fetchData();
+      });
+    }
+  });
+
+  stompClient.activate();
+
+    return () => {
+      stompClient.deactivate();
+    };
+  }
+
   return (
     <StateContext.Provider value={{ 
       token, setToken, user, setUser, comicList, setComicList, 
       comicListFull, setComicListFull,loadingAllComics, fetchComicListAll, 
-      selected, setSelected, isOpenSidebar, setOpenIsSidebar, searchQuery, setSearchQuery,
+      selected, setSelected, isOpenSidebar, setOpenIsSidebar, searchQuery, 
+      setSearchQuery, fetchDataRealTime
     }}>
       {children}
     </StateContext.Provider>

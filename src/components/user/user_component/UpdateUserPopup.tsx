@@ -11,10 +11,6 @@ interface updateUserProps {
 }
 
 const UpdateUserPopup = (props: updateUserProps) => {
-  // console.log(props.isOpenUpdate);
-  // console.log(props.userData);
-  // console.log(props.handleChangeUpdate);
-  // console.log(props.selectedValue);
 
   return (
     <>

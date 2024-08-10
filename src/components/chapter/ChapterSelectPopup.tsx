@@ -43,11 +43,11 @@ const ChapterSelectPopup = (props: ChapterSelectProps) => {
           icon={<IoMdClose size={30} color='black'/>}/>
         </div>
         <hr className='border border-solid border-x-white-rgb2 w-full my-4'/>
-        <div className='mt-2 grid grid-cols-3 gap-2 text-center overflow-y-auto h-[430px]'>
+        <div className='mt-2 grid grid-cols-3 gap-2 text-center overflow-y-auto max-h-[430px]'>
         {props.data?.chapterList?.map((chapter: Chapter, index: number) => (
           <div key={index} 
           onClick={() => handleNavigateReading(chapter)}
-          className={`py-1 h-fit w-fit bg-white cursor-pointer disabled:opacity-50 
+          className={`py-1 bg-white cursor-pointer disabled:opacity-50 
           rounded border-2 border-solid ${chapter === props.chapterFind ? 
             'border-orange-500' : ''}  hover:border-gray-700`}
           >

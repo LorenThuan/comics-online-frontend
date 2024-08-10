@@ -21,7 +21,7 @@ const PopularComicDetails = () => {
 
   const {setComicList, comicList, setSelected} = useStateContext();
   const navigate = useNavigate();
-  const {getClosestDate} = useComicList();
+  // const {getClosestDate} = useComicList();
 
   const handleAddToLibrary = async () => {
 
@@ -190,8 +190,9 @@ const PopularComicDetails = () => {
                 : 'Loading...'}
             </li>
             <li onClick={(e) => e.preventDefault()} className="text-[describes-rgb] cursor-none">
-                {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'}
-                </li>
+                {/* {getClosestDate(comicItem) ? moment(getClosestDate(comicItem)).fromNow() : 'No valid dates'} */}
+                {moment(chapter.createDate).fromNow()}
+            </li>
             {/* <li>{moment(comicItem.createDateChapter).fromNow()}</li> */}
           </div>
         ))

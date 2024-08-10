@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CrudUser from "../../../hooks/CrudUser";
 import UserService from "../../constants/UserService";
 import LoginRequired from "../login/LoginRequired";
@@ -22,10 +22,10 @@ const UserManagement = () => {
   const {usersList} = ComicListManager();
   const adminOnly = UserService.adminOnly();
   const navigate = useNavigate();
-  let profile: any = localStorage.getItem("profile");
-  if (profile) {
-    profile = JSON.parse(profile);
-  }
+  const [profile, setProfile] = useState<User>(() => {
+    const savedProfile = localStorage.getItem("profile");
+    return savedProfile ? JSON.parse(savedProfile) : null;
+  })
 
   const handleDelete = async (userItem: any) => {
     try {

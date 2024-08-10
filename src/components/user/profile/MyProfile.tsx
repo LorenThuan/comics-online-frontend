@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import avartar from "../../../assets/Logo.jpg";
 import { FaRegCircle } from "react-icons/fa";
 import SidebarIcon from "../../icon/SidebarIcon";
@@ -6,14 +6,15 @@ import CrudUser from "../../../hooks/CrudUser";
 import UserService from "../../constants/UserService";
 import LoginRequired from "../login/LoginRequired";
 import { useStateContext } from "../../../context/StateContext";
+import { User } from "../../constants/types";
 
 const MyProfile = () => {
   // const { user } = useStateContext();
   const isAuthenticated = UserService.isAuthenticated();
-  let profile: any = localStorage.getItem("profile");
-  if (profile) {
-    profile = JSON.parse(profile);
-  }
+  const [profile, setProfile] = useState<User>(() => {
+    const savedProfile = localStorage.getItem("profile");
+    return savedProfile ? JSON.parse(savedProfile) : null;
+  })
 
   return (
     <>
